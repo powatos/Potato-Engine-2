@@ -12,4 +12,4 @@ add_executable(TestGame
 )
 target_link_libraries(TestGame PRIVATE PotatoEngine2)
 
-CopyPotatoEngineAssets(TestGame)
+ConfigureAssets(TestGame)

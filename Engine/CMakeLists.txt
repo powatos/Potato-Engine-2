@@ -30,7 +30,7 @@ target_link_libraries(PotatoEngine2
 
 target_compile_features(PotatoEngine2 PUBLIC cxx_std_20)
 
-function(CopyPotatoEngineAssets target)
+function(ConfigureAssets target)
 
 	execute_process(
 		COMMAND ${CMAKE_COMMAND}
@@ -39,12 +39,27 @@ function(CopyPotatoEngineAssets target)
 			-P ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../CMake/MirrorAssetsDirectory.cmake
 	)
 
-	add_custom_command(TARGET ${target} POST_BUILD
+	file(GLOB_RECURSE engine_asset_files LIST_DIRECTORIES false
+		${CMAKE_CURRENT_FUNCTION_LIST_DIR}/Assets/*
+	)
+	file(GLOB_RECURSE game_asset_files LIST_DIRECTORIES false
+		${CMAKE_CURRENT_SOURCE_DIR}/Assets/*
+	)
+
+	set(stamp ${CMAKE_CURRENT_BINARY_DIR}/merged_assets.stamp)
+
+	add_custom_command(
+		OUTPUT ${stamp}
 		COMMAND ${CMAKE_COMMAND}
 			-DENGINE_DIR=${CMAKE_CURRENT_FUNCTION_LIST_DIR}/Assets
-			-DGAME_DIR=${CMAKE_SOURCE_DIR}/Assets
+			-DGAME_DIR=${CMAKE_CURRENT_SOURCE_DIR}/Assets
 			-DOUT_DIR=$<TARGET_FILE_DIR:${target}>/Assets
 			-P ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../CMake/MergeEngineProgramAssets.cmake
+		COMMAND ${CMAKE_COMMAND} -E touch ${stamp}
+		DEPENDS ${engine_asset_files} ${game_asset_files}
 	)
+
+	add_custom_target(${target}_assets DEPENDS ${stamp})
+	add_dependencies(${target} ${target}_assets)
 endfunction()
 
