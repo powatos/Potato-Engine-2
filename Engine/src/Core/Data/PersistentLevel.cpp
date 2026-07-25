@@ -27,7 +27,7 @@ bool PersistentLevel::LoadStaticActors() {
     bool allSuccessful = true;
 
     World* world = GameInstance::Get()->GetWorld();
-    __ArchiveType& Archive = __Archive::_GetArchive();
+    ___ArchiveType& Archive = ___Archive::_GetArchive();
 
     LOG(LogType::INFO, "Loading static actors from persistent level");
 

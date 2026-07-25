@@ -16,7 +16,7 @@ path DataManager::GetConfigDir() {
 }
 
 path DataManager::GetSaveDir() {
-    char* prefPath = SDL_GetPrefPath(__ENGINE_GLOBALS::orgName.c_str() ,__ENGINE_GLOBALS::appName.c_str());
+    char* prefPath = SDL_GetPrefPath(___ENGINE_GLOBALS::orgName.c_str() ,___ENGINE_GLOBALS::appName.c_str());
     path saveDir = path(prefPath) / "Saves";
     SDL_free(prefPath);
 

@@ -25,11 +25,11 @@
  * order fiasco](https://en.cppreference.com/cpp/language/siof))
  */
 #define SET_DEFAULT_SUBCLASS(def, set) \
-static struct __##set##_DEFAULT_SUBCLASS_REGISTER { \
-    __##set##_DEFAULT_SUBCLASS_REGISTER() { \
-        __DEFAULT_INSTANTIATORS::_##def() = []() -> def* { return new set(); }; \
+static struct ___##set##_DEFAULT_SUBCLASS_REGISTER { \
+    ___##set##_DEFAULT_SUBCLASS_REGISTER() { \
+        ___DEFAULT_INSTANTIATORS::_##def() = []() -> def* { return new set(); }; \
     } \
-} __##set##_DEFAULT_SUBCLASS_REGISTER_i;
+} ___##set##_DEFAULT_SUBCLASS_REGISTER_i;
 
 /**
  * @brief Singleton with various game properties and functions. This class also manages game subclasses
@@ -76,7 +76,7 @@ public:
      * state based movement more smooth, but increase latency. Lower values will decrease smoothness
      * but maximize input delay. A value of `195` is recommended for the optimal smoothness-to-latency ratio
      * @warning A value of `0` will remove input state logic and minimize latency. However, 
-     * inputs binded to states other than InputType::Triggered will never be fired
+     * inputs binded to states other than InputType::Started will never be fired
      * @note This setting also affects boolean input latency (single button press).
      */
     int MS_REPEAT_THRESHOLD;
@@ -96,7 +96,7 @@ private:
 
 };
 
-namespace __DEFAULT_INSTANTIATORS {
+namespace ___DEFAULT_INSTANTIATORS {
     inline std::function<Player*()>& _Player() {
         static std::function<Player*()> f;
         return f;

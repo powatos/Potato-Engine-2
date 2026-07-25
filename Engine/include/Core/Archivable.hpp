@@ -12,11 +12,11 @@
  * @param type Literal name of the class
  */
 #define ARCHIVE_STATIC(type) \
-static struct __##type##_Register { \
-    __##type##_Register() { \
-        __Archive::_GetArchive()[#type] = []() -> Archivable* { return new type(); }; \
+static struct ___##type##_Register { \
+    ___##type##_Register() { \
+        ___Archive::_GetArchive()[#type] = []() -> Archivable* { return new type(); }; \
     } \
-} __##type##_register;
+} ___##type##_register;
 
 /**
  * @brief Abstract factory class inherited by all classes that should be archived
@@ -33,11 +33,11 @@ public:
     virtual ~Archivable() = default;
 };
 
-using __ArchiveType = std::unordered_map< std::string, std::function<Archivable*()> >;
+using ___ArchiveType = std::unordered_map< std::string, std::function<Archivable*()> >;
 
-namespace __Archive {
-    inline __ArchiveType& _GetArchive(){
-        static __ArchiveType archive;
+namespace ___Archive {
+    inline ___ArchiveType& _GetArchive(){
+        static ___ArchiveType archive;
         return archive;
     }
 }

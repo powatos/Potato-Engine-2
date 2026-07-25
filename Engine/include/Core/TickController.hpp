@@ -8,7 +8,7 @@
 #include "Core/EngineSubsystem.hpp"
 
 enum class TickGroup;
-struct __TickGroupHash;
+struct ___TickGroupHash;
 class Tickable;
 
 /**
@@ -64,7 +64,7 @@ enum class TickGroup {
     _Render, //< Render stage
     PostRender //< Stage after rendering is complete
 };
-struct __TickGroupHash {
+struct ___TickGroupHash {
     size_t operator ()(const TickGroup& g) const noexcept{
         return static_cast<size_t>(g);
     }

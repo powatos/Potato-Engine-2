@@ -36,9 +36,9 @@ void GameInstance::BeginPlay() {
 void GameInstance::InstantiateSubclasses() {
 
     // User-defined Instantiaters
-    auto c_pc = __DEFAULT_INSTANTIATORS::_PlayerController();
-    auto c_p = __DEFAULT_INSTANTIATORS::_Player();
-    auto c_gm = __DEFAULT_INSTANTIATORS::_Gamemode();
+    auto c_pc = ___DEFAULT_INSTANTIATORS::_PlayerController();
+    auto c_p = ___DEFAULT_INSTANTIATORS::_Player();
+    auto c_gm = ___DEFAULT_INSTANTIATORS::_Gamemode();
     
     // PlayerController
     if (c_pc == nullptr) {

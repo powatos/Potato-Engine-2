@@ -17,11 +17,11 @@ class IEngineSubsystem;
  * @param name application name
  */
 #define PROJECT(name) \
-struct __ProjectInit { \
-    __ProjectInit() { \
-        __ENGINE_GLOBALS::appName = name; \
+struct ___ProjectInit { \
+    ___ProjectInit() { \
+        ___ENGINE_GLOBALS::appName = name; \
     } \
-} __ProjectInit;
+} ___ProjectInit;
 
 /**
  * @brief Global engine singleton class
@@ -71,16 +71,16 @@ public:
 protected:
     std::vector<IEngineSubsystem*> SubsystemStack;
 
-    IInputController* InputController;
-    IHUDController* HUDController;
-    EventController* NativeEventController;
+    IInputController* InputController{};
+    IHUDController* HUDController{};
+    EventController* NativeEventController{};
 
 
 private:
     std::string logPath;
 };
 
-namespace __ENGINE_GLOBALS {
+namespace ___ENGINE_GLOBALS {
     inline std::string orgName = "PotatoEngine";
     inline std::string appName;
 }
