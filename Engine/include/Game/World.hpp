@@ -2,6 +2,7 @@
 #pragma once
 
 #include <type_traits>
+#include <concepts>
 #include <vector>
 
 #include "Game/Actor.hpp"
@@ -57,7 +58,7 @@ public:
      * * @tparam ActorClass Class of actor to spawn
      * @returns Actor added to world
      */
-    template<typename ActorClass>
+    template<std::derived_from<Actor> ActorClass>
     ActorClass* SpawnActor();
     /**
      * @brief Spawns Actor into world
@@ -65,7 +66,7 @@ public:
      * @param SpawnPosition Default world position for actor to be spawned at
      * @returns Actor added to world
      */
-    template<typename ActorClass>
+    template<std::derived_from<Actor> ActorClass>
     ActorClass* SpawnActor(const Vector2& SpawnPosition);
 
     /**
@@ -94,7 +95,7 @@ private:
 
 };
 
-template<typename ActorClass>
+template<std::derived_from<Actor> ActorClass>
 ActorClass* World::SpawnActor() {
     static_assert(std::is_base_of_v<Actor, ActorClass>, "Illegal class spawn to world");
 
@@ -107,7 +108,7 @@ ActorClass* World::SpawnActor() {
     return static_cast<ActorClass*>(actor);
 }
 
-template<typename ActorClass>
+template<std::derived_from<Actor> ActorClass>
 ActorClass* World::SpawnActor(const Vector2& SpawnPosition) {
     Actor* actor = SpawnActor<ActorClass>();
     actor->SetPosition(SpawnPosition);

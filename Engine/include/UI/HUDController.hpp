@@ -1,6 +1,8 @@
 /** @file HUDController.hpp */
 #pragma once
 
+#include <concepts>
+
 class Widget;
 
 /**
@@ -24,7 +26,7 @@ public:
      * @param UID Unique ID to identify widget
      * @returns Widget that was added 
      */
-    template<typename WidgetClass>
+    template<std::derived_from<Widget> WidgetClass>
     WidgetClass* AddWidget(std::string UID);
     /** @brief Gets widget by UID @param UID UID @returns Widget matching name */
     virtual Widget* GetWidget(std::string UID) const = 0;
@@ -35,7 +37,7 @@ protected:
 
 };
 
-template <typename WidgetClass>
+template <std::derived_from<Widget> WidgetClass>
 WidgetClass* IHUDController::AddWidget(std::string UID) {
     WidgetClass* widget = new WidgetClass(UID);
     RegisterWidget(widget);

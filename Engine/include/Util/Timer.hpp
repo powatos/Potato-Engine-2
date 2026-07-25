@@ -76,6 +76,8 @@ struct TimerHandle
     }
 };
 
+// TODO: add concepts to enforce strict argument matching to callback args (also in timer manager)
+
 /**
  * @brief Simple timer for scheduling and tracking
  * @warning Do not mutate timers manually. Use the TimerManager interface exposed by the engine instead. @sa TimerManager

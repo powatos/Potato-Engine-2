@@ -33,7 +33,7 @@ public:
      * @param name Unique name of element
      * @returns `WidgetElement*` that was added
      */
-    template<typename ElemType>
+    template<std::derived_from<WidgetElement> ElemType>
     ElemType* AddElement(std::string name);
 
     /** @brief Gets map of all elements @returns `[name, WidgetElement*]` map */
@@ -50,7 +50,7 @@ private:
 
 };
 
-template<typename ElemType>
+template<std::derived_from<WidgetElement> ElemType>
 ElemType* Widget::AddElement(std::string name) {
     ElemType* elem = new ElemType();
     Elements[name] = elem;
