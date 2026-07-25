@@ -67,8 +67,8 @@ void PlayerController::SetupInputBindings() {
     IInputController* controller = PotatoEngine::Get().GetInputController();
 
     controller->RegisterInputBinding({
-        InputBinding(Keycode::A, InputType::Triggered, "StartMoveLeft", this, &PlayerController::sMvL),
-        InputBinding(Keycode::D, InputType::Triggered, "StartMoveRight", this, &PlayerController::sMvR),
+        InputBinding(Keycode::A, InputType::Started, "StartMoveLeft", this, &PlayerController::sMvL),
+        InputBinding(Keycode::D, InputType::Started, "StartMoveRight", this, &PlayerController::sMvR),
         
         InputBinding(Keycode::Space, InputType::Impulse, "Jump", this, &PlayerController::jump),
         

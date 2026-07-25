@@ -5,12 +5,13 @@
 
 #include "Core/GameInstance.hpp"
 #include "Game/World.hpp"
-#include "Systems/IOController.hpp"
 #include "Core/TickController.hpp"
 
 #include "Debug/Log.hpp"
 
 #include "Engine.hpp"
+
+#include "OutputManager.hpp"
 
 Engine::Engine() {
 
@@ -28,11 +29,11 @@ int Engine::main() {
 
     LOG(LogType::VITAL, "Engine main loop started");
     
-    const IOController* Controller = IOController::Get();
     const GameInstance* Instance = GameInstance::Get();
+    const OutputManager* outManager = OutputManager::Get();
     TickController* tickController = TickController::Get();
 
-    const ms idealDelay(static_cast<int>(1000.f / Controller->FRAMES_PER_SECOND));
+    const ms idealDelay(static_cast<int>(1000.f / outManager->FRAMES_PER_SECOND));
     auto lastTick = stdc::steady_clock::now();
 
     while (Instance->_isMainTickRunning == true) {
@@ -89,10 +90,10 @@ int Engine::main() {
 }
 
 void Engine::FireTick(const float dt) const {
-    EventController::Get()->FireNativeEvent<float>("__ENGINE_TICK", dt);
+    EventController::Get()->FireNativeEvent<float>("___ENGINE_TICK", dt);
 }
 void Engine::FireTickPostPhysics(const float dt) const {
-    EventController::Get()->FireNativeEvent<float>("__ENGINE_TICK_POST_PHYSICS", dt);
+    EventController::Get()->FireNativeEvent<float>("___ENGINE_TICK_POST_PHYSICS", dt);
 }
 
 void Engine::Resolve() noexcept {

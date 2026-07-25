@@ -5,6 +5,7 @@
 
 #include "MyPlayer.hpp"
 
+#include "Core/InputController.hpp"
 #include "Game/Raycast.hpp"
 
 SET_DEFAULT_SUBCLASS(Player, MyPlayer)
@@ -19,6 +20,14 @@ void MyPlayer::BeginPlay() {
     downraycast.Settings.OverrideActorsType = RaycastOverrideType::Exclude;
     downraycast.showDebug = false;
     downraycast.debugDuration = 1.0;
+
+    const auto IC = PotatoEngine::Get().GetInputController();
+    IC->RegisterInputBinding({
+        InputBinding(Keycode::A, InputType::Started, "aStart", []{LOG(LogType::INFO, "a start");}),
+        InputBinding(Keycode::A, InputType::Ongoing, "aOngoing", []{LOG(LogType::INFO, "a ongoing");}),
+        InputBinding(Keycode::A, InputType::Completed, "aComplete", []{LOG(LogType::INFO, "a completed");})
+    });
+
 }
 
 void MyPlayer::Tick(float dt) {
@@ -30,5 +39,5 @@ void MyPlayer::Tick(float dt) {
     // //     LOG(LogType::DEBUG, "{}", hit.distance);
     // // }
 
-    LOG(LogType::DEBUG, "{}", GetPosition().ToStringF());
+    // LOG(LogType::DEBUG, "{}", GetPosition().ToStringF());
 }

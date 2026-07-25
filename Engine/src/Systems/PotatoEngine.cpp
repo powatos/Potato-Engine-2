@@ -1,6 +1,6 @@
 /** @file PotatoEngine.cpp */
 
-#include <stdio.h>
+#include <cstdio>
 #include <cstdlib>
 
 #include "Core/GameInstance.hpp"
@@ -8,30 +8,29 @@
 #include "Core/EventController.hpp"
 #include "Engine.hpp"
 #include "Game/World.hpp"
-#include "Systems/IOController.hpp"
-#include "Systems/UIController.hpp"
+#include "UIController.hpp"
 #include "Core/TextureManager.hpp"
-#include "Core/GameInstance.hpp"
 #include "UI/HUDController.hpp"
 #include "Core/TickController.hpp"
-#include "Systems/PhysicsController.hpp"
+#include "PhysicsController.hpp"
 #include "Core/InputController.hpp"
 #include "Util/TimerManager.hpp"
+#include "InputManager.hpp"
+#include "OutputManager.hpp"
 
 #include "Debug/Log.hpp"
 
-#include "SDL3//SDL.h"
+#include <SDL3/SDL.h>
 
 #include "Core/PotatoEngine.hpp"
 
 PotatoEngine::PotatoEngine() {
 
-    char* prefPath = SDL_GetPrefPath(__ENGINE_GLOBALS::orgName.c_str() ,__ENGINE_GLOBALS::appName.c_str());
+    char* prefPath = SDL_GetPrefPath(___ENGINE_GLOBALS::orgName.c_str() ,___ENGINE_GLOBALS::appName.c_str());
     logPath = std::string(prefPath) + "debug.log";
     SDL_free(prefPath);
 
     LOG.init(logPath);
-
 
     LOG(LogType::VITAL, "PotatoEngine constructed");
 
@@ -39,14 +38,15 @@ PotatoEngine::PotatoEngine() {
 
     SubsystemStack.push_back( TickController::Get() );
 
-    SubsystemStack.push_back( IOController::Get() );
+    SubsystemStack.push_back( OutputManager::Get() );
+    SubsystemStack.push_back( InputManager::Get() );
 
     SubsystemStack.push_back( TextureManager::Get() );
 
     SubsystemStack.push_back( GameInstance::Get() );
 
     SubsystemStack.push_back( EventController::Get() );
-        
+
     SubsystemStack.push_back( PhysicsController::Get() );
 
     SubsystemStack.push_back( UIController::Get() );
@@ -61,7 +61,7 @@ PotatoEngine& PotatoEngine::Get()
 }
 
 void PotatoEngine::LoadSubclasses() {
-    InputController = IOController::Get();
+    InputController = InputManager::Get();
     HUDController = UIController::Get();
     NativeEventController = EventController::Get();
 

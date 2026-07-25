@@ -44,7 +44,7 @@ public:
      * controller->RegisterInputBinding(
      *     InputBinding(
      *         Keycode::Space, 
-     *         InputType::Triggered, 
+     *         InputType::Started,
      *         "JumpAction", 
      *         this, 
      *         &PlayerController::DoJump)

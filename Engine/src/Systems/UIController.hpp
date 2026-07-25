@@ -14,13 +14,13 @@
  * --> Widget pointer created, passed into RegisterWidget
  * --> RegisterWidget operates on overrided function (in UIController)
  * --> Widget added to ActiveWidgets
- * --> IOController::RegisterWidget called with widget
- * --> IOController creates private window and manages it
+ * --> OutputManager::RegisterWidget called with widget
+ * --> OutputManager creates private window and manages it
  * 
  * Resolving
  * --> Resolve calls to UIController
- * --> Resolve DOES NOT call IOController remove on all widgets because 
- *     IOController resolve (called after UIController resolve) does that already
+ * --> Resolve DOES NOT call OutputManager remove on all widgets because
+ *     OutputManager resolve (called after UIController resolve) does that already
  * --> Frees widget pointers
  * --> returns resolve
  */

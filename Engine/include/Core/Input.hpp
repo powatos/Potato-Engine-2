@@ -19,12 +19,6 @@ enum class Keycode
     A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
     Num0, Num1, Num2, Num3, Num4, Num5, Num6, Num7, Num8, Num9,
 
-    // SPECIAL
-    Space,
-    Enter,
-    Escape,
-    Tab,
-
     // ARROWS
     ArrowUp,
     ArrowDown,
@@ -35,10 +29,44 @@ enum class Keycode
     F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
 
     // MOUSE
-    Mouse
+    Mouse,
+
+    // SPECIAL
+    Space,
+    Enter,
+    Escape,
+    Tab,
+    Backspace,
+    CapsLock,
+
+    // MODIFIERS
+    LShift,
+    RShift,
+    LCtrl,
+    RCtrl,
+    LAlt,
+    RAlt,
+
+    // Other
+    Minus,
+    Equal,
+    Slash,
+    Backslash,
+    Tilde,
+    Comma,
+    Period,
+    Semicolon,
+    Apostrophe,
+
+    LBracket,
+    RBracket,
+
+
+
+
 };
 
-struct __KeycodeHash {
+struct ___KeycodeHash {
     size_t operator ()(const Keycode& key) const noexcept{
         return static_cast<size_t>(key);
     }
@@ -50,8 +78,8 @@ struct __KeycodeHash {
  */
 enum class InputType
 {
-    Triggered,
-    Ongoing,
-    Completed,
-    Impulse
+    Started, ///< @brief Input starts
+    Ongoing, ///< @brief Input is active
+    Completed, ///< @brief Input ends
+    Impulse ///@brief Same as InputType::Started; used for compatibility/usage hinting
 };

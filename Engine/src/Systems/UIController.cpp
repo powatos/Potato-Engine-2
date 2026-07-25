@@ -1,6 +1,6 @@
 /** @file UIController.cpp */
 
-#include "IOController.hpp"
+#include "OutputManager.hpp"
 #include "UI/Widget.hpp"
 
 #include "Debug/Log.hpp"
@@ -13,22 +13,22 @@ UIController::UIController() {
 
 void UIController::RegisterWidget(Widget* widget) {
 
-    IOController::Get()->RegisterWidget(widget);
+    OutputManager::Get()->RegisterWidget(widget);
     ActiveWidgets.push_back(widget);
 
 }
 
 void UIController::RemoveWidget(std::string UID) {
-    IOController::Get()->RemoveWidget(UID);
+    OutputManager::Get()->RemoveWidget(UID);
 
     Widget* w = GetWidget(UID);
-    ActiveWidgets.erase(std::remove(ActiveWidgets.begin(), ActiveWidgets.end(), w), ActiveWidgets.end());
+    std::erase(ActiveWidgets, w);
     delete w;
 }
 
 Widget* UIController::GetWidget(std::string UID) const {
     
-    auto it = std::find_if(ActiveWidgets.begin(), ActiveWidgets.end(), [UID](Widget* widget){
+    auto it = std::ranges::find_if(ActiveWidgets, [UID](Widget* widget){
         return widget->GetUID() == UID;
     });
 
