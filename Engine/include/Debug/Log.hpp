@@ -73,6 +73,8 @@ public:
     void init(const std::string& path);
     ~Logger();
 
+    bool showTerminalOutput;
+
 private:
     static const std::string getTimestampUTC();
 

@@ -27,7 +27,7 @@ struct Logger::LogAsyncImpl
     std::atomic<bool> isRunning{true};
 };
 
-Logger::Logger() : i_LogAsyncImpl(std::make_unique<LogAsyncImpl>()) {}
+Logger::Logger() : i_LogAsyncImpl(std::make_unique<LogAsyncImpl>()), showTerminalOutput(true) {}
 
 void Logger::pushLog(LogEntry entry) {
     {
@@ -66,12 +66,13 @@ void Logger::processLogs() {
                 << " | "
                 << entry.message << '\n';
 
-            std::cout
-                << entry.timestamp << " - "
-                << colorMod << logName << '\t' << "\x1b[0m"
-                << " | "
-                << colorMod << entry.message << "\x1b[0m" << '\n';
-
+            if (showTerminalOutput) {
+                std::cout
+                    << entry.timestamp << " - "
+                    << colorMod << logName << '\t' << "\x1b[0m"
+                    << " | "
+                    << colorMod << entry.message << "\x1b[0m" << '\n';
+            }
 
             localQueue.pop();
         }
