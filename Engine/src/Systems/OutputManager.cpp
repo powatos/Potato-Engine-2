@@ -19,17 +19,21 @@ OutputManager::OutputManager() {
 
     SDL_CreateWindowAndRenderer(
         ___ENGINE_GLOBALS::appName.c_str(),
-        ScreenSize.x, ScreenSize.y,
-        SDL_WINDOW_RESIZABLE |
+        static_cast<int>(windowSize.x), static_cast<int>(windowSize.y),
         SDL_WINDOW_MOUSE_FOCUS |
-        SDL_WINDOW_INPUT_FOCUS,
+        SDL_WINDOW_INPUT_FOCUS |
+        (windowMode == WindowMode::Windowed ? SDL_WINDOW_RESIZABLE : 0x0) |
+        (windowMode == WindowMode::Fullscreen ? SDL_WINDOW_FULLSCREEN : 0x0) |
+        (ShowBorder ? SDL_WINDOW_BORDERLESS : 0x0),
         &window,
         &renderer
     );
-
     MainWindow = window;
     Renderer = renderer;
 
+    SetScreenResolution(screenResolution);
+
+    SDL_SetWindowResizable(window, IsResizable);
 }
 
 
@@ -42,15 +46,22 @@ void OutputManager::BeginPlay() {
 void OutputManager::DrawLevel() {
     SDL_Renderer* renderer = static_cast<SDL_Renderer*>(Renderer);
 
-    SDL_SetRenderDrawColor(renderer, BackgroundColor.R, BackgroundColor.G, BackgroundColor.B, BackgroundColor.A);
+    SDL_SetRenderDrawColor(renderer, backgroundColor.R, backgroundColor.G, backgroundColor.B, backgroundColor.A);
 
-    SDL_RenderClear(renderer);
+    // SDL_RenderClear(renderer);
+    SDL_FRect sky {0,0,screenResolution.x, screenResolution.y};
+    SDL_RenderFillRect(renderer, &sky);
 
     const GameInstance* Instance = GameInstance::Get();
     const World* world = Instance->GetWorld();
     const ActorPool& renderActors = world->GetAllActors();
 
     const Camera* camera = Instance->GetPlayerController()->GetCamera();
+
+    const float aspectRatio = screenResolution.x / screenResolution.y;
+    const float cameraRenderHeight = camera->GetViewHeight() / camera->GetZoom();
+
+    LOG(LogType::DEBUG, "{}", camera->GetSize().ToStringF());
 
     for ( Actor* actor : renderActors ) {
         if (actor == nullptr) {
@@ -66,9 +77,9 @@ void OutputManager::DrawLevel() {
 
         if (!GameplayHelper::IsActorOverlapping(actor, camera)) { continue; }
 
-        // position offset relative to camera AND screen AND scaled to screen size
-        const Vector2 ScaleFactor = Vector2( ScreenSize / camera->GetSize() );
-        const Vector2 screenVector = Vector2(
+        // position offset relative to camera AND screen AND scaled to resolution
+        const Vector2 ScaleFactor = Vector2( screenResolution / camera->GetSize() );
+        const Vector2 screenVector =  Vector2(
             (actorPos.x - camera->GetPosition().x),
             (camera->GetPosition().y - actorPos.y)
         ) * ScaleFactor;
@@ -149,10 +160,27 @@ void OutputManager::DrawHUD() {
 
 }
 
+void OutputManager::DrawBars() {
+    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(Renderer);
+
+    SDL_SetRenderLogicalPresentation(renderer, static_cast<int>(screenResolution.x), static_cast<int>(screenResolution.y), SDL_LOGICAL_PRESENTATION_DISABLED);
+
+    SDL_SetRenderDrawColor(renderer, 0,0,0,0xff);
+    SDL_RenderClear(renderer);
+
+    const auto mode = static_cast<SDL_RendererLogicalPresentation>(SDL_LOGICAL_PRESENTATION_DISABLED + static_cast<int>(rescaleMode));
+    SDL_SetRenderLogicalPresentation(renderer, static_cast<int>(screenResolution.x), static_cast<int>(screenResolution.y), mode);
+
+}
+
+
 void OutputManager::Draw() {
     SDL_Renderer* renderer = static_cast<SDL_Renderer*>(Renderer);
 
+    DrawBars();
+
     DrawLevel();
+
     // DrawHUD();
 
     SDL_RenderPresent(renderer);
@@ -163,13 +191,76 @@ void OutputManager::_TickRender(float dt) {
 }
 
 void OutputManager::Tick(float dt) {
+    // TODO: update windowSize member when window size changed event is triggered instead of in tick
+    // SDL_Window* window = static_cast<SDL_Window*>(MainWindow);
+
+    // int w, h;
+    // SDL_GetWindowSize(window, &w, &h);
+    //
+    // windowSize = Vector2(static_cast<float>(w),static_cast<float>(h));
+}
+
+#pragma region Settings Setters
+
+void OutputManager::SetScreenResolution(const Vector2& resolution) {
+    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(Renderer);
+
+    screenResolution = resolution;
+
+    SetRescaleMode(rescaleMode);
+}
+
+void OutputManager::SetWindowSize(const Vector2& size) {
     SDL_Window* window = static_cast<SDL_Window*>(MainWindow);
 
-    int w, h;
-    SDL_GetWindowSize(window, &w, &h);
+    SDL_SetWindowSize(window, static_cast<int>(size.x), static_cast<int>(size.y));
+    windowSize = size;
 
-    ScreenSize = Vector2(w,h);
 }
+
+void OutputManager::SetWindowMode(WindowMode mode) {
+    SDL_Window* window = static_cast<SDL_Window*>(MainWindow);
+
+    switch (mode) {
+        case WindowMode::Fullscreen: {
+            SetIsResizable(false);
+            SDL_SetWindowFullscreen(window, true);
+            break;
+        }
+        case WindowMode::Windowed: {
+            SDL_SetWindowFullscreen(window, false);
+            SDL_SetWindowBordered(window, true);
+            SetIsResizable(true);
+
+            break;
+        }
+    }
+
+    windowMode = mode;
+}
+
+void OutputManager::SetRescaleMode(WindowRescaleMode mode) {
+    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(Renderer);
+
+    const auto _mode = static_cast<SDL_RendererLogicalPresentation>(SDL_LOGICAL_PRESENTATION_DISABLED + static_cast<int>(mode));
+    SDL_SetRenderLogicalPresentation(renderer, static_cast<int>(screenResolution.x), static_cast<int>(screenResolution.y), _mode);
+
+    rescaleMode = mode;
+}
+
+void OutputManager::SetShowBorder(bool show) {
+    SDL_Window* window = static_cast<SDL_Window*>(MainWindow);
+
+    SDL_SetWindowBordered(window, false);
+}
+
+void OutputManager::SetIsResizable(bool isResizable) {
+    SDL_Window* window = static_cast<SDL_Window*>(MainWindow);
+
+    SDL_SetWindowResizable(window, isResizable);
+}
+
+#pragma endregion
 
 #pragma region Widget Management
 
@@ -205,14 +296,6 @@ void OutputManager::RemoveWidget(std::string UID) {
         } else { it++; }
     }
 
-}
-
-void OutputManager::SetScreenSize(Vector2 size) {
-    IScreenController::SetScreenSize(size);
-
-    SDL_Window* window = static_cast<SDL_Window*>(MainWindow);
-
-    SDL_SetWindowSize(window, size.x, size.y);
 }
 
 #pragma endregion

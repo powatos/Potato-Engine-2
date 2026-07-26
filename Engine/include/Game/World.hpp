@@ -37,13 +37,12 @@ public:
         float bounceThreshold = 6.f; ///< Minimum normal velocity for bounce to occur in collisions
         bool enableDefaultWalls = false;
         float defaultWallThickness = 1;
-    };
-
+    }
     /**
      * @brief Game settings for world
      * @sa WorldSettings
      */
-    WorldSettings Settings;
+    Settings;
     
     /**
      * @internal

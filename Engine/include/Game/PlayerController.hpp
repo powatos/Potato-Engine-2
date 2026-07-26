@@ -68,6 +68,7 @@ protected:
     float JumpForce;
 
     bool CameraFollowsPlayer;
+    Vector2 CameraOffset;
 
 private:
     Player* ActivePlayer;

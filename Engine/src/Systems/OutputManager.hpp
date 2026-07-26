@@ -22,7 +22,12 @@ public:
     void RegisterWidget(Widget* widget);
     void RemoveWidget(std::string UID);
 
-    virtual void SetScreenSize(Vector2 size) override;
+    virtual void SetScreenResolution(const Vector2& resolution) override;
+    virtual void SetWindowSize(const Vector2& size) override;
+    virtual void SetWindowMode(WindowMode mode) override;
+    virtual void SetRescaleMode(WindowRescaleMode mode) override;
+    virtual void SetShowBorder(bool show) override;
+    virtual void SetIsResizable(bool isResizable) override;
 
 private:
     OutputManager();
@@ -30,6 +35,7 @@ private:
 
     void DrawLevel();
     void DrawHUD();
+    void DrawBars();
 
 protected:
     void Draw();

@@ -1,8 +1,9 @@
 /** @file GameplayHelper.hpp */
 #pragma once
 
+#include "Util/Vector2.hpp"
+
 class Camera;
-struct Vector2;
 class Actor;
 
 /**
@@ -27,7 +28,6 @@ public:
      * @param camera Camera to check for visibility
      * @returns true if is in frame
      */
-    // static bool IsPositionInCameraFrame(const Vector2& pos, Camera* camera);
     /**
      * @brief Gets list of overlapping actors
      * @param actor actor to check for overlaps
@@ -41,7 +41,6 @@ public:
      * @returns true if overlapping
      */
     static bool IsActorOverlapping(const Actor* actor1, const Actor* actor2);
-
     /**
      * @brief Generates and returns a random integer within a range
      * @param min minimum value (inclusive)

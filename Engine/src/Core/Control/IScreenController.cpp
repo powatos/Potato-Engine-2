@@ -2,40 +2,53 @@
 
 #include "Core/IScreenController.hpp"
 
-IScreenController::IScreenController() {
-    ScreenSize = Vector2(100,100);
+IScreenController::IScreenController()
+    : screenResolution(Vector2(1280, 720)),
+      windowSize(Vector2(1280, 720)),
+      targetFrameRate(30.f),
+      backgroundColor(Color()),
+      windowMode(WindowMode::Windowed),
+      rescaleMode(WindowRescaleMode::Letterbox),
+      ShowBorder(true),
+      IsResizable(true)
+{}
 
-    FrameRate = 30.f;
-
-    bIsResizable = true;
+Vector2 IScreenController::GetScreenResolution() const {
+    return screenResolution;
 }
 
-void IScreenController::SetScreenSize(Vector2 size) {
-    ScreenSize = size;;
-}
-Vector2 IScreenController::GetScreenSize() const {
-    return ScreenSize;
+Vector2 IScreenController::GetWindowSize() const {
+    return windowSize;
 }
 
-
-void IScreenController::SetFrameRate(float fps) {
-    FrameRate = fps;
-}
-float IScreenController::GetFrameRate() const {
-    return FrameRate;
-}
-
-
-void IScreenController::SetIsResizable(bool resizable) {
-    bIsResizable = resizable;
-}
-bool IScreenController::IsResizable(bool resizable) const {
-    return bIsResizable;
+float IScreenController::GetTargetFrameRate() const {
+    return targetFrameRate;
 }
 
 Color IScreenController::GetBackgroundColor() const {
-    return BackgroundColor;
+    return backgroundColor;
 }
-void IScreenController::SetBackgroundColor(Color color) {
-    BackgroundColor = color;
+
+WindowMode IScreenController::GetWindowMode() const {
+    return windowMode;
+}
+
+WindowRescaleMode IScreenController::GetRescaleMode() const {
+    return rescaleMode;
+}
+
+bool IScreenController::GetShowBorder() const {
+    return ShowBorder;
+}
+
+bool IScreenController::GetIsResizable() const {
+    return IsResizable;
+}
+
+void IScreenController::SetTargetFrameRate(float frameRate) {
+    targetFrameRate = frameRate;
+}
+
+void IScreenController::SetBackgroundColor(const Color& color) {
+    backgroundColor = color;
 }

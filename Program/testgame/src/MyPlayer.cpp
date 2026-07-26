@@ -24,13 +24,13 @@ void MyPlayer::BeginPlay() {
 }
 
 void MyPlayer::Tick(float dt) {
-    HitResult hit;
-    downraycast.origin = GetPosition() - Vector2::Up();
-    downraycast.Cast(hit);
+    // HitResult hit;
+    // downraycast.origin = GetPosition() - Vector2::Up();
+    // downraycast.Cast(hit);
+    //
+    // if (hit.hitActor) {
+    //     LOG(LogType::DEBUG, "{}", hit.hitActor->GetSize().ToString());
+    // }
 
-    if (hit.hitActor) {
-        LOG(LogType::DEBUG, "{}", hit.hitActor->GetSize().ToString());
-    }
-
-    LOG(LogType::DEBUG, "{}", GetPosition().ToStringF());
+    // LOG(LogType::DEBUG, "{}", GetPosition().ToStringF());
 }

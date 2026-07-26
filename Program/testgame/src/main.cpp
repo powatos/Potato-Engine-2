@@ -30,9 +30,11 @@ int main()
     GameInstance* instance = GameInstance::Get();
 
     IScreenController* screenController = engine.GetScreenController();
-    screenController->SetFrameRate(60.f);
+    screenController->SetTargetFrameRate(60.f);
     screenController->SetBackgroundColor(Color(0x00, 0xaa, 0xff, 0xff));
-    screenController->SetScreenSize(Vector2(500,500));
+    // screenController->SetScreenResolution(Vector2(100,100));
+    screenController->SetRescaleMode(WindowRescaleMode::Letterbox);
+    screenController->SetWindowMode(WindowMode::Windowed);
 
     /// LEVEL SETUP
     [[maybe_unused]] World* world = instance->GetWorld();
@@ -48,11 +50,12 @@ int main()
     Obstacle1->SetSimulatingPhysics(true);
     Obstacle1->SetMovability(ActorMovability::Movable);
     Obstacle1->SetBounce(0.5f);
+    Obstacle1->SetMass(1.f);
 
     /// PLAYER SETUP
     PlayerController* playerController = instance->GetPlayerController();
     Player* player = playerController->GetPlayer();
-    player->SetPosition(Vector2(30, 10));
+    player->SetPosition(Vector2(20, 10));
     player->GetTexture().SetRotation(0.f);
     player->SetUsingSimpleTexture(true);
     player->SetSize(Vector2(10,10));

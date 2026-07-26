@@ -10,12 +10,7 @@ public:
     void SetupInputBindings() override;
 
 private:
-    float moveSpeed;
+    void zoomOut();
+    void zoomIn();
 
-    void moveup();
-    void movedown();
-    void moveright();
-    void moveleft();
-
-    void rayc();
 };

@@ -25,7 +25,7 @@ Vector2 GameplayHelper::VecToScreenVec(const Vector2& worldPos) {
 
     return Vector2{
         worldPos.x,
-        PotatoEngine::Get().GetScreenController()->GetScreenSize().y - worldPos.y
+        PotatoEngine::Get().GetScreenController()->GetScreenResolution().y - worldPos.y
     };
 
 }
@@ -57,6 +57,7 @@ bool GameplayHelper::IsActorOverlapping(const Actor* actor1, const Actor* actor2
         a1Pos.y - a1Siz.y < a2Pos.y     // a1 bottom < a2 top
     ;
 }
+
 
 int GameplayHelper::RandomInt(int min, int max) {
     std::uniform_int_distribution<int> dist(min, max);

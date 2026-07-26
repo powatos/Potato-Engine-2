@@ -71,5 +71,6 @@ Testing/
 .idea/
 .vscode/
 
-
+# Custom
+dump/
 

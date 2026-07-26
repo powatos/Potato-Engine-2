@@ -37,16 +37,18 @@ void PlayerController::Tick(float dt) {
     if (CameraFollowsPlayer) { /// Camera follow logic
         if (ActivePlayer == nullptr) { return; }
         World* world = GameInstance::Get()->GetWorld();
+        const Vector2 playerPos = ActivePlayer->GetPosition();
+        const Vector2 cameraSize = ActiveCamera->GetSize();
 
-        Vector2 newCamPos = ActivePlayer->GetPosition();
-        
-        newCamPos.x -= ActiveCamera->GetSize().x/2;
-        newCamPos.y = ActiveCamera->GetSize().y-1;
+        Vector2 newCamPos;
 
-        newCamPos.x = std::clamp(newCamPos.x, 0.f, world->Settings.Size.x - ActiveCamera->GetSize().x);
-        newCamPos.y = std::clamp(newCamPos.y, ActiveCamera->GetSize().y, world->Settings.Size.y);
+        newCamPos.x = playerPos.x - cameraSize.x / 2;
+        newCamPos.y = playerPos.y + cameraSize.y / 2;
 
-        ActiveCamera->SetPosition(newCamPos);
+        // newCamPos.x = std::clamp(newCamPos.x, 0.f, world->Settings.Size.x - ActiveCamera->GetSize().x);
+        // newCamPos.y = std::clamp(newCamPos.y, ActiveCamera->GetSize().y, world->Settings.Size.y);
+
+        ActiveCamera->SetPosition(newCamPos + CameraOffset);
     }
     
     ActivePlayer->AddForce(playerMoveVec * TargetMovementVelocity);
