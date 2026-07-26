@@ -5,13 +5,14 @@
 
 #include "Core/EngineSubsystem.hpp"
 #include "Core/InputController.hpp"
+#include "Core/IScreenController.hpp"
 #include "Core/Tickable.hpp"
 
 
 struct WidgetMapper;
 class Widget;
 
-class OutputManager : public EngineSubsystem<OutputManager>, public Tickable
+class OutputManager : public EngineSubsystem<OutputManager>, public IScreenController, public Tickable
 {
     ENGINE_SUBSYSTEM(OutputManager)
 public:
@@ -21,7 +22,7 @@ public:
     void RegisterWidget(Widget* widget);
     void RemoveWidget(std::string UID);
 
-    float FRAMES_PER_SECOND;
+    virtual void SetScreenSize(Vector2 size) override;
 
 private:
     OutputManager();
@@ -33,11 +34,13 @@ private:
 protected:
     void Draw();
 
+    virtual void Tick(float dt) override;
     virtual void _TickRender(float dt) override;
 
     std::unordered_map<std::string, WidgetMapper*> WidgetMaps;
 
-    void* DisplayWindow;
+    void* MainWindow;
+    void* Renderer;
 
 };
 

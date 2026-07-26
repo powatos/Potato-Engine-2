@@ -17,6 +17,7 @@
 
 #include <memory>
 
+#include "Core/IScreenController.hpp"
 #include "Util/TimerManager.hpp"
 
 PROJECT("testgame")
@@ -27,10 +28,11 @@ int main()
     PotatoEngine& engine = PotatoEngine::Get();
     engine.LoadSubclasses();
     GameInstance* instance = GameInstance::Get();
-    
-    // ideal 195
-    instance->MS_REPEAT_THRESHOLD = 195;
-    instance->FRAMES_PER_SECOND = 60.f;
+
+    IScreenController* screenController = engine.GetScreenController();
+    screenController->SetFrameRate(60.f);
+    screenController->SetBackgroundColor(Color(0x00, 0xaa, 0xff, 0xff));
+    screenController->SetScreenSize(Vector2(500,500));
 
     /// LEVEL SETUP
     [[maybe_unused]] World* world = instance->GetWorld();
@@ -43,7 +45,7 @@ int main()
 
     Block* Obstacle1 = world->SpawnActor<Block>(Vector2(10,2));
     Obstacle1->SetSize(Vector2(5, 3));
-    Obstacle1->ctex = 'O';
+    Obstacle1->simpleColor = Color::BLUE();
     Obstacle1->SetCollisionType(CollisionType::Block);
     Obstacle1->SetSimulatingPhysics(true);
     Obstacle1->SetMovability(ActorMovability::Movable);
@@ -54,9 +56,9 @@ int main()
     Player* player = playerController->GetPlayer();
     player->SetPosition(Vector2(10, 10));
     player->GetTexture().SetRotation(0.f);
-    player->SetUsingCTex(true);
+    player->SetUsingSimpleTexture(true);
     player->SetSize(Vector2(1,1));
-    player->ctex = 'P';
+    player->simpleColor = Color(0xff, 0xff, 0x00);
 
     /// UI SETUP
     [[maybe_unused]] IHUDController* HUDController = engine.GetHUDController();
@@ -72,7 +74,7 @@ int main()
     ));
 
     /// PLAY
-    engine.BeginPlay(true);
+    engine.BeginPlay();
 
     engine.Resolve();
 

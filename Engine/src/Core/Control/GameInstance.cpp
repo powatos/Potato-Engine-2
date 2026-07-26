@@ -11,9 +11,7 @@
 GameInstance::GameInstance() {
     LOG(LogType::VITAL, "GameInstance constructed");
     
-    _isMainTickRunning = false;
-    FRAMES_PER_SECOND = 24.f;
-    MS_REPEAT_THRESHOLD = 250;
+    ___isMainTickRunning = false;
 
     world = new World();
 
@@ -30,7 +28,7 @@ void GameInstance::BeginPlay() {
     // ActivePlayerController->BeginPlay();
     ActiveGamemode->BeginPlay();
 
-    _isMainTickRunning = true;
+    ___isMainTickRunning = true;
 }
 
 void GameInstance::InstantiateSubclasses() {
@@ -70,7 +68,7 @@ void GameInstance::InstantiateSubclasses() {
 }
 
 void GameInstance::RequestShutdown() {
-    _isMainTickRunning = false;
+    ___isMainTickRunning = false;
 }
 
 void GameInstance::LoadSubclasses() {

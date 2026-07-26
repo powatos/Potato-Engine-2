@@ -5,6 +5,7 @@
 #include "Core/Tickable.hpp"
 #include "Game/HitResult.hpp"
 #include "Core/Texture.hpp"
+#include "Util/Color.hpp"
 
 #include "Util/Vector2.hpp"
 
@@ -25,6 +26,14 @@ enum class CollisionType
     Overlap, ///< @brief Actor generates hit events without collision correction
     Block, ///< @brief Actor generates hit events with collision correction
     None ///< @brief Actor doesn't collide nor generate hit events
+};
+
+/**
+ * @brief Enum representing a simple actor shape
+ */
+enum class SimpleShape
+{
+    Rectangle
 };
 
 /**
@@ -85,8 +94,8 @@ public:
     Texture& GetTexture();
     void SetTexture(const std::string& textureName);
 
-    bool IsUsingCTex() const;
-    void SetUsingCTex(bool enabled);
+    bool IsUsingSimpleTexture() const;
+    void SetUsingSimpleTexture(bool enabled);
 
     /**
      * @brief Internal function used to queue BeginPlay() on actor
@@ -108,11 +117,18 @@ public:
     virtual void OnHit(const HitResult& hitResult);
 
     /**
-     * @brief Single-char texture for actor 
-     * @details The actor is displayed as a grid (based on its @ref GetSize() "size") of this character
-     * @note This is intended to render simple objects or debug actors easily. For detailed textures, TODO
+     * @brief Simple shape texture for an actor
+     * @details The actor is displayed using the shape with a bounding box based on its @ref GetSize() "size" @see simpleColor
+     * @note This is intended to render simple objects and debug with ease. For detailed textures, see @ref Texture "Texture"
      */
-    char ctex;
+    SimpleShape simpleShape;
+
+    /**
+     * @brief Simple shape color for an actor
+     * @details The actor displays using this color if using a simple texture @see SetUsingSimpleTexture @see simpleShape
+     */
+    Color simpleColor;
+
 protected:
 
     /**
@@ -149,6 +165,6 @@ private:
     bool isInPlay;
 
     Texture ActorTexture;
-    bool bUseCTex;
+    bool bUseSimpleTexture;
    
 };

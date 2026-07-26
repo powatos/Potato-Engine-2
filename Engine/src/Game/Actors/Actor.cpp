@@ -28,7 +28,8 @@ Actor::Actor() {
     CollisionResponse = CollisionType::Block;
     
     ActorTexture = Texture();
-    bUseCTex = false;
+    bUseSimpleTexture = false;
+    simpleColor = Color{};
     isInPlay = false;
     
 }
@@ -41,7 +42,7 @@ void Actor::DispatchBeginPlay() {
 }
 
 void Actor::BeginPlay() {
-    if (!bUseCTex && !ActorTexture) {
+    if (!bUseSimpleTexture && !ActorTexture) {
         // if using Texture but it's invalid
         LOG(LogType::WARNING, "Actor texture invalid");
     }
@@ -162,11 +163,11 @@ void Actor::SetTexture(const std::string& textureName) {
     }
 }
 
-bool Actor::IsUsingCTex() const {
-    return bUseCTex;
+bool Actor::IsUsingSimpleTexture() const {
+    return bUseSimpleTexture;
 }
-void Actor::SetUsingCTex(bool enabled) {
-    bUseCTex = enabled;
+void Actor::SetUsingSimpleTexture(bool enabled) {
+    bUseSimpleTexture = enabled;
 }
 
 #pragma endregion

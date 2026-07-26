@@ -27,7 +27,7 @@ public:
      */
     struct WorldSettings
     {
-        Vector2 Size = Vector2(1000, 24); ///< Size of world in game units
+        Vector2 Size = Vector2(1000, 1000); ///< Size of world in game units
         float upGravity = 400.f; ///< Gravity strength when moving up for asymmetric actors
         float downGravity = 550.f; ///< Gravity strength when moving down for asymmetric actors
         bool doGravity = true; ///< Whether gravity should be applied to actors in world

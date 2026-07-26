@@ -7,10 +7,10 @@ Camera::Camera() {
 
     SetSimulatingPhysics(false);
     SetCollisionType(CollisionType::None);
-    SetSize(Vector2(80.f, 24.f));
+    SetSize(Vector2(100,100));
 
-    SetUsingCTex(true);
-    ctex = 'C';
+    SetUsingSimpleTexture(true);
+    simpleColor = Color::BLANK();
 }
 
 Camera::~Camera() {

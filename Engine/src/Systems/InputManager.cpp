@@ -4,7 +4,6 @@
 
 #include "Core/GameInstance.hpp"
 
-static constexpr char toggleCase(char c);
 static constexpr Keycode GetKeycode(int ch);
 
 InputManager::InputManager() {
@@ -16,7 +15,6 @@ InputManager::InputManager() {
 }
 
 void InputManager::BeginPlay() {
-    GameInstance* instance = GameInstance::Get();
 
 }
 
@@ -83,7 +81,7 @@ void InputManager::HandleInput() {
 void InputManager::_TickInput(float dt) {
     HandleInput();
 
-    for (Keycode k : CurrentActiveKeys) {
+    for (const Keycode k : CurrentActiveKeys) {
         FireBinding(InputBindingsOngoing, k);
     }
 
@@ -115,7 +113,7 @@ void InputManager::RegisterInputBinding(std::initializer_list<InputBinding> bind
 
 }
 
-void InputManager::UnregisterInputBinding(std::string deleteName) {
+void InputManager::UnregisterInputBinding(std::string_view deleteName) {
     UnregisterBindingFrom(InputBindingsStarted, deleteName);
     UnregisterBindingFrom(InputBindingsCompleted, deleteName);
     UnregisterBindingFrom(InputBindingsOngoing, deleteName);
@@ -129,7 +127,7 @@ void InputManager::UnregisterAllInputBindings(void *object) {\
 
 }
 
-void InputManager::UnregisterBindingFrom(BindingMap& map, std::string deleteName) {
+void InputManager::UnregisterBindingFrom(BindingMap& map, std::string_view deleteName) {
     for (auto it = map.begin(); it != map.end(); ) {
         auto& vec = it->second;
 
@@ -186,13 +184,7 @@ void InputManager::Resolve() noexcept {
 InputManager::~InputManager() {
 }
 
-static constexpr char toggleCase(char c) {
-    if (c >= 'a' && c <= 'z') { return c - 32; }
-    if (c >= 'A' && c <= 'Z') { return c + 32; }
-    return c;
-}
-
-/// @returns Keycode from passed ASCII input
+/// @returns Keycode from passed SDL3 input
 static constexpr Keycode GetKeycode(int ch)
 {
     // ASCII

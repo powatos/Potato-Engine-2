@@ -28,7 +28,7 @@ public:
      * @brief Unregisters a single binding
      * @param name Identifier for binding to unregister
      */
-    virtual void UnregisterInputBinding(std::string name) = 0;
+    virtual void UnregisterInputBinding(std::string_view name) = 0;
     
     /**
      * @brief Unregisters all bindings tied to an object

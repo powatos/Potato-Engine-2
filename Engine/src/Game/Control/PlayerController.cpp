@@ -44,6 +44,7 @@ void PlayerController::Tick(float dt) {
         newCamPos.y = ActiveCamera->GetSize().y-1;
 
         newCamPos.x = std::clamp(newCamPos.x, 0.f, world->Settings.Size.x - ActiveCamera->GetSize().x);
+        newCamPos.y = std::clamp(newCamPos.y, ActiveCamera->GetSize().y, world->Settings.Size.y);
 
         ActiveCamera->SetPosition(newCamPos);
     }

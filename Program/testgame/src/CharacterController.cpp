@@ -59,7 +59,7 @@ void CharacterController::rayc() {
     l.Cast(hitL);
     d.Cast(hitD);
 
-    if (hitL.hitActor) LOG(LogType::DEBUG, "L: {}", hitL.hitActor->ctex);
-    if (hitD.hitActor) LOG(LogType::DEBUG, "D: {}", hitD.hitActor->ctex);
+    // if (hitL.hitActor) LOG(LogType::DEBUG, "L: {}", hitL.hitActor->ctex);
+    // if (hitD.hitActor) LOG(LogType::DEBUG, "D: {}", hitD.hitActor->ctex);
 
 }

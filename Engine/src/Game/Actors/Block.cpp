@@ -8,6 +8,6 @@ Block::Block() {
     SetSize(Vector2(20, 5));
     SetMovability(ActorMovability::Static);
 
-    SetUsingCTex(true);
-    ctex = 'B';
+    SetUsingSimpleTexture(true);
+
 }

@@ -33,10 +33,10 @@ int Engine::main() {
     const OutputManager* outManager = OutputManager::Get();
     TickController* tickController = TickController::Get();
 
-    const ms idealDelay(static_cast<int>(1000.f / outManager->FRAMES_PER_SECOND));
+    const ms idealDelay(static_cast<int>(1000.f / outManager->GetFrameRate()));
     auto lastTick = stdc::steady_clock::now();
 
-    while (Instance->_isMainTickRunning == true) {
+    while (Instance->___isMainTickRunning == true) {
         auto currentTick = stdc::steady_clock::now();
 
         const stdc::duration<float> elapsed = currentTick - lastTick;

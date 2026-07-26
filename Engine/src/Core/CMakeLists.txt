@@ -2,6 +2,7 @@
 target_sources(PotatoEngine2 PRIVATE
     Control/GameInstance.cpp
     Control/Gamemode.cpp
+	Control/IScreenController.cpp
 
 	Data/DataManager.cpp
 	Data/PersistentLevel.cpp

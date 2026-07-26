@@ -20,19 +20,19 @@ void World::BeginPlay() {
 
         Block* wallB = SpawnActor<Block>(Vector2(-wallWidth, -1));
         wallB->SetSize(Vector2(Settings.Size.x + 2*wallWidth, wallWidth));
-        wallB->ctex = 'B';
+        wallB->simpleColor = Color::RED();
 
         Block* wallL = SpawnActor<Block>(Vector2(-wallWidth, Settings.Size.y + wallWidth));
         wallL->SetSize(Vector2(wallWidth, Settings.Size.y + 2*wallWidth));
-        wallL->ctex = 'L';
+        wallL->simpleColor = Color::RED();
 
         Block* wallR = SpawnActor<Block>(Vector2(Settings.Size.x, Settings.Size.y + wallWidth));
         wallR->SetSize(Vector2(wallWidth, Settings.Size.y + 2*wallWidth));
-        wallR->ctex = 'R';
+        wallR->simpleColor = Color::RED();
 
         Block* wallU = SpawnActor<Block>(Vector2(-wallWidth, Settings.Size.y + wallWidth-1));
         wallU->SetSize(Vector2(Settings.Size.x + wallWidth*2, wallWidth));
-        wallU->ctex = 'U';
+        wallU->simpleColor = Color::RED();
     }
     
     for (Actor* actor : actorPool) {

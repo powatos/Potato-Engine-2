@@ -18,7 +18,7 @@ struct Vector2
     /** @brief Constructs zero vector */
     constexpr Vector2() : x{0.f}, y{0.f} {}
     /** @brief Constructs custom vector @param x X @param y Y */
-    constexpr Vector2(float x, float y) : x(x), y(y) {}
+    constexpr Vector2(const float x, const float y) : x(x), y(y) {}
     /** @brief Constructs vector from copy @param vec Vector to copy */
     constexpr Vector2(const Vector2& vec) : x(vec.x), y(vec.y) {} 
 

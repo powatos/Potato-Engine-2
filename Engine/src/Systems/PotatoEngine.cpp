@@ -62,6 +62,7 @@ PotatoEngine& PotatoEngine::Get()
 
 void PotatoEngine::LoadSubclasses() {
     InputController = InputManager::Get();
+    ScreenController = OutputManager::Get();
     HUDController = UIController::Get();
     NativeEventController = EventController::Get();
 
@@ -100,6 +101,10 @@ void PotatoEngine::BeginPlay(bool autoResolve)
 
 IInputController* PotatoEngine::GetInputController() const {
     return InputController;
+}
+
+IScreenController* PotatoEngine::GetScreenController() const {
+    return ScreenController;
 }
 
 IHUDController* PotatoEngine::GetHUDController() const {

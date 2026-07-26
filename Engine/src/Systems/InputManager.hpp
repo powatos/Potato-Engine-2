@@ -17,14 +17,14 @@ public:
 
     virtual void RegisterInputBinding(InputBinding binding) override;
     virtual void RegisterInputBinding(std::initializer_list<InputBinding> bindings) override;
-    virtual void UnregisterInputBinding(std::string deleteName) override;
+    virtual void UnregisterInputBinding(std::string_view deleteName) override;
     virtual void UnregisterAllInputBindings(void* object) override;
 
 private:
     InputManager();
     ~InputManager();
 
-    void UnregisterBindingFrom(BindingMap& map, std::string deleteName);
+    void UnregisterBindingFrom(BindingMap& map, std::string_view deleteName);
     void UnregisterAllBindingsFrom(BindingMap& map, void* object);
     void FireBinding(BindingMap& map, Keycode key);
 

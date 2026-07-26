@@ -63,23 +63,7 @@ public:
      * @warning NEVER MODIFY THIS VALUE DIRECTLY
      * @sa RequestShutdown()
      */
-    bool _isMainTickRunning;
-    /**
-     * @brief Global FPS constant for screen refresh
-     * @note Reassignment after global @ref PotatoEngine::BeginPlay "BeginPlay" has no affect on refresh rate
-     */
-    float FRAMES_PER_SECOND;
-    /**
-     * @brief Threshold to wait for input completion in milliseconds
-     * @details Terminal limitations make @ref InputType "input states" difficult to implement.
-     * A delay is used to wait for marking an input as complete. Higher values will make
-     * state based movement more smooth, but increase latency. Lower values will decrease smoothness
-     * but maximize input delay. A value of `195` is recommended for the optimal smoothness-to-latency ratio
-     * @warning A value of `0` will remove input state logic and minimize latency. However, 
-     * inputs binded to states other than InputType::Started will never be fired
-     * @note This setting also affects boolean input latency (single button press).
-     */
-    int MS_REPEAT_THRESHOLD;
+    bool ___isMainTickRunning;
 
 private:
     GameInstance();

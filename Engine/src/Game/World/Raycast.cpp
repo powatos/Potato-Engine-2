@@ -60,19 +60,20 @@ Block* Raycast::Cast(HitResult& outHit) {
 
     Block* trail = nullptr;
 
-    if (showDebug) {
-        trail = world->SpawnActor<Block>(origin);
-        trail->SetSize(Vector2(outHit.distance == 0 ? ray.Magnitude() : outHit.distance, 1));
-        trail->SetCollisionType(CollisionType::None);
-        trail->SetSimulatingPhysics(false);
-        trail->GetTexture().SetRotation(ray.Angle());
-        trail->ctex = 'r';
-        trail->SetVisibility(true);
-
-        TimerManager::Get()->AddTimer("raycast_trail_delete_delay", debugDuration, world, &World::DestroyActor, trail);
-        TickController::Get()->Unregister(trail); // avoid uneccesary tick checks
-
-    }
+    // TODO: line
+    // if (showDebug) {
+    //     trail = world->SpawnActor<Block>(origin);
+    //     trail->SetSize(Vector2(outHit.distance == 0 ? ray.Magnitude() : outHit.distance, 1));
+    //     trail->SetCollisionType(CollisionType::None);
+    //     trail->SetSimulatingPhysics(false);
+    //     trail->GetTexture().SetRotation(ray.Angle());
+    //     trail->ctex = 'r';
+    //     trail->SetVisibility(true);
+    //
+    //     TimerManager::Get()->AddTimer("raycast_trail_delete_delay", debugDuration, world, &World::DestroyActor, trail);
+    //     TickController::Get()->Unregister(trail); // avoid uneccesary tick checks
+    //
+    // }
 
     return trail;
 }
