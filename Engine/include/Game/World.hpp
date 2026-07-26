@@ -13,6 +13,7 @@
 using ActorPool = std::vector<Actor*>;
 
 class Player;
+class Block;
 
 /**
  * @brief Local level managing gameplay interactions
@@ -34,8 +35,8 @@ public:
         float clipDampeningFactor = 1.f; ///< Dampening factor for clipping collisions (1 = no dampening, 0 = full clip)
         float clipAllowed = 0.f; ///< Allowed penetration for clipping collisions in game units (0 = no penetration
         float bounceThreshold = 6.f; ///< Minimum normal velocity for bounce to occur in collisions
-        bool setupDefaultWalls = false;
-        float defaultWallSize = 5;
+        bool enableDefaultWalls = false;
+        float defaultWallThickness = 1;
     };
 
     /**
@@ -90,8 +91,13 @@ public:
 private:
     virtual void TickPostUpdate(float dt) override;
 
+    void CreateDefaultWalls();
+    void ResizeWalls();
+
     ActorPool actorPool;
     ActorPool destroyQueue;
+
+    Block *wallB, *wallU, *wallL, *wallR;
 
 };
 

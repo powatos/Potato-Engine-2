@@ -15,29 +15,22 @@ MyPlayer::MyPlayer() : downraycast(Raycast()) {
 }
 
 void MyPlayer::BeginPlay() {
-    downraycast.SetRay(Vector2(5,-5));
+    downraycast.SetRay(Vector2(0,-1));
     downraycast.Settings.OverrideActorsList.insert(this);
     downraycast.Settings.OverrideActorsType = RaycastOverrideType::Exclude;
     downraycast.showDebug = false;
     downraycast.debugDuration = 1.0;
 
-    const auto IC = PotatoEngine::Get().GetInputController();
-    IC->RegisterInputBinding({
-        InputBinding(Keycode::A, InputType::Started, "aStart", []{LOG(LogType::INFO, "a start");}),
-        InputBinding(Keycode::A, InputType::Ongoing, "aOngoing", []{LOG(LogType::INFO, "a ongoing");}),
-        InputBinding(Keycode::A, InputType::Completed, "aComplete", []{LOG(LogType::INFO, "a completed");})
-    });
-
 }
 
 void MyPlayer::Tick(float dt) {
-    // HitResult hit;
-    // downraycast.origin = GetPosition() + Vector2::Right() * GetSize().x;
-    // downraycast.Cast(hit);
+    HitResult hit;
+    downraycast.origin = GetPosition() - Vector2::Up();
+    downraycast.Cast(hit);
 
-    // // if (hit.hitActor) {
-    // //     LOG(LogType::DEBUG, "{}", hit.distance);
-    // // }
+    if (hit.hitActor) {
+        LOG(LogType::DEBUG, "{}", hit.hitActor->GetSize().ToString());
+    }
 
-    // LOG(LogType::DEBUG, "{}", GetPosition().ToStringF());
+    LOG(LogType::DEBUG, "{}", GetPosition().ToStringF());
 }

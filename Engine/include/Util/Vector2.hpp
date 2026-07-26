@@ -53,9 +53,13 @@ struct Vector2
     inline Vector2 operator *(const Vector2& other) const {
         return Vector2(x*other.x, y*other.y);
     }
-    /** @returns division of two vectors */
+    /** @returns division by a scalar */
     inline Vector2 operator /(float scalar) const {
         return Vector2(x / scalar, y / scalar);
+    }
+    /** @returns hadamard quotient of two vectors */
+    inline Vector2 operator /(const Vector2& other) const {
+        return Vector2(x / other.x, y / other.y);
     }
     /** @returns negation of vector */
     inline Vector2 operator -() const {

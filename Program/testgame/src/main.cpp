@@ -39,12 +39,10 @@ int main()
     PersistentLevel level("save1.json");
     level.LoadStaticActors();
 
-    world->Settings.setupDefaultWalls = true;
-    // world->Settings.doGravity = false;
-    // world->Settings.Size = Vector2(80,24);
+    world->Settings.enableDefaultWalls = true;
 
-    Block* Obstacle1 = world->SpawnActor<Block>(Vector2(10,2));
-    Obstacle1->SetSize(Vector2(5, 3));
+    Block* Obstacle1 = world->SpawnActor<Block>(Vector2(10,50));
+    Obstacle1->SetSize(Vector2(20, 20));
     Obstacle1->simpleColor = Color::BLUE();
     Obstacle1->SetCollisionType(CollisionType::Block);
     Obstacle1->SetSimulatingPhysics(true);
@@ -54,11 +52,12 @@ int main()
     /// PLAYER SETUP
     PlayerController* playerController = instance->GetPlayerController();
     Player* player = playerController->GetPlayer();
-    player->SetPosition(Vector2(10, 10));
+    player->SetPosition(Vector2(30, 10));
     player->GetTexture().SetRotation(0.f);
     player->SetUsingSimpleTexture(true);
-    player->SetSize(Vector2(1,1));
+    player->SetSize(Vector2(10,10));
     player->simpleColor = Color(0xff, 0xff, 0x00);
+    player->simpleColorFill = true;
 
     /// UI SETUP
     [[maybe_unused]] IHUDController* HUDController = engine.GetHUDController();

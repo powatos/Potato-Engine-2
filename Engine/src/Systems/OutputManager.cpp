@@ -66,11 +66,12 @@ void OutputManager::DrawLevel() {
 
         if (!GameplayHelper::IsActorOverlapping(actor, camera)) { continue; }
 
-        // offseted relative to camera AND screen
+        // position offset relative to camera AND screen AND scaled to screen size
+        const Vector2 ScaleFactor = Vector2( ScreenSize / camera->GetSize() );
         const Vector2 screenVector = Vector2(
-            (actorPos.x - camera->GetPosition().x) * (ScreenSize.x / camera->GetSize().x),
-            (camera->GetPosition().y - actorPos.y) * (ScreenSize.y / camera->GetSize().y)
-        );
+            (actorPos.x - camera->GetPosition().x),
+            (camera->GetPosition().y - actorPos.y)
+        ) * ScaleFactor;
 
         // const float sine = std::sin(rot * PI/180.0);
         // const float cosine = std::cos(rot * PI/180.0);
@@ -84,18 +85,25 @@ void OutputManager::DrawLevel() {
             SDL_FRect rect {
                 screenVector.x,
                 screenVector.y,
-                actorSize.x,
-                actorSize.y
+                actorSize.x * ScaleFactor.x,
+                actorSize.y * ScaleFactor.y
             };
 
             const Color col = actor->simpleColor;
 
             SDL_SetRenderDrawColor(renderer, col.R, col.G, col.B, col.A);
 
-            SDL_RenderRect(
-                renderer,
-                &rect
-            );
+            if (actor->simpleColorFill) {
+                SDL_RenderFillRect(
+                    renderer,
+                    &rect
+                );
+            } else {
+                SDL_RenderRect(
+                    renderer,
+                    &rect
+                );
+            }
         }
 
     }

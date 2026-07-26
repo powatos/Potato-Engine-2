@@ -29,6 +29,7 @@ Actor::Actor() {
     
     ActorTexture = Texture();
     bUseSimpleTexture = false;
+    simpleColorFill = false;
     simpleColor = Color{};
     isInPlay = false;
     

@@ -129,6 +129,12 @@ public:
      */
     Color simpleColor;
 
+    /**
+     * @brief Simple color fill setting for an actor
+     * @details If true and using simple shape, the actor is filled in with its color @see simpleShape @see simpleColor
+     */
+    bool simpleColorFill;
+
 protected:
 
     /**
