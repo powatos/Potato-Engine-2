@@ -12,11 +12,11 @@
 
 using json = nlohmann::json;
 
-static json safeGetJson(const path& path);
+static json safeGetJson(const FilePath& path);
 
 PersistentLevel::PersistentLevel(const std::string& saveFileName) {
 
-    saveFileAbsPath = DataManager::GetSaveDir() / saveFileName;
+    saveFileAbsPath = AssetManager::Get()->GetSaveDir() / saveFileName;
     LOG(LogType::INFO, "Persistent level initialized with save file: {}", saveFileAbsPath.string());
 }   
 
@@ -144,7 +144,7 @@ void PersistentLevel::WriteVector2Data( std::string key, const Vector2& value ) 
 
 #pragma endregion
 
-static json safeGetJson(const path& savePath) {
+static json safeGetJson(const FilePath& savePath) {
     json parsed;
 
     const bool bFileEmpty = std::filesystem::exists(savePath) && std::filesystem::file_size(savePath) == 0;

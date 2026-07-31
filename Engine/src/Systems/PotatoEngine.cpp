@@ -9,7 +9,6 @@
 #include "Engine.hpp"
 #include "Game/World.hpp"
 #include "UIController.hpp"
-#include "Core/TextureManager.hpp"
 #include "UI/HUDController.hpp"
 #include "Core/TickController.hpp"
 #include "PhysicsController.hpp"
@@ -24,6 +23,10 @@
 
 #include "Core/PotatoEngine.hpp"
 
+#include "Core/AssetManager.hpp"
+#include "Core/TextureManager.hpp"
+
+
 PotatoEngine::PotatoEngine() {
 
     char* prefPath = SDL_GetPrefPath(___ENGINE_GLOBALS::orgName.c_str() ,___ENGINE_GLOBALS::appName.c_str());
@@ -34,14 +37,15 @@ PotatoEngine::PotatoEngine() {
 
     LOG(LogType::VITAL, "PotatoEngine constructed");
 
+    SubsystemStack.push_back( AssetManager::Get() );
+    SubsystemStack.push_back( TextureManager::Get() );
+
     SubsystemStack.push_back( Engine::Get() );
 
     SubsystemStack.push_back( TickController::Get() );
 
     SubsystemStack.push_back( OutputManager::Get() );
     SubsystemStack.push_back( InputManager::Get() );
-
-    SubsystemStack.push_back( TextureManager::Get() );
 
     SubsystemStack.push_back( GameInstance::Get() );
 
@@ -65,6 +69,8 @@ void PotatoEngine::LoadSubclasses() {
     ScreenController = OutputManager::Get();
     HUDController = UIController::Get();
     NativeEventController = EventController::Get();
+
+    AssetManager::Get()->CacheAssets();
 
     GameInstance::Get()->LoadSubclasses();
 }

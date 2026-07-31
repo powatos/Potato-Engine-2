@@ -4,7 +4,8 @@ target_sources(PotatoEngine2 PRIVATE
     Control/Gamemode.cpp
 	Control/IScreenController.cpp
 
-	Data/DataManager.cpp
+	Data/Asset.cpp
+	Data/AssetManager.cpp
 	Data/PersistentLevel.cpp
 
 	Event/EventController.cpp

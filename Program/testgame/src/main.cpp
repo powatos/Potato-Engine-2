@@ -9,7 +9,6 @@
 #include <Game/World.hpp>
 #include <UI/HUDController.hpp>
 #include <UI/DebugInfo.hpp>
-#include <Core/TextureManager.hpp>
 #include <Core/Texture.hpp>
 
 #include <Debug/Log.hpp>
@@ -18,6 +17,7 @@
 #include <memory>
 
 #include "Core/IScreenController.hpp"
+#include "Core/TextureManager.hpp"
 #include "Util/TimerManager.hpp"
 
 PROJECT("testgame")
@@ -27,6 +27,7 @@ int main()
     /// ENGINE SETUP
     PotatoEngine& engine = PotatoEngine::Get();
     engine.LoadSubclasses();
+
     GameInstance* instance = GameInstance::Get();
 
     IScreenController* screenController = engine.GetScreenController();
@@ -56,8 +57,6 @@ int main()
     PlayerController* playerController = instance->GetPlayerController();
     Player* player = playerController->GetPlayer();
     player->SetPosition(Vector2(20, 10));
-    player->GetTexture().SetRotation(0.f);
-    player->SetUsingSimpleTexture(true);
     player->SetSize(Vector2(10,10));
     player->simpleColor = Color(0xff, 0xff, 0x00);
     player->simpleColorFill = true;

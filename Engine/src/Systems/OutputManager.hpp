@@ -22,6 +22,8 @@ public:
     void RegisterWidget(Widget* widget);
     void RemoveWidget(std::string UID);
 
+    virtual void* RequestRenderingContext() const override;
+
     virtual void SetScreenResolution(const Vector2& resolution) override;
     virtual void SetWindowSize(const Vector2& size) override;
     virtual void SetWindowMode(WindowMode mode) override;

@@ -22,25 +22,46 @@ struct Color
     /** @brief Constructs color from copy @param col Color to copy */
     constexpr Color(const Color& col) : R(col.R), G(col.G), B(col.B), A(col.A) {}
 
-    /** @returns Full red color */
+    /**
+     * @brief Full red color
+     */
     inline static constexpr Color RED() { return Color(0xff, 0x00, 0x00, 0xff); }
-    /** @returns Full green color */
+
+    /**
+     * @brief Full green color
+     */
     inline static constexpr Color GREEN() { return Color(0x00, 0xff, 0x00, 0xff); }
-    /** @returns Full blue color */
+
+    /**
+     * @brief Full blue color
+     */
     inline static constexpr Color BLUE() { return Color(0x00, 0x00, 0xff, 0xff); }
-    /** @returns Full white color */
+
+    /**
+     * @brief Full white color
+     */
     inline static constexpr Color WHITE() { return Color(0xff, 0xff, 0xff, 0xff); }
-    /** @returns Full black color */
+
+    /**
+     * @brief Full black color
+     */
     inline static constexpr Color BLACK() { return Color{}; }
-    /** @returns Full white color */
+
+    /**
+     * @brief Full zero-ed color
+     */
     inline static constexpr Color BLANK() { return Color(0x0); }
 
-    /** @returns a raw 32-bit integer representation of the color with alpha as the most significant byte */
+    /**
+     * @brief a raw 32-bit integer representation of the color with alpha as the most significant byte
+     */
     inline std::uint32_t raw_argb() const {
         return A << 24 | R << 16 | G << 8 | B;
     }
 
-    /** @returns a raw 32-bit integer representation of the color with only RGB values and a zero-ed most significant byte */
+    /**
+     * @brief a raw 32-bit integer representation of the color with only RGB values and a zero-ed most significant byte
+     */
     inline std::uint32_t raw_rgb() const {
         return 0x00 << 24 | R << 16 | G << 8 | B;
     }

@@ -4,7 +4,7 @@
 #include <fstream>
 #include <string>
 
-#include "DataManager.hpp"
+#include "AssetManager.hpp"
 
 #include "Util/Vector2.hpp"
 
@@ -78,7 +78,7 @@ private:
     void WriteStringData( std::string key, std::string value );
     void WriteVector2Data( std::string key, const Vector2& value );
 
-    path saveFileAbsPath;
+    FilePath saveFileAbsPath;
 
 };
 

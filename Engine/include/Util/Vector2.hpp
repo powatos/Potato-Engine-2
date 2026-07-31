@@ -22,12 +22,18 @@ struct Vector2
     /** @brief Constructs vector from copy @param vec Vector to copy */
     constexpr Vector2(const Vector2& vec) : x(vec.x), y(vec.y) {} 
 
-    /** @returns unit vector pointing up */
+    /**
+     * @brief unit vector pointing up
+     */
     inline static constexpr Vector2 Up() { return Vector2{0.f,1.f}; }
-    /** @returns unit vector pointing right */
+    /**
+     * @brief unit vector pointing right
+     */
     inline static constexpr Vector2 Right() { return Vector2{1.f,0.f}; }
 
-    /** @returns addition of two vectors */
+    /**
+     * @brief addition of two vectors
+     */
     inline Vector2 operator +(const Vector2& other) const {
         return Vector2(x + other.x, y + other.y);
     }
@@ -36,7 +42,9 @@ struct Vector2
         x += other.x;
         y += other.y;
     }
-    /** @returns subtraction of two vectors */
+    /**
+     * @brief subtraction of two vectors
+     */
     inline Vector2 operator -(const Vector2& other) const {
         return Vector2(x - other.x, y - other.y);
     }
@@ -45,79 +53,121 @@ struct Vector2
         x -= other.x;
         y -= other.y;
     }
-    /** @returns amplification by a scalar */
+    /**
+     * @brief amplification by a scalar
+     */
     inline Vector2 operator *(float scalar) const {
         return Vector2(x * scalar, y * scalar);
     }
-    /** @returns [hadamard product](https://en.wikipedia.org/wiki/Hadamard_product_(matrices)) of two vectors */
+
+    /**
+     * @brief [hadamard product](https://en.wikipedia.org/wiki/Hadamard_product_(matrices)) of two vectors
+     */
     inline Vector2 operator *(const Vector2& other) const {
         return Vector2(x*other.x, y*other.y);
     }
-    /** @returns division by a scalar */
+
+    /**
+     * @brief division by a scalar
+     */
     inline Vector2 operator /(float scalar) const {
         return Vector2(x / scalar, y / scalar);
     }
-    /** @returns hadamard quotient of two vectors */
+
+    /**
+     * @brief hadamard quotient of two vectors
+     */
     inline Vector2 operator /(const Vector2& other) const {
         return Vector2(x / other.x, y / other.y);
     }
-    /** @returns negation of vector */
+
+    /**
+     * @brief negation of vector
+     */
     inline Vector2 operator -() const {
         return Vector2(-x, -y);
     }
 
-    /** @returns swizzled vector (x,y)->(y,x) */
+    /**
+     * @brief swizzled vector (x,y)->(y,x)
+     */
     inline Vector2 Swizzled() const {
         return Vector2(y, x);
     }
-    /** @returns [dot product](https://en.wikipedia.org/wiki/Euclidean_vector#Dot_product) of two vectors */
+
+    /**
+     * @brief [dot product](https://en.wikipedia.org/wiki/Euclidean_vector#Dot_product) of two vectors
+     */
     inline float Dot(const Vector2& other) const {
         return x * other.x + y * other.y;
     }
-    /** @returns [magnitude](https://en.wikipedia.org/wiki/Euclidean_vector#Length) of vector */
+
+    /**
+     * @brief [magnitude](https://en.wikipedia.org/wiki/Euclidean_vector#Length) of vector
+     */
     inline float Magnitude() const {
         return std::hypotf(x,y);
     }
-    /** @returns [unit](https://en.wikipedia.org/wiki/Euclidean_vector#Unit_vector) vector */
+
+    /**
+     * @brief [unit](https://en.wikipedia.org/wiki/Euclidean_vector#Unit_vector) vector
+     */
     inline Vector2 Normalized() const {
         float mag = Magnitude();
         if (mag == 0.f) return Vector2(0.f, 0.f);
         return Vector2(x / mag, y / mag);
     }
-    /** @returns distance to another vector */
+
+    /**
+     * @brief distance to another vector
+     */
     inline float Distance(const Vector2& other) const {
         const float dx = x-other.x;
         const float dy = y-other.y;
 
         return std::sqrt(dx * dx + dy * dy );
     }
-    /** @returns the square of the distance to another vector */
+
+    /**
+     * @brief the square of the distance to another vector
+     */
     inline float SquaredDistance(const Vector2& other) const {
         const float dx = x-other.x;
         const float dy = y-other.y;
 
         return  dx * dx + dy * dy;
     }
-    /** @returns a rotated vector @param rotation rotation in degrees */
+
+    /**
+     * @brief a rotated vector @param rotation rotation in degrees
+     */
     inline Vector2 Rotate(float rotation) const {
         const float sine = std::sin(rotation * PI/180);
-        const float cosine = std::cos(rotation * PI/180);  
-        
+        const float cosine = std::cos(rotation * PI/180);
+
         return Vector2(
             x * cosine - y * sine,
             x * sine + y * cosine
         );
     }
-    /** @returns the angle of the vector from standard position in degrees */
+
+    /**
+     * @brief the angle of the vector from standard position in degrees
+     */
     inline float Angle() const {
         return 180/PI * std::atan2(y, x);
     }
 
-    /** @returns string representation of vector */
+    /**
+     * @brief string representation of vector
+     */
     inline std::string ToString() const {
         return "(" + std::to_string((int)x) + ", " + std::to_string((int)y) + ")";
     }
-    /** @returns string representation of vector using float */
+
+    /**
+     * @brief string representation of vector using float
+     */
     inline std::string ToStringF() const {
         return "(" + std::to_string(x) + ", " + std::to_string(y) + ")";
     }

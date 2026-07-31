@@ -92,7 +92,9 @@ void PlayerController::jump() { ActivePlayer->AddImpulse(Vector2(0, JumpForce));
 void PlayerController::eMvL() { playerMoveVec.x = 0; }
 void PlayerController::eMvR() { playerMoveVec.x = 0; }
 
-void PlayerController::_rot() { ActivePlayer->GetTexture().AddLocalRotation(15); }
+void PlayerController::_rot() {
+    // ActivePlayer->GetTexture().AddLocalRotation(15);
+}
 
 #pragma endregion
 

@@ -73,7 +73,7 @@ void OutputManager::DrawLevel() {
 
         const Vector2 actorPos = actor->GetPosition();
         const Vector2 actorSize = actor->GetSize();
-        const float rot = actor->GetTexture().GetRotation();
+        // const float rot = actor->GetTexture().GetRotation();
 
         if (!GameplayHelper::IsActorOverlapping(actor, camera)) { continue; }
 
@@ -92,13 +92,15 @@ void OutputManager::DrawLevel() {
         //     screenVector.x * sine + screenVector.y * cosine
         // };
 
+        SDL_FRect rect {
+            screenVector.x,
+            screenVector.y,
+            actorSize.x * ScaleFactor.x,
+            actorSize.y * ScaleFactor.y
+        };
+
         if (actor->IsUsingSimpleTexture()) {
-            SDL_FRect rect {
-                screenVector.x,
-                screenVector.y,
-                actorSize.x * ScaleFactor.x,
-                actorSize.y * ScaleFactor.y
-            };
+
 
             const Color col = actor->simpleColor;
 
@@ -115,10 +117,19 @@ void OutputManager::DrawLevel() {
                     &rect
                 );
             }
+        } else {
+            Texture* actor_tex = actor->GetTexture();
+            if (actor_tex == nullptr) {
+                continue;
+            }
+
+            SDL_Texture* tex = static_cast<SDL_Texture*>(actor_tex->sdl_texture);
+
+            SDL_RenderTexture(renderer, tex, nullptr, &rect);
+
         }
 
     }
-
 
 }
 
@@ -198,6 +209,10 @@ void OutputManager::Tick(float dt) {
     // SDL_GetWindowSize(window, &w, &h);
     //
     // windowSize = Vector2(static_cast<float>(w),static_cast<float>(h));
+}
+
+void* OutputManager::RequestRenderingContext() const {
+    return Renderer;
 }
 
 #pragma region Settings Setters
@@ -298,8 +313,8 @@ void OutputManager::RemoveWidget(std::string UID) {
 
 }
 
-#pragma endregion
 
+#pragma endregion
 
 void OutputManager::Resolve() noexcept {
     LOG(LogType::VITAL, "Resolving OutputManager");
@@ -309,6 +324,9 @@ void OutputManager::Resolve() noexcept {
         map->window = nullptr;
         delete map;
     }
+
+    SDL_DestroyRenderer(static_cast<SDL_Renderer*>(Renderer));
+    SDL_DestroyWindow(static_cast<SDL_Window*>(MainWindow));
 
     SDL_QuitSubSystem(SDL_INIT_VIDEO);
 

@@ -4,7 +4,6 @@
   "dependencies": [
     "sdl3",
     "nlohmann-json",
-    "fmt",
-    "utfcpp"
+    "fmt"
   ]
 }

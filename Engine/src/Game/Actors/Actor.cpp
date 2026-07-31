@@ -6,33 +6,37 @@
 #include "Core/EventController.hpp"
 #include "Core/PotatoEngine.hpp"
 #include "Game/World.hpp"
-#include "Core/TextureManager.hpp"
 
 #include "Debug/Log.hpp"
 #include "Util/Vector2.hpp"
 
 #include "Game/Actor.hpp"
 
+#include "Core/TextureManager.hpp"
+
 ARCHIVE_STATIC(Actor)
 
-Actor::Actor() {
+Actor::Actor()
+{
 
     Position = Vector2();
     Size = Vector2();
-    Visible = true;
 
     Bounciness = 0.f;
     Mass = 10.f;
     SimulatePhysics = true;
     Movability = ActorMovability::Movable;
     CollisionResponse = CollisionType::Block;
-    
-    ActorTexture = Texture();
+
     bUseSimpleTexture = false;
     simpleColorFill = false;
     simpleColor = Color{};
+
+    ActorTexture = TextureManager::Get()->GetTexture(""); // fallbacks to default texture
+
     isInPlay = false;
-    
+    Visible = true;
+
 }
 
 void Actor::DispatchBeginPlay() {
@@ -43,10 +47,10 @@ void Actor::DispatchBeginPlay() {
 }
 
 void Actor::BeginPlay() {
-    if (!bUseSimpleTexture && !ActorTexture) {
-        // if using Texture but it's invalid
-        LOG(LogType::WARNING, "Actor texture invalid");
-    }
+    // if (!bUseSimpleTexture && !ActorTexture) {
+    //     // if using Texture but it's invalid
+    //     LOG(LogType::WARNING, "Actor texture invalid");
+    // }
 
 }
 
@@ -81,7 +85,7 @@ void Actor::SetSize(const Vector2 &size) {
     Size = size;
 }
 void Actor::ResizeToTexture() {
-    Size = ActorTexture.GetBoundingBox();
+    // Size = ActorTexture.GetBoundingBox();
 }
 
 bool Actor::isVisible() const {
@@ -153,15 +157,11 @@ void Actor::SetBounce(float bounce) {
     Bounciness = bounce;
 }
 
-Texture& Actor::GetTexture() {
+Texture* Actor::GetTexture() const {
     return ActorTexture;
 }
-void Actor::SetTexture(const std::string& textureName) {
-    TextureManager* texManager = TextureManager::Get();
-
-    if (texManager->HasTexture(textureName)) {
-        ActorTexture = Texture(texManager->GetTexture(textureName)); 
-    }
+void Actor::SetTexture(const std::string& texturePath) {
+    ActorTexture = TextureManager::Get()->GetTexture(texturePath);
 }
 
 bool Actor::IsUsingSimpleTexture() const {

@@ -1,45 +1,32 @@
 /** @file Texture.hpp */
 #pragma once
 
-#include "Util/Vector2.hpp"
+#include "Core/Asset.hpp"
 
 #include <string>
 #include <vector>
 
+#include "Util/Color.hpp"
+
 /**
  * @brief Texture struct for representing an actor texture
  */
-struct Texture
+struct Texture : public Asset
 {
-    /** 
-     * @brief Constructs a texture object from texture
-     * @param textureFile Name of texture file in the Textures directory
-     */
-    Texture(const std::string& textureFile);
-    Texture();
-    Texture(const Texture& other); 
-    
-    const std::vector<std::wstring>& raw_vec() const; ///< @brief returns the raw texture vector
-    const std::wstring& raw() const; ///< @brief returns the raw texture string
 
-    const Vector2& GetBoundingBox() const;
+    void* sdl_surface;
+    void* sdl_texture;
 
-    float GetRotation() const; /**< @brief Gets rotation @returns rotation */
-    void SetRotation(float rotation); /**< @brief Sets rotation @param rotation Rotation to set (degrees) */
-    void AddLocalRotation(float rotation); /**< @brief Adds to rotation value @param rotation Rotation to add */
+    Color GetKeyColor();
+    void SetKeyColor(Color color);
 
-    /**
-     * @brief bool overload that checks if Texture is valid
-     * @returns true if the texture is valid
-     */
-    explicit operator bool() const;
+    Texture(FilePath path, void* surface, void* texture);
+
+    Texture(Texture&& other) noexcept;
+
+    ~Texture();
 
 private:
-    std::vector<std::wstring> data;
+    Color keyColor; // 0x0 alpha means do not use color key
 
-    Vector2 BoundingBox;
-    std::wstring cachedStr;
-
-    float Rotation;
-    
 };

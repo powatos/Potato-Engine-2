@@ -31,11 +31,11 @@ void DebugInfo::TickPostPhysics(float dt) {
     PlayerController* plrCtrl = GameInstance::Get()->GetPlayerController();
     Vector2 playerPos = plrCtrl->GetPlayer()->GetPosition();
     Vector2 playerVel = plrCtrl->GetPlayer()->GetVelocity();
-    float playerRot = plrCtrl->GetPlayer()->GetTexture().GetRotation();
+    // float playerRot = plrCtrl->GetPlayer()->GetTexture().GetRotation();
     
     dynamic_cast<TextElement*>(GetElement("PlayerPosText"))->field = "Player position: " + playerPos.ToString();
     dynamic_cast<TextElement*>(GetElement("PlayerVelText"))->field = "Player velocity: " + playerVel.ToStringF();
-    dynamic_cast<TextElement*>(GetElement("PlayerRotText"))->field = "Player rotation: " + std::to_string(playerRot);
+    // dynamic_cast<TextElement*>(GetElement("PlayerRotText"))->field = "Player rotation: " + std::to_string(playerRot);
 
 }
 

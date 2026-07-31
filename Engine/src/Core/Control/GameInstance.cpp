@@ -15,7 +15,6 @@ GameInstance::GameInstance() {
 
     world = new World();
 
-    InstantiateSubclasses();
 }
 
 void GameInstance::BeginPlay() {
@@ -72,6 +71,8 @@ void GameInstance::RequestShutdown() {
 }
 
 void GameInstance::LoadSubclasses() {
+    InstantiateSubclasses();
+
     ActivePlayerController->Initialize();
     ActivePlayerController->SetupInputBindings();
 }

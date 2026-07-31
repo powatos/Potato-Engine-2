@@ -91,8 +91,8 @@ public:
     float GetBounce() const; /**< @brief Gets bounce @returns Bounce */
     void SetBounce(float bounce); /**< @brief Sets bounce @param bounce Bounce to set */
 
-    Texture& GetTexture();
-    void SetTexture(const std::string& textureName);
+    Texture* GetTexture() const; /**< @brief Gets texture @returns actor texture */
+    void SetTexture(const std::string& texturePath); /**< @brief Sets actor texture */
 
     bool IsUsingSimpleTexture() const;
     void SetUsingSimpleTexture(bool enabled);
@@ -152,6 +152,10 @@ protected:
     
     virtual void Tick(float dt) override;
 
+
+    Texture* ActorTexture;
+    bool bUseSimpleTexture;
+
 private:
 
     Vector2 Position;
@@ -170,7 +174,5 @@ private:
 
     bool isInPlay;
 
-    Texture ActorTexture;
-    bool bUseSimpleTexture;
    
 };

@@ -3,7 +3,6 @@
 find_package(SDL3 REQUIRED CONFIG)
 find_package(nlohmann_json REQUIRED CONFIG)
 find_package(fmt REQUIRED CONFIG)
-find_package(utf8cpp REQUIRED CONFIG)
 
 add_library(PotatoEngine2 STATIC)
 
@@ -25,7 +24,6 @@ target_link_libraries(PotatoEngine2
     PRIVATE
         SDL3::SDL3
         nlohmann_json::nlohmann_json
-        utf8cpp::utf8cpp
 )
 
 target_compile_features(PotatoEngine2 PUBLIC cxx_std_20)

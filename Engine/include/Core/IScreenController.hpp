@@ -46,6 +46,8 @@ protected:
 
 public:
 
+    virtual void* RequestRenderingContext() const = 0;
+
     /**
      * @brief Gets resolution of screen
      * @returns resolution

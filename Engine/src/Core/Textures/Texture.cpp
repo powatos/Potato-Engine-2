@@ -1,87 +1,72 @@
 /** @file Texture.cpp */
 
-#include <codecvt>
-#include <locale>
-#include <fstream>
-
-#include "Core/DataManager.hpp"
-
-#include "Debug/Log.hpp"
-
-#include "utf8/unchecked.h"
-
 #include "Core/Texture.hpp"
 
-Texture::Texture() : Rotation(0.f) {
+#include <SDL3/SDL_render.h>
+#include <SDL3/SDL_surface.h>
 
+#include "Core/IScreenController.hpp"
+#include "Core/PotatoEngine.hpp"
+#include "Debug/Log.hpp"
+
+Texture::Texture(FilePath path, void* surface, void* texture) :
+    Asset(path),
+    sdl_surface(surface),
+    sdl_texture(texture)
+{}
+
+Texture::Texture(Texture&& other) noexcept :
+    Asset(std::move(other)),
+    sdl_surface(other.sdl_surface),
+    sdl_texture(other.sdl_texture)
+{
+    other.sdl_surface = nullptr;
+    other.sdl_texture = nullptr;
 }
 
-Texture::Texture(const std::string& textureFile) : Texture() { 
-    // pull file
-    path filePath = DataManager::GetConfigDir() / "Textures" / textureFile;
-    if (!std::filesystem::exists(filePath)) {
-        LOG(LogType::ERROR, "Texture file not found at {}", filePath.string());
+
+Color Texture::GetKeyColor() {
+    return keyColor;
+}
+
+
+void Texture::SetKeyColor(Color color) {
+
+    if (sdl_texture == nullptr) {
+        LOG(LogType::ERROR, "Unallocated texture member while trying to set texture key color");
         return;
     }
 
-    std::ifstream file(filePath);
-    if (!file.is_open()) {
-        LOG(LogType::ERROR, "Could not open texture file at {}", filePath.string());
-        return;
+    keyColor = color;
+
+    SDL_Surface* surface = static_cast<SDL_Surface*>(sdl_surface);
+
+    if (keyColor.A == 0x00) {
+        SDL_SetSurfaceColorKey(
+            surface,
+            false,
+            0
+        );
+    } else {
+
+        const SDL_PixelFormatDetails* format = SDL_GetPixelFormatDetails(surface->format);
+        const SDL_Palette* palette = SDL_GetSurfacePalette(surface);
+        const Uint32 key = SDL_MapRGB(format, palette, color.R, color.G, color.B);
+
+        SDL_SetSurfaceColorKey(
+            static_cast<SDL_Surface*>(sdl_surface),
+            false,
+            key
+        );
+
     }
 
-    std::string line;
+    sdl_texture = SDL_CreateTextureFromSurface(static_cast<SDL_Renderer*>(PotatoEngine::Get().GetScreenController()->RequestRenderingContext()), surface);
 
-    int y{0};
-    int maxX{-1};
-    while (std::getline(file, line)) {
-        std::wstring wline;
-        utf8::unchecked::utf8to16(line.begin(), line.end(), std::back_inserter(wline));
-        data.push_back(wline);
-        ++y;
-        if (static_cast<int>(wline.size()) > maxX) { maxX = static_cast<int>(wline.length()); }
-    }
 
-    BoundingBox = Vector2(maxX, y);
-
-    for (const std::wstring& wline : data) {
-        cachedStr += wline;
-        cachedStr += '\n';
-    }
-}
-Texture::Texture(const Texture& other) : Texture() {
-    // copy all members
-    data = other.data;
-    cachedStr = other.cachedStr;
-    
-    BoundingBox = other.BoundingBox;
-    Rotation = other.Rotation;
 }
 
-const std::vector<std::wstring>& Texture::raw_vec() const {
-    return data;
-}
-const std::wstring& Texture::raw() const {
-    return cachedStr;
-}
-
-const Vector2& Texture::GetBoundingBox() const {
-    return BoundingBox;
-}
-
-float Texture::GetRotation() const { 
-    return Rotation; 
-}
-void Texture::SetRotation(float rotation) {
-    // Normalize rotation to [0, 360)
-    rotation = fmodf(rotation, 360.0f);
-    if (rotation < 0.0f) { rotation += 360.0f; }
-    Rotation = rotation;
-}
-void Texture::AddLocalRotation(float rotation) {
-    SetRotation(GetRotation() + rotation);
-}
-
-Texture::operator bool() const {
-    return !raw().empty();
+Texture::~Texture() {
+    SDL_DestroyTexture(static_cast<SDL_Texture*>(sdl_texture));
+    SDL_DestroySurface(static_cast<SDL_Surface*>(sdl_surface));
 }

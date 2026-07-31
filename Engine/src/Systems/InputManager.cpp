@@ -7,6 +7,7 @@
 static constexpr Keycode GetKeycode(int ch);
 
 InputManager::InputManager() {
+    LOG(LogType::VITAL, "InputManager constructed");
 
     SDL_InitSubSystem(SDL_INIT_EVENTS);
 
@@ -178,6 +179,8 @@ void InputManager::FireBinding(BindingMap& map, Keycode key) {
 #pragma endregion
 
 void InputManager::Resolve() noexcept {
+    LOG(LogType::VITAL, "Resolving InputManager");
+
     SDL_QuitSubSystem(SDL_INIT_EVENTS);
 }
 
