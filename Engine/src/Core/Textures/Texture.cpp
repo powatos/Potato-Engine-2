@@ -55,13 +55,17 @@ void Texture::SetKeyColor(Color color) {
 
         SDL_SetSurfaceColorKey(
             static_cast<SDL_Surface*>(sdl_surface),
-            false,
+            true,
             key
         );
 
     }
 
-    sdl_texture = SDL_CreateTextureFromSurface(static_cast<SDL_Renderer*>(PotatoEngine::Get().GetScreenController()->RequestRenderingContext()), surface);
+    SDL_DestroyTexture(static_cast<SDL_Texture*>(sdl_texture));
+
+    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(PotatoEngine::Get().GetScreenController()->RequestRenderingContext());
+
+    sdl_texture = SDL_CreateTextureFromSurface(renderer, surface);
 
 
 }

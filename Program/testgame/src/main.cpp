@@ -58,8 +58,10 @@ int main()
     Player* player = playerController->GetPlayer();
     player->SetPosition(Vector2(20, 10));
     player->SetSize(Vector2(10,10));
-    player->simpleColor = Color(0xff, 0xff, 0x00);
-    player->simpleColorFill = true;
+    // player->simpleColor = Color(0xff, 0xff, 0x00);
+    // player->simpleColorFill = true;
+    player->GetTexture()->SetKeyColor(Color(0xff544c0c));
+
 
     /// UI SETUP
     [[maybe_unused]] IHUDController* HUDController = engine.GetHUDController();

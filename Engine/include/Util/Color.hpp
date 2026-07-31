@@ -18,7 +18,7 @@ struct Color
     /** @brief Constructs custom color with alpha @param R Red @param G Green @param B Blue @param A Alpha */
     explicit constexpr Color(const std::uint8_t R, std::uint8_t G, std::uint8_t B, std::uint8_t A) : R(R), G(G), B(B), A(A) {}
     /** @brief Constructs custom color from raw argb representation @param raw Raw color */
-    explicit constexpr Color(const std::uint32_t raw) : R((raw >> 16) & 0xff ), G((raw >> 16) & 0xff), B((raw >> 8) & 0xff), A((raw >> 24) & 0xff) {}
+    explicit constexpr Color(const std::uint32_t raw) : R((raw >> 16) & 0xff ), G((raw >> 8) & 0xff), B(raw & 0xff), A((raw >> 24) & 0xff) {}
     /** @brief Constructs color from copy @param col Color to copy */
     constexpr Color(const Color& col) : R(col.R), G(col.G), B(col.B), A(col.A) {}
 
