@@ -14,11 +14,17 @@
 #include "Game/Raycast.hpp"
 
 Raycast::Raycast() {
-    LOG(LogType::WARNING, "Empty raycast constructed");
     showDebug = false;
+    debugDuration = 1.f;
+    rayLength = 0.f;
 }
 
-Raycast::Raycast(const Vector2& origin, const Vector2& ray, RaycastSettings Settings) : origin(origin), Settings(Settings), ray(ray) {
+Raycast::Raycast(const Vector2& rayOrigin, const Vector2& rayV, RaycastSettings settings) :
+    Raycast()
+{
+    origin = rayOrigin;
+    ray = rayV;
+    Settings = std::move(settings);
     rayLength = ray.Magnitude();
 }
 

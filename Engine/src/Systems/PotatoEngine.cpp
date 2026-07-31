@@ -28,31 +28,39 @@
 
 
 PotatoEngine::PotatoEngine() {
+    LOG(LogType::VITAL, "PotatoEngine constructed");
 
+    /// Set up logs
     char* prefPath = SDL_GetPrefPath(___ENGINE_GLOBALS::orgName.c_str() ,___ENGINE_GLOBALS::appName.c_str());
     logPath = std::string(prefPath) + "debug.log";
     SDL_free(prefPath);
 
     LOG.init(logPath);
 
-    LOG(LogType::VITAL, "PotatoEngine constructed");
-
-    SubsystemStack.push_back( AssetManager::Get() );
+    /// Initialize all specific asset managers
     SubsystemStack.push_back( TextureManager::Get() );
 
-    SubsystemStack.push_back( Engine::Get() );
+    /// Initialize asset manager
+    SubsystemStack.push_back( AssetManager::Get() );
 
+    /// Initialize low level controllers
+    SubsystemStack.push_back( Engine::Get() );
     SubsystemStack.push_back( TickController::Get() );
 
+    /// Initialize IO controllers
     SubsystemStack.push_back( OutputManager::Get() );
     SubsystemStack.push_back( InputManager::Get() );
 
+    /// Initialize game core classes
     SubsystemStack.push_back( GameInstance::Get() );
 
+    /// Initialize event controller
     SubsystemStack.push_back( EventController::Get() );
 
+    /// Initialize physics controllers
     SubsystemStack.push_back( PhysicsController::Get() );
 
+    /// Initialize high level controllers
     SubsystemStack.push_back( UIController::Get() );
     SubsystemStack.push_back( TimerManager::Get() );
 

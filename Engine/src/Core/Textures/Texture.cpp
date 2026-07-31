@@ -25,10 +25,17 @@ Texture::Texture(Texture&& other) noexcept :
 }
 
 
-Color Texture::GetKeyColor() {
-    return keyColor;
+void* Texture::___Get_Surface() const {
+    return sdl_surface;
 }
 
+void* Texture::___Get_Texture() const {
+    return sdl_texture;
+}
+
+Color Texture::GetKeyColor() const {
+    return keyColor;
+}
 
 void Texture::SetKeyColor(Color color) {
 

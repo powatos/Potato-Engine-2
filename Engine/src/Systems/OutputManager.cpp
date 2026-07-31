@@ -123,7 +123,7 @@ void OutputManager::DrawLevel() {
                 continue;
             }
 
-            SDL_Texture* tex = static_cast<SDL_Texture*>(actor_tex->sdl_texture);
+            SDL_Texture* tex = static_cast<SDL_Texture*>(actor_tex->___Get_Texture());
 
             SDL_RenderTexture(renderer, tex, nullptr, &rect);
 

@@ -8,48 +8,30 @@ using FilePath = std::filesystem::path;
 class AssetManager;
 
 /**
- * @brief Enum for asset types supported by the engine
- */
-// enum class AssetType
-// {
-//     None,
-//
-//     bmp,
-//     png,
-//
-//     txt,
-//
-// };
-
-
-/**
  * @brief Lightweight struct to store metadata for an `Asset`
  */
 struct AssetMetadata
 {
-    // AssetType type;
 
 };
 
 /**
  * @brief Wrapper struct to hold data related to a game asset
- * @details `Asset`s cannot be copied, moved or constructed manually. Associate a game asset file with a struct pointer with AssetManager::RetrieveAsset() @sa AssetManager
+ * @details `Asset`s cannot be copied, move constructed, or constructed manually. Use the specific asset class type to handle game assets
  */
 struct Asset
 {
 private:
     friend class AssetManager;
 
-
 protected:
-    Asset(const FilePath& path);
-    virtual ~Asset() = default;
+    Asset(const FilePath& path); // only AssetManager constructs
+    virtual ~Asset() = default; // only freed in AssetManager
 
 public:
 
-    const AssetMetadata meta;
-
-    const FilePath path;
+    const AssetMetadata meta; ///< @brief Metadata for asset
+    const FilePath path; ///< @brief Path to file associated with asset; intended for internal use
 
     Asset(const Asset& other) = delete; // remove copy construction
     Asset& operator=(const Asset& other) = delete; // remove copy assignment

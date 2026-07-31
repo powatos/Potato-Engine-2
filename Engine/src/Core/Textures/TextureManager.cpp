@@ -10,6 +10,8 @@
 #include "Core/IScreenController.hpp"
 #include "Debug/Log.hpp"
 
+#include "Core/AssetConfigs.h"
+
 #ifndef DEFAULT_TEXTURE_ASSET_PATH
     #error "Potato Engine: Must define DEFAULT_TEXTURE_ASSET_PATH before engine compilation"
 #endif
