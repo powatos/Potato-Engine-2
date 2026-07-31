@@ -33,7 +33,6 @@ Texture* TextureManager::CreateTexture(const FilePath& rootPath) {
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 
     Texture* tex = new Texture( rootPath, surface, texture);
-    tex->SetKeyColor(Color::BLANK());
 
     cache[rootPath.string()] = tex;
 

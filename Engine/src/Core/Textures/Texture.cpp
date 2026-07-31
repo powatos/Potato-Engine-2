@@ -13,7 +13,10 @@ Texture::Texture(FilePath path, void* surface, void* texture) :
     Asset(path),
     sdl_surface(surface),
     sdl_texture(texture)
-{}
+{
+    SetScaleMode(TextureScaleMode::Nearest);
+    SetKeyColor(Color::BLANK());
+}
 
 Texture::Texture(Texture&& other) noexcept :
     Asset(std::move(other)),
@@ -28,15 +31,25 @@ Texture::Texture(Texture&& other) noexcept :
 void* Texture::___Get_Surface() const {
     return sdl_surface;
 }
-
 void* Texture::___Get_Texture() const {
     return sdl_texture;
+}
+
+TextureScaleMode Texture::GetScaleMode() const {
+    return scaleMode;
+}
+void Texture::SetScaleMode(TextureScaleMode mode) {
+    scaleMode = mode;
+
+    SDL_SetTextureScaleMode(
+        static_cast<SDL_Texture*>(sdl_texture),
+        static_cast<SDL_ScaleMode>(static_cast<int>(mode))
+    );
 }
 
 Color Texture::GetKeyColor() const {
     return keyColor;
 }
-
 void Texture::SetKeyColor(Color color) {
 
     if (sdl_texture == nullptr) {
@@ -73,9 +86,12 @@ void Texture::SetKeyColor(Color color) {
     SDL_Renderer* renderer = static_cast<SDL_Renderer*>(PotatoEngine::Get().GetScreenController()->RequestRenderingContext());
 
     sdl_texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SetScaleMode(scaleMode);
 
 
 }
+
+
 
 Texture::~Texture() {
     SDL_DestroyTexture(static_cast<SDL_Texture*>(sdl_texture));

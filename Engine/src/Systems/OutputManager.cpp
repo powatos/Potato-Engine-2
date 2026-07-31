@@ -124,7 +124,7 @@ void OutputManager::DrawLevel() {
             }
 
             SDL_Texture* tex = static_cast<SDL_Texture*>(actor_tex->___Get_Texture());
-
+            // SDL_SetTextureScaleMode(tex, SDL_SCALEMODE_PIXELART);
             SDL_RenderTexture(renderer, tex, nullptr, &rect);
 
         }
