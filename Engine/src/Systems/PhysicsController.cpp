@@ -22,6 +22,8 @@ void PhysicsController::_TickPhysics(float dt) {
 
     // update velocity for each actor
     for (Actor* actor : actorPool) {
+        if (actor == nullptr) { continue; }
+
         if (!actor->isSimulatingPhysics()) { continue; }
         if (actor->GetMovability() == ActorMovability::Static) { continue; }
 
@@ -153,6 +155,8 @@ void PhysicsController::_TickPhysics(float dt) {
 
 void PhysicsController::UpdateActorVelocity(Actor* actor, float dt) {
     const World::WorldSettings& Settings = GameInstance::Get()->GetWorld()->Settings;
+
+    if (actor == nullptr) { return; }
 
     Vector2 forces = actor->GetForces();
     if (Settings.doGravity) {

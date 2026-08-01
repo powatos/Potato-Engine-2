@@ -2,6 +2,7 @@
 
 #include <SDL3/SDL_init.h>
 #include <SDL3/SDL_render.h>
+#include <SDL3/SDL_hints.h>
 
 #include "Core/GameInstance.hpp"
 #include "UI/TextElement.hpp"
@@ -11,6 +12,9 @@
 
 OutputManager::OutputManager() {
     LOG(LogType::VITAL, "OutputManager constructed");
+
+    SDL_SetHint(SDL_HINT_VIDEO_WAYLAND_ALLOW_LIBDECOR, "1");
+    SDL_SetHint(SDL_HINT_VIDEO_WAYLAND_PREFER_LIBDECOR, "1");
 
     SDL_InitSubSystem(SDL_INIT_VIDEO);
 
@@ -30,6 +34,10 @@ OutputManager::OutputManager() {
     );
     MainWindow = window;
     Renderer = renderer;
+
+    if (MainWindow == nullptr || Renderer == nullptr) {
+        LOG(LogType::ERROR, "Failed to create display context: {}", SDL_GetError());
+    }
 
     SetScreenResolution(screenResolution);
 
@@ -60,9 +68,7 @@ void OutputManager::DrawLevel() {
 
     const float aspectRatio = screenResolution.x / screenResolution.y;
     const float cameraRenderHeight = camera->GetViewHeight() / camera->GetZoom();
-
-    LOG(LogType::DEBUG, "{}", camera->GetSize().ToStringF());
-
+    
     for ( Actor* actor : renderActors ) {
         if (actor == nullptr) {
             LOG(LogType::WARNING, "nullptr actor found in actor pool while drawing - skipped actor");

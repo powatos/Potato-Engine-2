@@ -1,5 +1,7 @@
 /** @file World.cpp */
 
+#include <algorithm>
+
 #include "Game/Block.hpp"
 #include "Game/Player.hpp"
 

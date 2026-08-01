@@ -1,5 +1,7 @@
 /** @file TickController.cpp */
 
+#include <algorithm>
+
 #include "Core/TickController.hpp"
 
 #include "Core/Tickable.hpp"
@@ -29,6 +31,8 @@ void TickController::Fire(float dt, TickGroup group) {
 }
 
 constexpr void TickController::checkObjByGroup(float dt, TickGroup group, Tickable* obj) {
+    if (obj == nullptr) { return; }
+
     switch (group) {
         case TickGroup::PreInput:
             obj->TickPreInput(dt);
