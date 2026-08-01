@@ -34,6 +34,7 @@ PotatoEngine::PotatoEngine() {
     SDL_free(prefPath);
 
     LOG.init(logPath);
+    LOG.showTerminalOutput = false;
 
     LOG(LogType::VITAL, "PotatoEngine constructed");
 

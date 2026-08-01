@@ -85,6 +85,9 @@ void GameInstance::Resolve() noexcept {
     LOG(LogType::VITAL, "Resolving GameInstance");
 
     delete ActivePlayerController;
+    // ActivePlayer is freed as an actor on world destruction
+    delete ActiveGamemode;
+
     delete world;
 }
 

@@ -21,10 +21,12 @@ Actor::Actor()
 
     Position = Vector2();
     Size = Vector2();
+    Velocity = Vector2();
 
     Bounciness = 0.f;
     Mass = 10.f;
     SimulatePhysics = true;
+    UseAsymmetricGravity = false;
     Movability = ActorMovability::Movable;
     CollisionResponse = CollisionType::Block;
 
