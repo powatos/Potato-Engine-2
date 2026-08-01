@@ -36,6 +36,7 @@ PotatoEngine::PotatoEngine() {
     SDL_free(prefPath);
 
     LOG.init(logPath);
+    LOG.showTerminalOutput = false;
 
     /// Initialize all specific asset managers
     SubsystemStack.push_back( TextureManager::Get() );

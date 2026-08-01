@@ -2,6 +2,7 @@
 #pragma once
 
 #include <cmath>
+#include <format>
 #include <string>
 
 static constexpr double PI = 3.14159265358979323846;
@@ -162,14 +163,14 @@ struct Vector2
      * @brief string representation of vector
      */
     inline std::string ToString() const {
-        return "(" + std::to_string((int)x) + ", " + std::to_string((int)y) + ")";
+        return std::format("({}, {})", static_cast<int>(x), static_cast<int>(y));
     }
 
     /**
      * @brief string representation of vector using float
      */
     inline std::string ToStringF() const {
-        return "(" + std::to_string(x) + ", " + std::to_string(y) + ")";
+        return std::format("({:.3f}, {:.3f})", x, y);
     }
 
 };
