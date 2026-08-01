@@ -18,6 +18,7 @@
 
 #include "Core/IScreenController.hpp"
 #include "Core/TextureManager.hpp"
+#include "Util/GameplayUtil.hpp"
 #include "Util/TimerManager.hpp"
 
 PROJECT("testgame")

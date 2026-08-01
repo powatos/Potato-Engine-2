@@ -2,10 +2,7 @@
   "name": "potato-engine-2",
   "version": "2.0.0",
   "dependencies": [
-    {
-      "name": "sdl3",
-      "features": ["wayland"]
-    },
+    "sdl3",
     "nlohmann-json",
     "fmt"
   ]

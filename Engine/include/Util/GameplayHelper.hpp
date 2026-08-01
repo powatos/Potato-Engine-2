@@ -7,11 +7,11 @@ class Camera;
 class Actor;
 
 /**
- * @brief Helper class with useful logic and shorthand functions
+ * @brief Helper class with useful runtime functions
  * @details This class is uninstantiable. All helpers are `static`
  */
 class GameplayHelper {
-    GameplayHelper() = default;
+    GameplayHelper() = delete;
 
 public:
     /**
@@ -41,22 +41,5 @@ public:
      * @returns true if overlapping
      */
     static bool IsActorOverlapping(const Actor* actor1, const Actor* actor2);
-    /**
-     * @brief Generates and returns a random integer within a range
-     * @param min minimum value (inclusive)
-     * @param max maximum value (inclusive)
-     */
-    static int RandomInt(int min, int max);
 
-    /**
-     * @brief Generates and returns a random float within a range
-     * @param min minimum value (inclusive)
-     * @param max maximum value (exclusive)
-     */
-    static int RandomFloat(float min, float max);
-
-    /**
-     * @brief Generates and returns a random boolean
-     */
-    static int RandomBool();
 };
