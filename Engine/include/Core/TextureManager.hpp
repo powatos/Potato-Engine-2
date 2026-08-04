@@ -1,6 +1,7 @@
 /** @file "TextureManager.hpp" */
 #pragma once
 
+#include <array>
 #include <unordered_map>
 
 #include "EngineSubsystem.hpp"
@@ -8,7 +9,7 @@
 
 /**
  * @brief Manager to interface global textures
- * @details The following file types are supported for image textures:
+ * @details The following file types are supported for image textures: @sa validTextures
  * - BMP (.bmp)
  * - <del>PNG (.png)</del>
  * - <del>JPEG (.jpg / .jpeg)</del>
@@ -23,7 +24,7 @@ public:
 
     /**
      * @brief Gets a texture based on its corresponding file
-     * @param relativePath Path from assets folder to the file associated with the texture
+     * @param texturePath Path from textures folder to the file associated with the texture
      * @returns Texture associated with file
      */
     Texture* GetTexture(const std::string& relativePath);
@@ -38,6 +39,12 @@ public:
      * @returns Texture object constructed from the file
      */
     Texture* CreateTexture(const FilePath& rootPath);
+
+    static constexpr std::array<std::string_view, 1> validExtensions {
+        ".bmp"
+    };
+
+
 private:
 
     std::unordered_map<std::string, Texture*> cache;

@@ -1,46 +1,38 @@
 /** @file AssetManager.cpp */
 
+#include <ranges>
+
 #include "Core/PotatoEngine.hpp"
+#include "Core/AssetManager.hpp"
+#include "Core/TextureManager.hpp"
+#include "Core/AssetConfigs.h"
 
 #include "Debug/Log.hpp"
 
 #include "SDL3/SDL.h"
-
-#include "Core/AssetManager.hpp"
-
-#include <ranges>
-
-#include "Core/TextureManager.hpp"
 
 AssetManager::AssetManager() {
     LOG(LogType::VITAL, "AssetManager constructed");
 }
 
 void AssetManager::CacheAssets() {
-    for (const auto& entry : std::filesystem::recursive_directory_iterator(GetAssetsDir())) {
-        if (!std::filesystem::is_regular_file(entry)) { continue; }
 
+    // Create textures
+    TextureManager* textureManager = TextureManager::Get();
+
+    for ( const auto& entry : std::filesystem::recursive_directory_iterator(GetAssetsDir() / DEFAULT_TEXTURE_SUBDIR) ) {
+        if (!std::filesystem::is_regular_file(entry)) { continue; }
         const std::string ext = entry.path().extension().string();
 
-        Asset* asset = nullptr;
+        if (std::ranges::find(TextureManager::validExtensions, ext) == TextureManager::validExtensions.end())
+        { LOG(LogType::WARNING, "Unsupported asset type found at {}", entry.path().string()); continue; }
 
-        if (ext == ".bmp") {
-            asset = TextureManager::Get()->CreateTexture(entry.path());
-        }
-        // else if (ext == ".png") {
-        //
-        // }
-        // else if (ext == ".txt") {
-        //
-        // }
-
-        if (asset == nullptr) {
-            LOG(LogType::WARNING, "Invalid asset cached with path {}", entry.path().string());
-        }
-
+        Asset* asset = textureManager->CreateTexture(entry.path());
         cache[entry.path().string()] = asset;
-
     }
+
+    // Create ...
+
 }
 
 Asset* AssetManager::GetAsset(const std::string& relativePath) {

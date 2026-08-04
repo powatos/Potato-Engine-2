@@ -16,6 +16,10 @@
     #error "Potato Engine: Must define DEFAULT_TEXTURE_ASSET_PATH before engine compilation"
 #endif
 
+#ifndef DEFAULT_TEXTURE_SUBDIR
+    #error "Potato Engine: Must define DEFAULT_TEXTURE_SUBDIR before engine compilation"
+#endif
+
 TextureManager::TextureManager() {
     LOG(LogType::VITAL, "TextureManager constructed");
 
@@ -44,7 +48,7 @@ Texture* TextureManager::CreateTexture(const FilePath& rootPath) {
 Texture* TextureManager::GetTexture(const std::string& relativePath) {
     const AssetManager* assetManager = AssetManager::Get();
 
-    const std::string fullPath = AssetManager::NormalizePath((assetManager->Get()->GetAssetsDir() / relativePath).string());
+    const std::string fullPath = AssetManager::NormalizePath((assetManager->Get()->GetAssetsDir() / DEFAULT_TEXTURE_SUBDIR / relativePath).string());
 
     if (!cache.contains(fullPath)) {
         return GetTexture(DEFAULT_TEXTURE_ASSET_PATH);

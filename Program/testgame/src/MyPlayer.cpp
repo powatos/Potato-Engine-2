@@ -14,7 +14,7 @@ MyPlayer::MyPlayer() : downraycast(Raycast()) {
     SetBounce(1.f);
 
     SetUsingSimpleTexture(false);
-    SetTexture("Textures/smile.bmp");
+    SetTexture("smile.bmp");
 }
 
 void MyPlayer::BeginPlay() {
