@@ -30,7 +30,7 @@ int GameplayUtil::RandomInt(int min, int max) {
     return dist(randGen());
 }
 
-int GameplayUtil::RandomFloat(float min, float max) {
+float GameplayUtil::RandomFloat(float min, float max) {
     std::uniform_real_distribution<float> dist(min, max);
     return dist(randGen());
 }

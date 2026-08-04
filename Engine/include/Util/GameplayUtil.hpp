@@ -21,7 +21,7 @@ public:
      * @param min minimum value (inclusive)
      * @param max maximum value (exclusive)
      */
-    static int RandomFloat(float min, float max);
+    static float RandomFloat(float min, float max);
 
     /**
      * @brief Generates and returns a random boolean
