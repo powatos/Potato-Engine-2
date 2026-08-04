@@ -14,9 +14,46 @@ void TestGM::BeginPlay() {
     Gamemode::BeginPlay();
 
     // work();
+    randomTerrain();
+
+}
+
+void TestGM::randomTerrain() {
+
+    World* world = GameInstance::Get()->GetWorld();
+
+    const float maxLength = world->Settings.Size.x;
+
+    float currentLength = 0.f;
+    float width = GameplayUtil::RandomFloat(30.f, 50.f);
+
+    do {
+        const float height = GameplayUtil::PerlinNoise(Vector2(currentLength, 10)) * 10.f;
+
+        Block* terrain = world->SpawnActor<Block>();
+
+        terrain->SetSize(Vector2(width, height));
+        terrain->SetPosition(Vector2(
+            currentLength,
+            height
+        ));
+
+        terrain->SetSimulatingPhysics(true);
+        terrain->SetCollisionType(CollisionType::Block);
+        terrain->SetMovability(ActorMovability::Static);
+        terrain->SetUsingSimpleTexture(true);
+        terrain->simpleColorFill = true;
+        terrain->simpleColor = Color::BLACK();
+
+        currentLength += width;
+
+        width = std::min(GameplayUtil::RandomFloat(10.f, 30.f), maxLength - currentLength);
+
+    } while (currentLength < maxLength);
 
 
 }
+
 
 void TestGM::work() {
     const float res = 1;

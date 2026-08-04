@@ -10,5 +10,6 @@ public:
 
 private:
     void work();
+    void randomTerrain();
 
 };
