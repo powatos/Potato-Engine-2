@@ -2,8 +2,8 @@
 #pragma once
 
 #include "Core/Tickable.hpp"
-#include "Game/Camera.hpp"
-#include "Game/Player.hpp"
+#include "Actors/Camera.hpp"
+#include "Actors/Player.hpp"
 
 /**
  * @brief Main managing class for the player, controlling interactions and non-local behavior

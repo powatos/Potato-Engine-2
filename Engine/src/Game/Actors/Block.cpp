@@ -1,6 +1,6 @@
 /** @file Block.cpp */
 
-#include "Game/Block.hpp"
+#include "Actors/Block.hpp"
 
 ARCHIVE_STATIC(Block)
 

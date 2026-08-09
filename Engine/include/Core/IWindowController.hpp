@@ -1,7 +1,8 @@
-/** @file "IScreenController.hpp" */
+/** @file "IWindowController.hpp" */
 #pragma once
 #include "Util/Color.hpp"
 #include "Util/Vector2.hpp"
+
 
 /**
  * @brief Enum representing window border mode
@@ -25,7 +26,7 @@ enum class WindowRescaleMode
 /**
  * @brief Interface to manage screen settings and operations
  */
-class IScreenController {
+class IWindowController {
 protected:
 
     Vector2 screenResolution;
@@ -41,12 +42,13 @@ protected:
     bool ShowBorder;
     bool IsResizable;
 
-    IScreenController();
-    virtual ~IScreenController() = default;
+    IWindowController();
+    virtual ~IWindowController() = default;
 
 public:
 
     virtual void* RequestRenderingContext() const = 0;
+    virtual void* RequestTTFEngine() const = 0;
 
     /**
      * @brief Gets resolution of screen

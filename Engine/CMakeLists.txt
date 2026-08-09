@@ -1,6 +1,7 @@
 # Engine
 
 find_package(SDL3 REQUIRED CONFIG)
+find_package(SDL3_ttf REQUIRED CONFIG)
 find_package(nlohmann_json REQUIRED CONFIG)
 find_package(fmt REQUIRED CONFIG)
 
@@ -23,6 +24,7 @@ target_link_libraries(PotatoEngine2
         fmt::fmt
     PRIVATE
         SDL3::SDL3
+		SDL3_ttf::SDL3_ttf
         nlohmann_json::nlohmann_json
 )
 

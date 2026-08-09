@@ -1,4 +1,4 @@
-/** @file EventController.hpp */
+/** @file EventManager.hpp */
 #pragma once
 
 #include <any>
@@ -13,9 +13,9 @@
 /**
  * @brief Class for event managing
  */
-class EventController : public EngineSubsystem<EventController>
+class EventManager : public EngineSubsystem<EventManager>
 {
-    ENGINE_SUBSYSTEM(EventController)
+    ENGINE_SUBSYSTEM(EventManager)
 
 public:
     virtual void Resolve() noexcept override;
@@ -56,20 +56,20 @@ public:
     void UnregisterNativeEvent(std::string BindingName);
 
 private:
-    EventController();
-    ~EventController();
+    EventManager();
+    ~EventManager();
     
     std::unordered_map< std::string, std::vector<std::any> > Bindings;
 
 };
 
 template<typename ...Args>
-void EventController::RegisterNativeEvent(std::string EventID, NativeEventBinding<Args...> Binding) {
+void EventManager::RegisterNativeEvent(std::string EventID, NativeEventBinding<Args...> Binding) {
     Bindings[EventID].push_back(std::any(Binding));
 }
 
 template<typename ...Args, typename ...CallbackArgs>
-bool EventController::FireNativeEvent(std::string EventID, CallbackArgs... args) {
+bool EventManager::FireNativeEvent(std::string EventID, CallbackArgs... args) {
     using namespace std::string_literals;
 
     for (const auto& [id, bindingList] : Bindings) {
@@ -93,7 +93,7 @@ bool EventController::FireNativeEvent(std::string EventID, CallbackArgs... args)
 }
 
 template<typename ...Args>
-void EventController::UnregisterNativeEvent(std::string EventID, void* object) {
+void EventManager::UnregisterNativeEvent(std::string EventID, void* object) {
     using namespace std::string_literals;
 
     for (auto& [id, bindingList] : Bindings) {
@@ -117,7 +117,7 @@ void EventController::UnregisterNativeEvent(std::string EventID, void* object) {
 }
 
 template<typename ...Args>
-void EventController::UnregisterNativeEvent(std::string BindingName) {
+void EventManager::UnregisterNativeEvent(std::string BindingName) {
     using namespace std::string_literals;
 
     for (auto& [id, bindingList] : Bindings) {

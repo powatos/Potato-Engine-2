@@ -1,14 +1,13 @@
 
 #include <Core/GameInstance.hpp>
 #include <Core/PersistentLevel.hpp>
-#include <Core/EventController.hpp>
+#include <Core/EventManager.hpp>
 #include <Core/InputController.hpp>
 #include <Core/PotatoEngine.hpp>
-#include <Game/Block.hpp>
-#include <Game/Player.hpp>
+#include <Actors/Block.hpp>
+#include <Actors/Player.hpp>
 #include <Game/World.hpp>
-#include <UI/HUDController.hpp>
-#include <UI/DebugInfo.hpp>
+#include <Widgets/DebugInfo.hpp>
 #include <Core/Texture.hpp>
 
 #include <Debug/Log.hpp>
@@ -16,8 +15,9 @@
 
 #include <memory>
 
-#include "Core/IScreenController.hpp"
+#include "Core/IWindowController.hpp"
 #include "Core/TextureManager.hpp"
+#include "UI/UIManager.hpp"
 #include "Util/GameplayUtil.hpp"
 #include "Util/TimerManager.hpp"
 
@@ -31,12 +31,12 @@ int main()
 
     GameInstance* instance = GameInstance::Get();
 
-    IScreenController* screenController = engine.GetScreenController();
-    screenController->SetTargetFrameRate(60.f);
-    screenController->SetBackgroundColor(Color(0x00, 0xaa, 0xff, 0xff));
+    IWindowController* windowController = engine.GetWindowController();
+    windowController->SetTargetFrameRate(60.f);
+    windowController->SetBackgroundColor(Color(0x00, 0xaa, 0xff, 0xff));
     // screenController->SetScreenResolution(Vector2(100,100));
-    screenController->SetRescaleMode(WindowRescaleMode::Letterbox);
-    screenController->SetWindowMode(WindowMode::Windowed);
+    windowController->SetRescaleMode(WindowRescaleMode::Letterbox);
+    windowController->SetWindowMode(WindowMode::Windowed);
 
     /// LEVEL SETUP
     [[maybe_unused]] World* world = instance->GetWorld();
@@ -52,15 +52,15 @@ int main()
     player->SetSize(Vector2(10,10));
 
     /// UI SETUP
-    [[maybe_unused]] IHUDController* HUDController = engine.GetHUDController();
+    UIManager* uim = UIManager::Get();
 
     /// DEBUG
-    [[maybe_unused]] DebugInfo* debugInfoWidget = HUDController->AddWidget<DebugInfo>("W_DebugInfo");
+    DebugInfo* debugInfoWidget = uim->AddUI<DebugInfo>("W_DebugInfo");
     engine.GetInputController()->RegisterInputBinding(InputBinding(
-        Keycode::T, 
-        InputType::Impulse, 
-        "ToggleDebugInfo", 
-        static_cast<UIElement*>(debugInfoWidget), 
+        Keycode::T,
+        InputType::Impulse,
+        "ToggleDebugInfo",
+        debugInfoWidget,
         &DebugInfo::ToggleVisibility
     ));
 

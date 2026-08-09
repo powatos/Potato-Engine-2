@@ -1,8 +1,8 @@
 /** @file Camera.cpp */
 
-#include "Game/Camera.hpp"
+#include "Actors/Camera.hpp"
 
-#include "Core/IScreenController.hpp"
+#include "Core/IWindowController.hpp"
 #include "Core/PotatoEngine.hpp"
 
 Camera::Camera() {
@@ -42,9 +42,9 @@ float Camera::GetViewHeight() const {
 void Camera::TickPostUpdate(float dt) {
     Actor::TickPostUpdate(dt);
 
-    IScreenController* screenController = PotatoEngine::Get().GetScreenController();
+    IWindowController* windowController = PotatoEngine::Get().GetWindowController();
 
-    const float aspectRatio = screenController->GetScreenResolution().x / screenController->GetScreenResolution().y;
+    const float aspectRatio = windowController->GetScreenResolution().x / windowController->GetScreenResolution().y;
     const float renderHeight = ViewHeight / Zoom;
     SetSize(Vector2(renderHeight * aspectRatio, renderHeight));
 

@@ -1,17 +1,17 @@
-/** @file TickController.cpp */
+/** @file TickManager.cpp */
 
 #include <algorithm>
 
-#include "Core/TickController.hpp"
+#include "Core/TickManager.hpp"
 
 #include "Core/Tickable.hpp"
 #include "Debug/Log.hpp"
 
-TickController::TickController() {
-    LOG(LogType::VITAL, "TickController constructed");
+TickManager::TickManager() {
+    LOG(LogType::VITAL, "TickManager constructed");
 }
 
-void TickController::Fire(float dt, TickGroup group) {
+void TickManager::Fire(float dt, TickGroup group) {
 
     // add from queue
     tickables.reserve(tickables.size() + tickablesQueue.size());
@@ -30,7 +30,7 @@ void TickController::Fire(float dt, TickGroup group) {
 
 }
 
-constexpr void TickController::checkObjByGroup(float dt, TickGroup group, Tickable* obj) {
+constexpr void TickManager::checkObjByGroup(float dt, TickGroup group, Tickable* obj) {
     if (obj == nullptr) { return; }
 
     switch (group) {
@@ -61,18 +61,18 @@ constexpr void TickController::checkObjByGroup(float dt, TickGroup group, Tickab
     }
 }
 
-void TickController::Register(Tickable* tickable) {
+void TickManager::Register(Tickable* tickable) {
     tickablesQueue.push_back(tickable);
 }
-void TickController::Unregister(Tickable* tickable) {
+void TickManager::Unregister(Tickable* tickable) {
     if (auto it = std::find(tickables.begin(), tickables.end(), tickable); it != tickables.end()) {
         *it = nullptr;
     }
 }
 
-void TickController::Resolve() noexcept {
-    LOG(LogType::VITAL, "Resolving TickController");
+void TickManager::Resolve() noexcept {
+    LOG(LogType::VITAL, "Resolving TickManager");
 }
 
-TickController::~TickController() {
+TickManager::~TickManager() {
 }

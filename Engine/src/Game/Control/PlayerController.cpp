@@ -3,11 +3,11 @@
 #include <algorithm>
 
 #include "Core/GameInstance.hpp"
-#include "Core/EventController.hpp"
+#include "Core/EventManager.hpp"
 #include "Core/InputController.hpp"
 #include "Core/PotatoEngine.hpp"
-#include "Game/Camera.hpp"
-#include "Game/Player.hpp"
+#include "Actors/Camera.hpp"
+#include "Actors/Player.hpp"
 #include "Game/World.hpp"
 
 #include "Debug/Log.hpp"

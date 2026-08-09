@@ -1,7 +1,7 @@
 /** @file Tickable.hpp */
 #pragma once
 
-class TickController;
+class TickManager;
 
 /**
  * @brief Abstract class that route ticking functionality
@@ -18,7 +18,7 @@ class TickController;
  */
 class Tickable 
 {
-    friend class TickController;
+    friend class TickManager;
 
 public:
     Tickable(Tickable&&) noexcept = default;

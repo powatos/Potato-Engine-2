@@ -23,12 +23,14 @@ public:
     /**
      * @anchor event-delegate-template-constructor
      * @brief Constructs delegate with class method binding
-     * * @tparam BindingClass Class for binding
+     * * @tparam BindingClassO Class of object for binding
+     * * @tparam BindingClassC Class of callback to bind
      * @param obj object to bind to
      * @param method callback with additional arguments
      */
-    template<typename BindingClass>
-    EventDelegate(BindingClass* obj, void(BindingClass::*method)(CallbackArgs...)) {
+    template<typename BindingClassO, typename BindingClassC>
+    requires std::is_base_of_v<BindingClassC, BindingClassO>
+    EventDelegate(BindingClassO* obj, void(BindingClassC::*method)(CallbackArgs...)) {
         instance = obj;
         callback = [obj, method](CallbackArgs... args) { 
             (obj->*method)(std::forward<CallbackArgs>(args)...); // forward ensures value category preserved

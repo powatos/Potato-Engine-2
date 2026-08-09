@@ -1,4 +1,4 @@
-/** @file PhysicsController.cpp */
+/** @file PhysicsManager.cpp */
 
 #include <limits>
 #include <unordered_map>
@@ -10,13 +10,13 @@
 #include "Util/GameplayHelper.hpp"
 #include "Debug/Log.hpp"
 
-#include "PhysicsController.hpp"
+#include "PhysicsManager.hpp"
 
-PhysicsController::PhysicsController() {
-    LOG(LogType::VITAL, "PhysicsController constructed");
+PhysicsManager::PhysicsManager() {
+    LOG(LogType::VITAL, "PhysicsManager constructed");
 }
 
-void PhysicsController::_TickPhysics(float dt) {
+void PhysicsManager::_TickPhysics(float dt) {
     const ActorPool& actorPool = GameInstance::Get()->GetWorld()->GetAllActors();
     constexpr float TOI_EPSILON = 1e-4f;
 
@@ -153,7 +153,7 @@ void PhysicsController::_TickPhysics(float dt) {
 
 }
 
-void PhysicsController::UpdateActorVelocity(Actor* actor, float dt) {
+void PhysicsManager::UpdateActorVelocity(Actor* actor, float dt) {
     const World::WorldSettings& Settings = GameInstance::Get()->GetWorld()->Settings;
 
     if (actor == nullptr) { return; }
@@ -174,7 +174,7 @@ void PhysicsController::UpdateActorVelocity(Actor* actor, float dt) {
     actor->ClearForces();
 }
 
-PhysicsController::SweepResult PhysicsController::SweptAABB(
+PhysicsManager::SweepResult PhysicsManager::SweptAABB(
     const Vector2& aPos, const Vector2 bPos,
     const Vector2& aSize, const Vector2& bSize,
     const Vector2& relativeDisplacement
@@ -255,7 +255,7 @@ PhysicsController::SweepResult PhysicsController::SweptAABB(
     return result;
 }
 
-void PhysicsController::ApplyRestitutionImpulse(Actor* a, Actor* b, const Vector2& normal) {
+void PhysicsManager::ApplyRestitutionImpulse(Actor* a, Actor* b, const Vector2& normal) {
     const World::WorldSettings& Settings = GameInstance::Get()->GetWorld()->Settings;
 
     const float aInvMass = a->GetMovability() == ActorMovability::Static ? 0.f : (1.f / a->GetMass());
@@ -277,7 +277,7 @@ void PhysicsController::ApplyRestitutionImpulse(Actor* a, Actor* b, const Vector
     b->AddImpulse(-impulse * bInvMass);
 }
 
-void PhysicsController::ApplyPenetrationCorrection(Actor* a, Actor* b, const Vector2& normal, float penetration) {
+void PhysicsManager::ApplyPenetrationCorrection(Actor* a, Actor* b, const Vector2& normal, float penetration) {
     const World::WorldSettings& Settings = GameInstance::Get()->GetWorld()->Settings;
 
     const float seperationAmount = std::max(penetration - Settings.clipAllowed, 0.f) * Settings.clipDampeningFactor;
@@ -294,9 +294,9 @@ void PhysicsController::ApplyPenetrationCorrection(Actor* a, Actor* b, const Vec
     b->AddLocalOffset(-correctionVector * (bInvMass / totalInvMass));
 }
 
-void PhysicsController::Resolve() noexcept {
-    LOG(LogType::VITAL, "Resolving PhysicsController");
+void PhysicsManager::Resolve() noexcept {
+    LOG(LogType::VITAL, "Resolving PhysicsManager");
 }
 
-PhysicsController::~PhysicsController() {
+PhysicsManager::~PhysicsManager() {
 }

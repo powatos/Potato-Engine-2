@@ -1,7 +1,7 @@
 /** @file GameInstance.cpp */
 
 #include "Core/Gamemode.hpp"
-#include "Game/Player.hpp"
+#include "Actors/Player.hpp"
 #include "Game/World.hpp"
 
 #include "Debug/Log.hpp"

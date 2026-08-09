@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-#include "Game/Block.hpp"
-#include "Game/Player.hpp"
+#include "Actors/Block.hpp"
+#include "Actors/Player.hpp"
 
 #include "Debug/Log.hpp"
 

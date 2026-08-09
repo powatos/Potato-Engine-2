@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "Game/Entity.hpp"
+#include "Actors/Entity.hpp"
 
 Entity::Entity() {
     MaxHealth = 100.f;

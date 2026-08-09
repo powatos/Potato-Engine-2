@@ -1,7 +1,7 @@
 /** @file InputBinding.hpp */
 #pragma once
 
-#include "Core/EventController.hpp"
+#include "Core/EventManager.hpp"
 #include "Core/Input.hpp"
 
 /**
@@ -27,15 +27,17 @@ public:
 
     /**
      * @brief Constructs binding with method callback
-     * * @tparam T Class of binding object
+     * * @tparam To Class of binding object
+     * * @tparam Tc Class of binded callback
      * @param key Keycode to bind to
      * @param type InputType to bind to
      * @param name Identifier for binding
      * @param obj Object to bind to
      * @param callback Function to notify
      */
-    template<typename T>
-    InputBinding(Keycode key, InputType type, std::string name, T* obj, void(T::*callback)()) : 
+    template<typename To, typename Tc>
+    requires std::is_base_of_v<Tc, To>
+    InputBinding(Keycode key, InputType type, const std::string& name, To* obj, void(Tc::*callback)()) :
         name(name),
         delegate(obj, callback),
         key(key),
@@ -50,7 +52,7 @@ public:
      * @param name Identifier for binding
      * @param callback Function to notify
      */
-    InputBinding(Keycode key, InputType type, std::string name, void(*callback)()) : 
+    InputBinding(Keycode key, InputType type, const std::string& name, void(*callback)()) :
         name(name),
         delegate(callback),
         key(key),

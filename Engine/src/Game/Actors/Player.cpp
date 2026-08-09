@@ -7,7 +7,7 @@
 #include "Debug/Log.hpp"
 #include "Util/GameplayHelper.hpp"
 
-#include "Game/Player.hpp"
+#include "Actors/Player.hpp"
 
 Player::Player() {
     SetSize(Vector2(2,2));

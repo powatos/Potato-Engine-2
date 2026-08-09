@@ -1,4 +1,4 @@
-/** @file TickController.hpp */
+/** @file TickManager.hpp */
 #pragma once
 
 #include <unordered_map>
@@ -14,9 +14,9 @@ class Tickable;
 /**
  * 
  */
-class TickController : public EngineSubsystem<TickController>
+class TickManager : public EngineSubsystem<TickManager>
 {
-    ENGINE_SUBSYSTEM(TickController)
+    ENGINE_SUBSYSTEM(TickManager)
 
 public:
     virtual void Resolve() noexcept override;
@@ -40,8 +40,8 @@ public:
     void Unregister(Tickable* tickable);    
 
 protected:
-    TickController();
-    ~TickController();
+    TickManager();
+    ~TickManager();
 
 private:
     std::vector<Tickable*> tickables;

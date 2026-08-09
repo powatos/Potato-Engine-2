@@ -1,4 +1,4 @@
-/** @file PhysicsController.hpp */
+/** @file PhysicsManager.hpp */
 #pragma once
 
 #include "Core/Singleton.hpp"
@@ -9,16 +9,16 @@
 
 class Actor;
 
-class PhysicsController : public EngineSubsystem<PhysicsController>, public Tickable
+class PhysicsManager : public EngineSubsystem<PhysicsManager>, public Tickable
 {
-    ENGINE_SUBSYSTEM(PhysicsController)
+    ENGINE_SUBSYSTEM(PhysicsManager)
 
 public:
     virtual void Resolve() noexcept override;
 
 protected:
-    PhysicsController();
-    ~PhysicsController();
+    PhysicsManager();
+    ~PhysicsManager();
 
     virtual void _TickPhysics(float dt) override;
 

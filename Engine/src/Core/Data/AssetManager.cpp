@@ -6,6 +6,7 @@
 #include "Core/AssetManager.hpp"
 #include "Core/TextureManager.hpp"
 #include "Core/AssetConfigs.h"
+#include "Core/FontManager.hpp"
 
 #include "Debug/Log.hpp"
 
@@ -20,7 +21,7 @@ void AssetManager::CacheAssets() {
     // Create textures
     TextureManager* textureManager = TextureManager::Get();
 
-    for ( const auto& entry : std::filesystem::recursive_directory_iterator(GetAssetsDir() / DEFAULT_TEXTURE_SUBDIR) ) {
+    for ( const auto& entry : std::filesystem::recursive_directory_iterator(GetAssetsDir() / DEFAULT_TEXTURES_SUBDIR) ) {
         if (!std::filesystem::is_regular_file(entry)) { continue; }
         const std::string ext = entry.path().extension().string();
 
@@ -28,6 +29,20 @@ void AssetManager::CacheAssets() {
         { LOG(LogType::WARNING, "Unsupported asset type found at {}", entry.path().string()); continue; }
 
         Asset* asset = textureManager->CreateTexture(entry.path());
+        cache[entry.path().string()] = asset;
+    }
+
+    // Create fonts
+    FontManager* fontManager = FontManager::Get();
+
+    for ( const auto& entry : std::filesystem::recursive_directory_iterator(GetAssetsDir() / DEFAULT_FONTS_SUBDIR) ) {
+        if (!std::filesystem::is_regular_file(entry)) { continue; }
+        const std::string ext = entry.path().extension().string();
+
+        if (std::ranges::find(FontManager::validExtensions, ext) == FontManager::validExtensions.end())
+        { LOG(LogType::WARNING, "Unsupported asset type found at {}", entry.path().string()); continue; }
+
+        Asset* asset = fontManager->CreateFont(entry.path());
         cache[entry.path().string()] = asset;
     }
 

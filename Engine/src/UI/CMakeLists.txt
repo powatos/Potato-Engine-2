@@ -1,7 +1,12 @@
 
 target_sources(PotatoEngine2 PRIVATE
-	Widgets/Widget.cpp
-	UIElement.cpp
+	WidgetElements/BoxElement.cpp
+	WidgetElements/TextElement.cpp
 
-	Widgets/Objects/DebugInfo.cpp
+	Widgets/DebugInfo.cpp
+
+	UIElement.cpp
+	UIManager.cpp
+
+	Widget.cpp
 )

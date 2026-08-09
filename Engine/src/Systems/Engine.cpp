@@ -4,8 +4,8 @@
 #include <thread>
 
 #include "Core/GameInstance.hpp"
-#include "Game/World.hpp"
-#include "Core/TickController.hpp"
+#include "Core/EventManager.hpp"
+#include "Core/TickManager.hpp"
 
 #include "Debug/Log.hpp"
 
@@ -31,7 +31,7 @@ int Engine::main() {
     
     const GameInstance* Instance = GameInstance::Get();
     const OutputManager* outManager = OutputManager::Get();
-    TickController* tickController = TickController::Get();
+    TickManager* tickManager = TickManager::Get();
 
     const ms idealDelay(static_cast<int>(1000.f / outManager->GetTargetFrameRate()));
     auto lastTick = stdc::steady_clock::now();
@@ -47,20 +47,20 @@ int Engine::main() {
         if (dt >= 0.5f) { dt = 0.5f; } // clamp max dt
 
         {
-            tickController->Fire(dt, TickGroup::PreInput);
+            tickManager->Fire(dt, TickGroup::PreInput);
 
-            tickController->Fire(dt, TickGroup::_Input);
+            tickManager->Fire(dt, TickGroup::_Input);
 
-            tickController->Fire(dt, TickGroup::Update);
-            tickController->Fire(dt, TickGroup::PostUpdate);
+            tickManager->Fire(dt, TickGroup::Update);
+            tickManager->Fire(dt, TickGroup::PostUpdate);
 
-            tickController->Fire(dt, TickGroup::_Physics);
+            tickManager->Fire(dt, TickGroup::_Physics);
 
-            tickController->Fire(dt, TickGroup::PostPhysics);
+            tickManager->Fire(dt, TickGroup::PostPhysics);
 
-            tickController->Fire(dt, TickGroup::_Render);
+            tickManager->Fire(dt, TickGroup::_Render);
 
-            tickController->Fire(dt, TickGroup::PostRender);
+            tickManager->Fire(dt, TickGroup::PostRender);
         }
 
         auto end = stdc::steady_clock::now();
@@ -90,10 +90,10 @@ int Engine::main() {
 }
 
 void Engine::FireTick(const float dt) const {
-    EventController::Get()->FireNativeEvent<float>("___ENGINE_TICK", dt);
+    EventManager::Get()->FireNativeEvent<float>("___ENGINE_TICK", dt);
 }
 void Engine::FireTickPostPhysics(const float dt) const {
-    EventController::Get()->FireNativeEvent<float>("___ENGINE_TICK_POST_PHYSICS", dt);
+    EventManager::Get()->FireNativeEvent<float>("___ENGINE_TICK_POST_PHYSICS", dt);
 }
 
 void Engine::Resolve() noexcept {

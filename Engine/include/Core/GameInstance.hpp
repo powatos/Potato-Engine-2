@@ -5,7 +5,7 @@
 #include <type_traits>
 
 #include "Game/World.hpp"
-#include "Game/Player.hpp"
+#include "Actors/Player.hpp"
 #include "Gamemode.hpp"
 
 #include "Core/EngineSubsystem.hpp"

@@ -6,8 +6,8 @@
 
 #include "Util/TimerManager.hpp"
 #include "Core/GameInstance.hpp"
-#include "Game/Block.hpp"
-#include "Core/TickController.hpp"
+#include "Actors/Block.hpp"
+#include "Core/TickManager.hpp"
 
 #include "Debug/Log.hpp"
 
@@ -77,7 +77,7 @@ Block* Raycast::Cast(HitResult& outHit) {
     //     trail->SetVisibility(true);
     //
     //     TimerManager::Get()->AddTimer("raycast_trail_delete_delay", debugDuration, world, &World::DestroyActor, trail);
-    //     TickController::Get()->Unregister(trail); // avoid uneccesary tick checks
+    //     TickManager::Get()->Unregister(trail); // avoid uneccesary tick checks
     //
     // }
 

@@ -1,7 +1,7 @@
 /** @file Camera.hpp */
 #pragma once
 
-#include "Actor.hpp"
+#include "Game/Actor.hpp"
 
 /**
  * @brief Camera wrapper for rendering

@@ -2,22 +2,32 @@
 
 #include "UI/UIElement.hpp"
 
-Vector2 UIElement::GetScreenSize() const {
+#include "Core/PotatoEngine.hpp"
+
+UIElement::UIElement(const std::string& UID) : UID(UID), Visible(true) {}
+
+void UIElement::Setup() {}
+
+const std::string& UIElement::GetUID() const {
+    return UID;
+}
+
+UIVector UIElement::GetScreenSize() const {
     return ScreenSize;
 }
-void UIElement::SetScreenSize(const Vector2& size) {
+void UIElement::SetScreenSize(const UIVector& size) {
     ScreenSize = size;
 }
 
 
-Vector2 UIElement::GetScreenPosition() const { 
+UIVector UIElement::GetScreenPosition() const {
     return ScreenPosition; 
 }
-void UIElement::SetScreenPosition(const Vector2 &ScreenPos) { 
+void UIElement::SetScreenPosition(const UIVector& ScreenPos) {
     ScreenPosition = ScreenPos;
 }
 
-void UIElement::AddScreenOffset(const Vector2& ScreenOffset) {
+void UIElement::AddScreenOffset(const UIVector& ScreenOffset) {
     SetScreenPosition(ScreenPosition + ScreenOffset);
 }
 
@@ -30,4 +40,13 @@ void UIElement::SetVisibility(bool visibility) {
 }
 void UIElement::ToggleVisibility() {
     Visible = !Visible;
+}
+
+Vector2 UIElement::GetTruePosition() const {
+    return GetScreenPosition().scale * PotatoEngine::Get().GetWindowController()->GetScreenResolution() + GetScreenPosition().offset;
+
+}
+Vector2 UIElement::GetTrueSize() const {
+    return GetScreenSize().scale * PotatoEngine::Get().GetWindowController()->GetScreenResolution() + GetScreenSize().offset;
+
 }

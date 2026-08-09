@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "dependencies": [
     "sdl3",
+    "sdl3-ttf",
     "nlohmann-json",
     "fmt"
   ]

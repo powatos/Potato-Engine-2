@@ -7,5 +7,4 @@ Asset::Asset(const FilePath& path) :
         // .type = parseExtension(path.extension().string())
     }),
     path(path)
-
 {}

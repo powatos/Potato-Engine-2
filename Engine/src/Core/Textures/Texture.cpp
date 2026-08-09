@@ -5,7 +5,7 @@
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_surface.h>
 
-#include "Core/IScreenController.hpp"
+#include "Core/IWindowController.hpp"
 #include "Core/PotatoEngine.hpp"
 #include "Debug/Log.hpp"
 
@@ -83,7 +83,7 @@ void Texture::SetKeyColor(Color color) {
 
     SDL_DestroyTexture(static_cast<SDL_Texture*>(sdl_texture));
 
-    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(PotatoEngine::Get().GetScreenController()->RequestRenderingContext());
+    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(PotatoEngine::Get().GetWindowController()->RequestRenderingContext());
 
     sdl_texture = SDL_CreateTextureFromSurface(renderer, surface);
     SetScaleMode(scaleMode);

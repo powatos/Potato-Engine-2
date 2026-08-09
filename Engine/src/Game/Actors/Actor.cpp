@@ -3,7 +3,7 @@
 #include <algorithm>
 
 #include "Core/GameInstance.hpp"
-#include "Core/EventController.hpp"
+#include "Core/EventManager.hpp"
 #include "Core/PotatoEngine.hpp"
 #include "Game/World.hpp"
 

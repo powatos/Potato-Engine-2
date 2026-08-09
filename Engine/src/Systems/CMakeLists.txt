@@ -4,11 +4,8 @@ target_sources(PotatoEngine2 PRIVATE
 	Engine.cpp
 	Engine.hpp
 
-	PhysicsController.cpp
-	PhysicsController.hpp
-
-	UIController.cpp
-	UIController.hpp
+	PhysicsManager.cpp
+	PhysicsManager.hpp
 
 	InputManager.cpp
 	InputManager.hpp

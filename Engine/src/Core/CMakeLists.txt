@@ -2,13 +2,16 @@
 target_sources(PotatoEngine2 PRIVATE
     Control/GameInstance.cpp
     Control/Gamemode.cpp
-	Control/IScreenController.cpp
+	Control/IWindowController.cpp
 
 	Data/Asset.cpp
 	Data/AssetManager.cpp
 	Data/PersistentLevel.cpp
 
-	Event/EventController.cpp
+	Fonts/Font.cpp
+	Fonts/FontManager.cpp
+
+	Event/EventManager.cpp
 
 	Input/
 
@@ -16,5 +19,5 @@ target_sources(PotatoEngine2 PRIVATE
 	Textures/TextureManager.cpp
 
 	Tick/Tickable.cpp
-	Tick/TickController.cpp
+	Tick/TickManager.cpp
 )

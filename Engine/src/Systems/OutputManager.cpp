@@ -3,12 +3,18 @@
 #include <SDL3/SDL_init.h>
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_hints.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
+#include "Core/AssetManager.hpp"
+#include "Core/FontManager.hpp"
 #include "Core/GameInstance.hpp"
+#include "Debug/Log.hpp"
+#include "UI/BoxElement.hpp"
 #include "UI/TextElement.hpp"
-#include "UI/Widget.hpp"
 #include "Util/GameplayHelper.hpp"
 
+#define sdl_ren SDL_Renderer* renderer = static_cast<SDL_Renderer*>(Renderer);
+#define sdl_win SDL_Window* window = static_cast<SDL_Window*>(MainWindow);
 
 OutputManager::OutputManager() {
     LOG(LogType::VITAL, "OutputManager constructed");
@@ -40,8 +46,15 @@ OutputManager::OutputManager() {
     }
 
     SetScreenResolution(screenResolution);
-
     SDL_SetWindowResizable(window, IsResizable);
+
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+    TTF_Init();
+
+    TTF_TextEngine* textEngine = TTF_CreateRendererTextEngine(renderer);
+    TextEngine = textEngine;
+
 }
 
 
@@ -52,13 +65,15 @@ void OutputManager::BeginPlay() {
 }
 
 void OutputManager::DrawLevel() {
-    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(Renderer);
+    sdl_ren
 
     SDL_SetRenderDrawColor(renderer, backgroundColor.R, backgroundColor.G, backgroundColor.B, backgroundColor.A);
 
-    // SDL_RenderClear(renderer);
-    SDL_FRect sky {0,0,screenResolution.x, screenResolution.y};
-    SDL_RenderFillRect(renderer, &sky);
+    { // toggle comment this whole block for bars
+        SDL_RenderClear(renderer);
+        // SDL_FRect sky {0,0,screenResolution.x, screenResolution.y};
+        // SDL_RenderFillRect(renderer, &sky);
+    }
 
     const GameInstance* Instance = GameInstance::Get();
     const World* world = Instance->GetWorld();
@@ -139,46 +154,119 @@ void OutputManager::DrawLevel() {
 
 }
 
+#pragma region UI Rendering
+
 void OutputManager::DrawHUD() {
-    using namespace std::string_literals;
 
-    // iterate through each widget
-    for (auto& [UID, map] : WidgetMaps) {
-        // WINDOW* hudWindow = static_cast<WINDOW*>(map->window);
-        //
-        // werase(hudWindow);
+    const UIHierarchy* root = UIManager::Get()->RootWidgetH;
 
-        if (!map->widget->isVisible()) { continue; }
+    UIVector pos = root->Object->GetScreenPosition();
+    UIVector scale = root->Object->GetScreenSize();
 
-        // box(hudWindow, 0, 0);
-
-        // iterate through each ui element on the widget
-        for (auto [name, elem] : map->widget->GetAllElements()) {
-            if (!elem->isVisible()) { continue; }
-
-            const char* t  = elem->TYPE();
-
-            if (t == "TextElement"s) {
-                const TextElement* e = dynamic_cast<const TextElement*>(elem);
-                const Vector2 pos = e->GetScreenPosition() + Vector2(1.f,1.f);
-                // mvwprintw(hudWindow,
-                //     static_cast<int>(pos.y),
-                //     static_cast<int>(pos.x),
-                //     "%s",
-                //     e->field.c_str()
-                // );
-            }
-
-        }
-        // touchwin(hudWindow);
-        // wnoutrefresh(hudWindow);
-    }
-
+    Recurse_DrawUI(root, pos, scale);
 
 }
 
+void OutputManager::Recurse_DrawUI(const UIHierarchy* ui, UIVector posScale, UIVector sizeScale) {
+
+    UIElement* uiObj = ui->Object;
+
+    if (!uiObj->isVisible()) { return; }
+
+    // calls corresponding Render() overload
+    uiObj->___Render_Passthrough(this, posScale, sizeScale);
+
+    const UIVector screenPos = uiObj->GetScreenPosition();
+    const UIVector screenSize = uiObj->GetScreenSize();
+
+    posScale.scale *= screenPos.scale;
+    posScale.offset += screenPos.offset;
+
+    sizeScale.scale *= screenSize.scale;
+    sizeScale.offset += screenSize.offset;
+
+    for (const UIHierarchy* child : ui->Children) {
+        Recurse_DrawUI(child, posScale, sizeScale);
+    }
+
+}
+
+void OutputManager::Render(const class Widget* ui, UIVector posScale, UIVector sizeScale) {
+
+}
+
+void OutputManager::Render(const class TextElement* ui, UIVector posScale, UIVector sizeScale) {
+    sdl_ren
+
+    const Vector2 pos = getScaledVec(ui->GetScreenPosition(), posScale);
+    const Vector2 size = getScaledVec(ui->GetScreenSize(), sizeScale);
+
+    TTF_Text* text = static_cast<TTF_Text*>(ui->___Get_Text());
+
+    TTF_DrawRendererText(text, pos.x, pos.y);
+
+}
+
+void OutputManager::Render(const class BoxElement* ui, UIVector posScale, UIVector sizeScale) {
+    sdl_ren
+
+    const Vector2 pos = getScaledVec(ui->GetScreenPosition(), posScale);
+    const Vector2 size = getScaledVec(ui->GetScreenSize(), sizeScale);
+
+    const SDL_FRect rect{
+        pos.x,
+        pos.y,
+        size.x,
+        size.y
+    };
+
+    if (ui->BorderWeight != 0) {
+        const int t = ui->BorderWeight;
+
+        const SDL_FRect rects[4] = {
+            { // top
+                rect.x - t,
+                rect.y - t,
+                rect.w + t*2,
+                static_cast<const float>(t)
+            },
+            { // bottom
+                rect.x - t,
+                rect.y + rect.h,
+                rect.w + t*2,
+                static_cast<const float>(t)
+            },
+            { // left
+                rect.x - t,
+                rect.y,
+                static_cast<const float>(t),
+                rect.h
+            },
+            { // right
+                rect.x + rect.w,
+                rect.y,
+                static_cast<const float>(t),
+                rect.h
+            }
+        };
+
+        const Color col = ui->BorderColor;
+        SDL_SetRenderDrawColor(renderer, col.R, col.G, col.B, col.A);
+
+        SDL_RenderFillRects(renderer, rects, 4);
+    }
+
+    const Color col = ui->FillColor;
+    SDL_SetRenderDrawColor(renderer, col.R, col.G, col.B, col.A);
+
+    SDL_RenderFillRect(renderer, &rect);
+
+}
+
+#pragma endregion
+
 void OutputManager::DrawBars() {
-    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(Renderer);
+    sdl_ren
 
     SDL_SetRenderLogicalPresentation(renderer, static_cast<int>(screenResolution.x), static_cast<int>(screenResolution.y), SDL_LOGICAL_PRESENTATION_DISABLED);
 
@@ -192,15 +280,16 @@ void OutputManager::DrawBars() {
 
 
 void OutputManager::Draw() {
-    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(Renderer);
+    sdl_ren
 
-    DrawBars();
+    // DrawBars();
 
     DrawLevel();
 
-    // DrawHUD();
+    DrawHUD();
 
     SDL_RenderPresent(renderer);
+
 }
 
 void OutputManager::_TickRender(float dt) {
@@ -209,7 +298,7 @@ void OutputManager::_TickRender(float dt) {
 
 void OutputManager::Tick(float dt) {
     // TODO: update windowSize member when window size changed event is triggered instead of in tick
-    // SDL_Window* window = static_cast<SDL_Window*>(MainWindow);
+    // sdl_win
 
     // int w, h;
     // SDL_GetWindowSize(window, &w, &h);
@@ -217,14 +306,23 @@ void OutputManager::Tick(float dt) {
     // windowSize = Vector2(static_cast<float>(w),static_cast<float>(h));
 }
 
+Vector2 OutputManager::getScaledVec(const UIVector& vec, const UIVector& scale) const {
+    return (vec.scale * scale.scale) * screenResolution + (vec.offset + scale.offset);
+
+}
+
 void* OutputManager::RequestRenderingContext() const {
     return Renderer;
+}
+
+void* OutputManager::RequestTTFEngine() const {
+    return TextEngine;
 }
 
 #pragma region Settings Setters
 
 void OutputManager::SetScreenResolution(const Vector2& resolution) {
-    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(Renderer);
+    sdl_ren
 
     screenResolution = resolution;
 
@@ -232,7 +330,7 @@ void OutputManager::SetScreenResolution(const Vector2& resolution) {
 }
 
 void OutputManager::SetWindowSize(const Vector2& size) {
-    SDL_Window* window = static_cast<SDL_Window*>(MainWindow);
+    sdl_win
 
     SDL_SetWindowSize(window, static_cast<int>(size.x), static_cast<int>(size.y));
     windowSize = size;
@@ -240,7 +338,7 @@ void OutputManager::SetWindowSize(const Vector2& size) {
 }
 
 void OutputManager::SetWindowMode(WindowMode mode) {
-    SDL_Window* window = static_cast<SDL_Window*>(MainWindow);
+    sdl_win
 
     switch (mode) {
         case WindowMode::Fullscreen: {
@@ -261,7 +359,7 @@ void OutputManager::SetWindowMode(WindowMode mode) {
 }
 
 void OutputManager::SetRescaleMode(WindowRescaleMode mode) {
-    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(Renderer);
+    sdl_ren
 
     const auto _mode = static_cast<SDL_RendererLogicalPresentation>(SDL_LOGICAL_PRESENTATION_DISABLED + static_cast<int>(mode));
     SDL_SetRenderLogicalPresentation(renderer, static_cast<int>(screenResolution.x), static_cast<int>(screenResolution.y), _mode);
@@ -270,66 +368,24 @@ void OutputManager::SetRescaleMode(WindowRescaleMode mode) {
 }
 
 void OutputManager::SetShowBorder(bool show) {
-    SDL_Window* window = static_cast<SDL_Window*>(MainWindow);
+    sdl_win
 
     SDL_SetWindowBordered(window, false);
 }
 
 void OutputManager::SetIsResizable(bool isResizable) {
-    SDL_Window* window = static_cast<SDL_Window*>(MainWindow);
+    sdl_win
 
     SDL_SetWindowResizable(window, isResizable);
 }
 
 #pragma endregion
 
-#pragma region Widget Management
-
-void OutputManager::RegisterWidget(Widget *widget) {
-    if (MainWindow == nullptr) { return; }
-    // WINDOW* displayWindow = static_cast<WINDOW*>(MainWindow);
-
-    const Vector2 widgetSize = widget->GetScreenSize();
-    const Vector2 widgetPos = widget->GetScreenPosition();
-
-    // WINDOW* win = derwin(displayWindow,
-    //     static_cast<int>(widgetSize.y),
-    //     static_cast<int>(widgetSize.x),
-    //     static_cast<int>(widgetPos.y),
-    //     static_cast<int>(widgetPos.x)
-    // );
-
-    // WidgetMaps.emplace(widget->GetUID(), new WidgetMapper(widget, win));
-
-}
-
-void OutputManager::RemoveWidget(std::string UID) {
-
-    for (auto it = WidgetMaps.begin(); it != WidgetMaps.end(); ) {
-        if (it->second->window == nullptr) { continue; } // can happen if OutputManager resolve is called before UIController resolve
-        if (it->second->widget->GetUID() == UID) {
-            // delwin(static_cast<WINDOW*>(it->second->window));
-            it->second->window = nullptr;
-
-            delete it->second;
-            WidgetMaps.erase(it);
-            break;
-        } else { it++; }
-    }
-
-}
-
-
-#pragma endregion
 
 void OutputManager::Resolve() noexcept {
     LOG(LogType::VITAL, "Resolving OutputManager");
 
-    for (auto& [UID, map] : WidgetMaps) {
-        // delwin(static_cast<WINDOW*>(map->window));
-        map->window = nullptr;
-        delete map;
-    }
+    TTF_Quit();
 
     SDL_DestroyRenderer(static_cast<SDL_Renderer*>(Renderer));
     SDL_DestroyWindow(static_cast<SDL_Window*>(MainWindow));
@@ -340,4 +396,3 @@ void OutputManager::Resolve() noexcept {
 
 OutputManager::~OutputManager() {
 }
-

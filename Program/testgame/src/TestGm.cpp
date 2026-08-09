@@ -2,7 +2,7 @@
 
 
 #include "Core/GameInstance.hpp"
-#include "Game/Block.hpp"
+#include "Actors/Block.hpp"
 
 #include "TestGm.hpp"
 

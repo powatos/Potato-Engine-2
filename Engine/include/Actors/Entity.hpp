@@ -1,7 +1,7 @@
 /** @file Entity.hpp */
 #pragma once
 
-#include "Actor.hpp"
+#include "Game/Actor.hpp"
 
 /**
  * @brief Character with player-like attributes

@@ -6,9 +6,8 @@
 #include <string>
 
 class IInputController;
-class IScreenController;
-class IHUDController;
-class EventController;
+class IWindowController;
+class EventManager;
 class IEngineSubsystem;
 
 /**
@@ -62,22 +61,14 @@ public:
 
     /** @brief Gets @ref IInputController "input controller" @returns @ref IInputController "input controller" */
     IInputController* GetInputController() const;
-    /** @brief Gets @ref IScreenController "screen controller" @returns @ref IScreenController "screen controller" */
-    IScreenController* GetScreenController() const;
-    /** @brief Gets @ref ITickController "tick controller" @returns @ref ITickController "tick controller" */
-    // ITickController* GetTickController() const;
-    /** @brief Gets @ref IHUDController "HUD controller" @returns @ref IHUDController "HUD controller" */
-    IHUDController* GetHUDController() const;
-    /** @brief Gets @ref EventController "Native event controller" @returns @ref EventController "Native event controller" */
-    EventController* GetNativeEventController() const;
+    /** @brief Gets @ref IWindowController "window controller" @returns @ref IWindowController "window controller" */
+    IWindowController* GetWindowController() const;
 
 protected:
     std::vector<IEngineSubsystem*> SubsystemStack;
 
     IInputController* InputController{};
-    IScreenController* ScreenController{};
-    IHUDController* HUDController{};
-    EventController* NativeEventController{};
+    IWindowController* WindowController{};
 
 
 private:

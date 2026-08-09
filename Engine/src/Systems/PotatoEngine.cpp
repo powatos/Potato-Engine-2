@@ -5,13 +5,12 @@
 
 #include "Core/GameInstance.hpp"
 #include "Core/Gamemode.hpp"
-#include "Core/EventController.hpp"
+#include "Core/EventManager.hpp"
 #include "Engine.hpp"
 #include "Game/World.hpp"
-#include "UIController.hpp"
-#include "UI/HUDController.hpp"
-#include "Core/TickController.hpp"
-#include "PhysicsController.hpp"
+#include "UI/UIManager.hpp"
+#include "Core/TickManager.hpp"
+#include "PhysicsManager.hpp"
 #include "Core/InputController.hpp"
 #include "Util/TimerManager.hpp"
 #include "InputManager.hpp"
@@ -24,6 +23,7 @@
 #include "Core/PotatoEngine.hpp"
 
 #include "Core/AssetManager.hpp"
+#include "Core/FontManager.hpp"
 #include "Core/TextureManager.hpp"
 
 
@@ -36,33 +36,34 @@ PotatoEngine::PotatoEngine() {
     SDL_free(prefPath);
 
     LOG.init(logPath);
-    LOG.showTerminalOutput = false;
+    // LOG.showTerminalOutput = false;
 
     /// Initialize all specific asset managers
     SubsystemStack.push_back( TextureManager::Get() );
-
-    /// Initialize asset manager
-    SubsystemStack.push_back( AssetManager::Get() );
+    SubsystemStack.push_back( FontManager::Get() );
 
     /// Initialize low level controllers
     SubsystemStack.push_back( Engine::Get() );
-    SubsystemStack.push_back( TickController::Get() );
+    SubsystemStack.push_back( TickManager::Get() );
 
     /// Initialize IO controllers
     SubsystemStack.push_back( OutputManager::Get() );
     SubsystemStack.push_back( InputManager::Get() );
 
+    /// Initialize asset manager
+    SubsystemStack.push_back( AssetManager::Get() );
+
     /// Initialize game core classes
     SubsystemStack.push_back( GameInstance::Get() );
 
     /// Initialize event controller
-    SubsystemStack.push_back( EventController::Get() );
+    SubsystemStack.push_back( EventManager::Get() );
 
     /// Initialize physics controllers
-    SubsystemStack.push_back( PhysicsController::Get() );
+    SubsystemStack.push_back( PhysicsManager::Get() );
 
     /// Initialize high level controllers
-    SubsystemStack.push_back( UIController::Get() );
+    SubsystemStack.push_back( UIManager::Get() );
     SubsystemStack.push_back( TimerManager::Get() );
 
 }
@@ -75,9 +76,7 @@ PotatoEngine& PotatoEngine::Get()
 
 void PotatoEngine::LoadSubclasses() {
     InputController = InputManager::Get();
-    ScreenController = OutputManager::Get();
-    HUDController = UIController::Get();
-    NativeEventController = EventController::Get();
+    WindowController = OutputManager::Get();
 
     AssetManager::Get()->CacheAssets();
 
@@ -118,18 +117,9 @@ IInputController* PotatoEngine::GetInputController() const {
     return InputController;
 }
 
-IScreenController* PotatoEngine::GetScreenController() const {
-    return ScreenController;
+IWindowController* PotatoEngine::GetWindowController() const {
+    return WindowController;
 }
-
-IHUDController* PotatoEngine::GetHUDController() const {
-    return HUDController;
-}
-
-EventController* PotatoEngine::GetNativeEventController() const {
-    return NativeEventController;
-}
-
 
 void PotatoEngine::Resolve() noexcept {
     LOG(LogType::VITAL, "Resolving PotatoEngine (Subsystem stack resolve)");

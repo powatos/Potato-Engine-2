@@ -3,16 +3,20 @@
 
 #include "UI/Widget.hpp"
 
+#include "Core/Tickable.hpp"
+
 struct Vector2;
 
 /**
  * @internal
  * @brief Displays debug information on screen updating in real time
  */
-class DebugInfo : public Widget
+class DebugInfo : public Widget, public Tickable
 {
+    using Widget::Widget;
 public:
-    DebugInfo(std::string UID);
+    void Setup() override;
+
     ~DebugInfo();
 
 protected:

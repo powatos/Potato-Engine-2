@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Game/Player.hpp"
+#include "Actors/Player.hpp"
 #include "Game/Raycast.hpp"
 
 class MyPlayer : public Player

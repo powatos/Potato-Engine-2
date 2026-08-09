@@ -8,7 +8,7 @@
  */
 struct WidgetElement : public UIElement
 {
-    virtual const char* TYPE() const = 0; // TODO: find way to factorize (macros?) - refer to Archive constructors
+    using UIElement::UIElement;
 
     virtual ~WidgetElement() = default;
 

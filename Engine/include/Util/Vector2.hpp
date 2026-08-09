@@ -62,10 +62,16 @@ struct Vector2
     }
 
     /**
-     * @brief [hadamard product](https://en.wikipedia.org/wiki/Hadamard_product_(matrices)) of two vectors
+     * @brief hadamard product of two vectors
      */
     inline Vector2 operator *(const Vector2& other) const {
         return Vector2(x*other.x, y*other.y);
+    }
+
+    /** @brief Hadamard multiplies to vector */
+    inline void operator *=(const Vector2& other) {
+        x *= other.x;
+        y *= other.y;
     }
 
     /**
@@ -80,6 +86,11 @@ struct Vector2
      */
     inline Vector2 operator /(const Vector2& other) const {
         return Vector2(x / other.x, y / other.y);
+    }
+
+    /** @brief Hadamard divides to vector (safe with zero division) */
+    inline Vector2 operator /=(const Vector2& other) {
+        return Vector2(other.x != 0.f ? x/other.x : 0.f, other.y != 0.f ? y/other.y : 0.f);
     }
 
     /**

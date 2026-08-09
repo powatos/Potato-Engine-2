@@ -7,7 +7,7 @@
 #include <SDL3/SDL_surface.h>
 
 #include "Core/AssetManager.hpp"
-#include "Core/IScreenController.hpp"
+#include "Core/IWindowController.hpp"
 #include "Debug/Log.hpp"
 
 #include "Core/AssetConfigs.h"
@@ -16,8 +16,8 @@
     #error "Potato Engine: Must define DEFAULT_TEXTURE_ASSET_PATH before engine compilation"
 #endif
 
-#ifndef DEFAULT_TEXTURE_SUBDIR
-    #error "Potato Engine: Must define DEFAULT_TEXTURE_SUBDIR before engine compilation"
+#ifndef DEFAULT_TEXTURES_SUBDIR
+    #error "Potato Engine: Must define DEFAULT_TEXTURES_SUBDIR before engine compilation"
 #endif
 
 TextureManager::TextureManager() {
@@ -27,7 +27,7 @@ TextureManager::TextureManager() {
 
 Texture* TextureManager::CreateTexture(const FilePath& rootPath) {
 
-    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(PotatoEngine::Get().GetScreenController()->RequestRenderingContext());
+    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(PotatoEngine::Get().GetWindowController()->RequestRenderingContext());
     if (renderer == nullptr) {
         LOG(LogType::ERROR, "Failed to get valid rendering context while creating texture with path {}", rootPath.string());
         return nullptr;
@@ -48,7 +48,7 @@ Texture* TextureManager::CreateTexture(const FilePath& rootPath) {
 Texture* TextureManager::GetTexture(const std::string& relativePath) {
     const AssetManager* assetManager = AssetManager::Get();
 
-    const std::string fullPath = AssetManager::NormalizePath((assetManager->Get()->GetAssetsDir() / DEFAULT_TEXTURE_SUBDIR / relativePath).string());
+    const std::string fullPath = AssetManager::NormalizePath((assetManager->GetAssetsDir() / DEFAULT_TEXTURES_SUBDIR / relativePath).string());
 
     if (!cache.contains(fullPath)) {
         return GetTexture(DEFAULT_TEXTURE_ASSET_PATH);

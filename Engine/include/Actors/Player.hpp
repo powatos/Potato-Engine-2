@@ -1,7 +1,7 @@
 /** @file Player.hpp */
 #pragma once
 
-#include "Game/Entity.hpp"
+#include "Entity.hpp"
 
 class PlayerController;
 
