@@ -22,25 +22,25 @@ struct TextElement : public WidgetElement
     DEFINE_RENDER_PASSTHROUGH
 
     TextElement(const std::string& UID);
-    ~TextElement();
+    virtual ~TextElement();
 
-    void SetText(const std::string& text);
-    std::string GetText() const;
+    void SetText(const std::string& text); ///< @brief Set text to display
+    std::string GetText() const; ///< @brief Get text currently displayed
 
-    void SetWrapText(bool wrapText);
-    bool IsWrappingText() const;
+    void SetWrapText(bool wrapText); ///< @brief Set text wrapping enabled
+    bool IsWrappingText() const; ///< @brief Get text wrapping enabled
 
-    void SetTextMode(TextMode textMode);
-    TextMode GetTextMode() const;
+    void SetTextMode(TextMode textMode); ///< @brief Set text bounding box mode
+    TextMode GetTextMode() const; ///< @brief Get text bounding box mode
 
-    void SetFont(Font* font);
-    Font* GetFont() const;
+    void SetFont(Font* font); ///< @brief Set text font
+    Font* GetFont() const; ///< @brief Gets current text font
 
-    void SetColor(Color fontColor);
-    Color GetColor() const;
+    void SetColor(Color fontColor); ///< @brief Set text color
+    Color GetColor() const; ///< @brief Gets current text color
 
-    void SetPtSize(int size);
-    int GetPtSize() const;
+    void SetPtSize(int size); ///< @brief Set font size
+    int GetPtSize() const; ///< @brief Gets current font size
 
     void* ___Get_Text() const;
 

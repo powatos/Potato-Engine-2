@@ -3,8 +3,9 @@
 #include "UI/UIElement.hpp"
 
 #include "Core/PotatoEngine.hpp"
+#include "UI/UIManager.hpp"
 
-UIElement::UIElement(const std::string& UID) : UID(UID), Visible(true) {}
+UIElement::UIElement(const std::string& UID) : UID(UID), Visible(true), ZIndex(0) {}
 
 void UIElement::Setup() {}
 
@@ -40,6 +41,16 @@ void UIElement::SetVisibility(bool visibility) {
 }
 void UIElement::ToggleVisibility() {
     Visible = !Visible;
+}
+
+void UIElement::SetZIndex(int zIndex) {
+    if (ZIndex == zIndex) { return; }
+
+    ZIndex = zIndex;
+    UIManager::Get()->___SetZIndex(this, zIndex);
+}
+int UIElement::GetZIndex() const {
+    return ZIndex;
 }
 
 Vector2 UIElement::GetTruePosition() const {

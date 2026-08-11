@@ -158,7 +158,7 @@ void OutputManager::DrawLevel() {
 
 void OutputManager::DrawHUD() {
 
-    const UIHierarchy* root = UIManager::Get()->RootWidgetH;
+    const UIHierarchy* root = UIManager::Get()->RootWidget_H;
 
     UIVector pos = root->Object->GetScreenPosition();
     UIVector scale = root->Object->GetScreenSize();

@@ -3,13 +3,11 @@
 
 #include <vector>
 
-#include "Core/Hierarchy.h"
 #include "Core/EngineSubsystem.hpp"
 #include "Core/Singleton.hpp"
 
 #include "Widget.hpp"
 
-using UIHierarchy = Hierarchy<UIElement>;
 
 class UIManager : public EngineSubsystem<UIManager>
 {
@@ -18,7 +16,8 @@ class UIManager : public EngineSubsystem<UIManager>
 public:
     virtual void Resolve() noexcept override;
 
-    UIHierarchy* RootWidgetH;
+    UIHierarchy* RootWidget_H;
+    Widget* RootWidget;
 
     /**
      * @brief Construct and add UI parented to another UI onto the screen
@@ -45,14 +44,16 @@ public:
      * @note This function deletes the widget instance and render buffer. Do not use this
      * to hide the widget temporarily, or when preservation of data is vital. @sa Widget::SetVisibility
      */
-    virtual void RemoveUI(const std::string& UID);
+    void RemoveUI(const std::string& UID);
 
     /** @brief Gets UI by UID
      * @param UID UID
      * @param HintParent Parent of target UI; optional if unknown
      * @returns UI matching name
      */
-    virtual UIElement* GetUI(const std::string& UID, const UIElement* HintParent = nullptr);
+    UIElement* GetUI(const std::string& UID, const UIElement* HintParent = nullptr);
+
+    void ___SetZIndex(UIElement* ui, int zIndex) const;
 
 private:
     UIManager();
@@ -61,6 +62,9 @@ private:
     void Recurse_Add(UIElement* ui, UIElement* parent, UIHierarchy* currentLevel);
     void Recurse_Remove(const std::string& UID, UIHierarchy* currentLevel);
     UIElement* Recurse_Get(const std::string& UID, const UIHierarchy* currentLevel);
+
+    static bool zOrderingPred(const UIElement* sibling, const UIElement* insertingChild);
+
 };
 
 template<std::derived_from<UIElement> UIClass, std::derived_from<UIElement> Parent>
@@ -73,7 +77,7 @@ UIClass* UIManager::AddUI(const std::string& UID, Parent* parent) {
 
     UIClass* ui = new UIClass(UID);
 
-    Recurse_Add(ui, parent, RootWidgetH);
+    Recurse_Add(ui, parent, RootWidget_H);
     ui->Setup();
 
     return ui;
@@ -81,6 +85,6 @@ UIClass* UIManager::AddUI(const std::string& UID, Parent* parent) {
 
 template<std::derived_from<Widget> WidgetClass>
 WidgetClass* UIManager::AddUI(const std::string& UID) {
-    WidgetClass* ui = AddUI<WidgetClass>(UID, static_cast<Widget*>(RootWidgetH->Object));
+    WidgetClass* ui = AddUI<WidgetClass>(UID, RootWidget);
     return ui;
 }

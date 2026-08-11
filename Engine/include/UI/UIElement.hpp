@@ -1,11 +1,17 @@
 /** @file UIElement.hpp */
 #pragma once
 
+#include <set>
+
+#include "Core/HTreeNode.h"
 #include "____LLUIRenderer.hpp"
 #include "Core/IWindowController.hpp"
-#include "Core/Hierarchy.h"
 #include "Util/UIVector.hpp"
 #include "Util/Vector2.hpp"
+
+class UIElement;
+
+using UIHierarchy = HTreeNode<UIElement>;
 
 /**
  * @brief Wrapper for elements that can be rendered on screen
@@ -15,7 +21,7 @@
 class UIElement
 {
 public:
-    virtual void ___Render_Passthrough(___LLUIRenderer* r, UIVector po, UIVector so) = 0;
+    virtual void ___Render_Passthrough(___LLUIRenderer* r, UIVector po, UIVector so) {};
 
     /**
      * @brief Constructs UI element
@@ -43,11 +49,17 @@ public:
     virtual void SetVisibility(bool visibility); ///< @brief Sets visibility of UI @param visibility Visibility to set
     virtual void ToggleVisibility(); ///< @brief Toggles visibility of UI
 
+    void SetZIndex(int zIndex);
+    int GetZIndex() const;
+
     Vector2 GetTruePosition() const; ///< @brief Gets true pixel-position on screen
     Vector2 GetTrueSize() const; ///< @brief Gets true pixel-size on screen
 
+    UIHierarchy* ___hierarchyRef;
 private:
+
     const std::string UID;
+    int ZIndex;
 
     UIVector ScreenSize;
     UIVector ScreenPosition;

@@ -6,6 +6,7 @@
 #include "Widgets/DebugInfo.hpp"
 
 #include "UI/BoxElement.hpp"
+#include "UI/ResizeElement.hpp"
 #include "UI/UIManager.hpp"
 
 void DebugInfo::Setup() {
@@ -21,11 +22,15 @@ void DebugInfo::Setup() {
     BG->BorderWeight = 1;
     BG->BorderColor = Color::BLACK();
 
-    TextElement* playerPosText = uim->AddUI<TextElement>("PlayerPosText", BG);
+    ResizeElement* resizer = uim->AddUI<ResizeElement>("ResizeElement", this);
+    resizer->ResizeTarget = BG;
+    resizer->padding = 2;
+
+    TextElement* playerPosText = uim->AddUI<TextElement>("PlayerPosText", this);
     playerPosText->SetTextMode(TextMode::ResizeToFit);
     playerPosText->SetWrapText(false);
     playerPosText->SetPtSize(16);
-
+    playerPosText->SetZIndex(1);
 
     SetVisibility(true);
 }

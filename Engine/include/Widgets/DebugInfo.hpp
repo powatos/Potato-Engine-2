@@ -19,6 +19,7 @@ public:
 
     ~DebugInfo();
 
+
 protected:
     virtual void TickPostPhysics(float dt) override;
 
