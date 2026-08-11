@@ -165,6 +165,9 @@ Texture* Actor::GetTexture() const {
 void Actor::SetTexture(const std::string& texturePath) {
     ActorTexture = TextureManager::Get()->GetTexture(texturePath);
 }
+void Actor::SetTexture(Texture* texture) {
+    ActorTexture = texture;
+}
 
 bool Actor::IsUsingSimpleTexture() const {
     return bUseSimpleTexture;

@@ -50,7 +50,6 @@ int main()
     PlayerController* playerController = instance->GetPlayerController();
     Player* player = playerController->GetPlayer();
     player->SetPosition(Vector2(0,100));
-    player->SetSize(Vector2(10,10));
 
     /// UI SETUP
     UIManager* uim = UIManager::Get();

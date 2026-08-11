@@ -93,6 +93,7 @@ public:
 
     Texture* GetTexture() const; /**< @brief Gets texture @returns actor texture */
     void SetTexture(const std::string& texturePath); /**< @brief Sets actor texture */
+    void SetTexture(Texture* texture); /**< @brief Sets actor texture */
 
     bool IsUsingSimpleTexture() const;
     void SetUsingSimpleTexture(bool enabled);

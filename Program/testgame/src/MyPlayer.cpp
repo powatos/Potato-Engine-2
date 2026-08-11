@@ -6,6 +6,7 @@
 #include "MyPlayer.hpp"
 
 #include "Core/InputController.hpp"
+#include "Core/TextureManager.hpp"
 #include "Game/Raycast.hpp"
 
 SET_DEFAULT_SUBCLASS(Player, MyPlayer)
@@ -14,7 +15,12 @@ MyPlayer::MyPlayer() : downraycast(Raycast()) {
     SetBounce(1.f);
 
     SetUsingSimpleTexture(false);
-    SetTexture("smile.bmp");
+
+    Texture* tex = TextureManager::Get()->GetTexture("Capsule.bmp");
+    tex->SetKeyColor(Color(0xff'ff'00'ff));
+    SetTexture(tex);
+
+    SetSize(Vector2(5, 10));
 }
 
 void MyPlayer::BeginPlay() {
