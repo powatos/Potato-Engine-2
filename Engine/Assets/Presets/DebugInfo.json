@@ -1,0 +1,43 @@
+{
+    "name": "DebugInfo",
+    "position": [0, 0, 10, 10],
+    "size": [0.1, 0.3, 0, 0],
+    "visibility": true,
+    "elements": {
+        "BoxElement-instances": [
+            {
+                "name": "BG",
+                "parent": "this",
+                "size": [1, 1, 0, 0],
+                "borderWeight": 1,
+                "borderColor": [0, 0, 0, 255]
+            }
+        ],
+        "ResizeElement-instances": [
+            {
+                "name": "ResizeElement",
+                "parent": "this",
+                "target": "BG",
+                "padding": 2
+            }
+        ],
+        "TextElement-instances": [
+            {
+                "name": "PlayerPosText",
+                "parent": "this",
+                "textMode": "ResizeToFit",
+                "wrapText": false,
+                "ptSize": 16,
+                "zIndex": 1
+            },
+            {
+                "name": "FPSText",
+                "parent": "this",
+                "textMode": "ResizeToFit",
+                "wrapText": false,
+                "ptSize": 16,
+                "zIndex": 1
+            }
+        ]
+    }
+}

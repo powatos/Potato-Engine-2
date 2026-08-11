@@ -1,0 +1,158 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://powatos.github.io/PotatoEnginev2/Presets.schema.json",
+    "title": "Widget Preset",
+    "description": "Widget presets for Potato Engine v2",
+    "$ref": "#/$defs/UIElement",
+    "unevaluatedProperties": false,
+    "properties": {
+        "elements": {
+            "type": "object",
+            "additionalProperties": false,
+            "$comment": "Add new element types here with matching definition",
+            "properties": {
+                "BoxElement-instances": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/BoxElement"
+                    }
+                },
+                "TextElement-instances": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/TextElement"
+                    }
+                },
+                "ResizeElement-instances": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/ResizeElement"
+                    }
+                }
+            }
+        }
+    },
+    "$defs": {
+        "UIVector": {
+            "type": "array",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 4,
+            "maxItems": 4
+        },
+        "Color": {
+            "type": "array",
+            "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 255
+            },
+            "minItems": 4,
+            "maxItems": 4
+        },
+        "UIElement": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "#/$defs/UIVector"
+                },
+                "size": {
+                    "$ref": "#/$defs/UIVector"
+                },
+                "visibility": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "WidgetElement": {
+            "$ref": "#/$defs/UIElement",
+            "required": ["parent"],
+            "properties": {
+                "parent": {
+                    "type": "string"
+                }
+            }
+        },
+        "BoxElement": {
+            "$ref": "#/$defs/WidgetElement",
+            "unevaluatedProperties": false,
+            "properties": {
+                "fillColor": {
+                    "$ref": "#/$defs/Color"
+                },
+                "borderColor": {
+                    "$ref": "#/$defs/Color"
+                },
+                "borderWeight": {
+                    "type": "integer",
+                    "minimum": 0
+                }
+            }
+        },
+        "TextElement": {
+            "$ref": "#/$defs/WidgetElement",
+            "unevaluatedProperties": false,
+            "properties": {
+                "textMode": {
+                    "type": "string",
+                    "enum": ["ResizeToFit", "ShrinkToFit", "IgnoreBounds"]
+                },
+                "wrapText": {
+                    "type": "boolean"
+                },
+                "ptSize": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "zIndex": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ResizeElement": {
+            "$ref": "#/$defs/WidgetElement",
+            "unevaluatedProperties": false,
+            "properties": {
+                "target": {
+                    "type": "string"
+                },
+                "padding": {
+                    "type": "integer"
+                }
+            }
+        }
+
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

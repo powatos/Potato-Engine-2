@@ -6,6 +6,7 @@ target_sources(PotatoEngine2 PRIVATE
 
 	Widgets/DebugInfo.cpp
 
+	PresetManager.cpp
 	UIElement.cpp
 	UIManager.cpp
 

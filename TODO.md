@@ -1,5 +1,7 @@
 # todo
 z ordering for actors
+refactor specific asset managers
+widget presets
 
 
 # other
