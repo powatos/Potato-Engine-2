@@ -25,7 +25,7 @@ enum class TextureScaleMode
  */
 struct Texture : public Asset
 {
-    Texture(FilePath path, void* surface, void* texture);
+    Texture(const FilePath& path);
     Texture(Texture&& other) noexcept;
 
     ~Texture();
@@ -36,8 +36,8 @@ struct Texture : public Asset
     TextureScaleMode GetScaleMode() const;
     void SetScaleMode(TextureScaleMode mode);
 
-    void* Internal_GetSurface() const;
-    void* Internal_GetTexture() const;
+    [[nodiscard]] void* Internal_GetSurface() const;
+    [[nodiscard]] void* Internal_GetTexture() const;
 
 private:
     Color keyColor; // 0x0 alpha means do not use color key

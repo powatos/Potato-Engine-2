@@ -14,7 +14,7 @@ CharacterController::CharacterController() {
 void CharacterController::SetupInputBindings() {
     PlayerController::SetupInputBindings();
 
-    auto InputController = PotatoEngine::Get().GetInputController();
+    auto InputController = PotatoEngine::GetInputController();
 
     InputController->RegisterInputBinding({
         InputBinding(Keycode::Minus, InputType::Impulse, "zoomOut", this, &CharacterController::zoomOut),

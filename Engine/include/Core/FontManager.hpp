@@ -18,7 +18,7 @@
 //
 //     // Font* GetFont(const std::string& relativePath, const int ptSize = DEFAULT_FONT_PT_SIZE);
 //
-//     Font* ChangeFontSize(const Font* font, const int ptSize);
+//     Font* ChangeFontSize(const Font* ttf_font, const int ptSize);
 //
 //     static constexpr std::array<std::string_view, 1> validExtensions {
 //         ".ttf"

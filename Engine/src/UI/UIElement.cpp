@@ -54,10 +54,10 @@ int UIElement::GetZIndex() const {
 }
 
 Vector2 UIElement::GetTruePosition() const {
-    return GetScreenPosition().scale * PotatoEngine::Get().GetWindowController()->GetScreenResolution() + GetScreenPosition().offset;
+    return GetScreenPosition().scale * PotatoEngine::GetWindowController()->GetScreenResolution() + GetScreenPosition().offset;
 
 }
 Vector2 UIElement::GetTrueSize() const {
-    return GetScreenSize().scale * PotatoEngine::Get().GetWindowController()->GetScreenResolution() + GetScreenSize().offset;
+    return GetScreenSize().scale * PotatoEngine::GetWindowController()->GetScreenResolution() + GetScreenSize().offset;
 
 }

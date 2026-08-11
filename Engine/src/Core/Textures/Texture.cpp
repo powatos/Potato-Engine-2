@@ -9,17 +9,22 @@
 #include "Core/PotatoEngine.hpp"
 #include "Debug/Log.hpp"
 
-Texture::Texture(FilePath path, void* surface, void* texture) :
-    Asset(path),
-    sdl_surface(surface),
-    sdl_texture(texture)
+Texture::Texture(const FilePath& path) :
+    Asset(path)
 {
+    SDL_Surface* surface = SDL_LoadBMP(path.string().c_str());
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(static_cast<SDL_Renderer*>(PotatoEngine::GetWindowController()->RequestRenderingContext()), surface);
+
+    sdl_surface = surface;
+    sdl_texture = texture;
+
     SetScaleMode(TextureScaleMode::Nearest);
     SetKeyColor(Color::BLANK());
 }
 
 Texture::Texture(Texture&& other) noexcept :
     Asset(std::move(other)),
+    scaleMode(other.scaleMode),
     sdl_surface(other.sdl_surface),
     sdl_texture(other.sdl_texture)
 {
@@ -83,7 +88,7 @@ void Texture::SetKeyColor(Color color) {
 
     SDL_DestroyTexture(static_cast<SDL_Texture*>(sdl_texture));
 
-    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(PotatoEngine::Get().GetWindowController()->RequestRenderingContext());
+    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(PotatoEngine::GetWindowController()->RequestRenderingContext());
 
     sdl_texture = SDL_CreateTextureFromSurface(renderer, surface);
     SetScaleMode(scaleMode);

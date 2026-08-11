@@ -63,15 +63,15 @@ public:
     void Resolve() noexcept;
 
     /** @brief Gets @ref IInputController "input controller" @returns @ref IInputController "input controller" */
-    IInputController* GetInputController() const;
+    static IInputController* GetInputController();
     /** @brief Gets @ref IWindowController "window controller" @returns @ref IWindowController "window controller" */
-    IWindowController* GetWindowController() const;
+    static IWindowController* GetWindowController();
 
 protected:
     std::vector<IEngineSubsystem*> SubsystemStack;
 
-    IInputController* InputController{};
-    IWindowController* WindowController{};
+    inline static IInputController* InputController = nullptr;
+    inline static IWindowController* WindowController = nullptr;
 
 
 private:

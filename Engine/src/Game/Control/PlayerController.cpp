@@ -67,7 +67,7 @@ Camera* PlayerController::GetCamera() const { return ActiveCamera; }
 void PlayerController::SetupInputBindings() {
 
     // setup input bindings
-    IInputController* controller = PotatoEngine::Get().GetInputController();
+    IInputController* controller = PotatoEngine::GetInputController();
 
     controller->RegisterInputBinding({
         InputBinding(Keycode::A, InputType::Started, "StartMoveLeft", this, &PlayerController::sMvL),

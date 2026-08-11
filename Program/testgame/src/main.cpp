@@ -32,7 +32,7 @@ int main()
 
     GameInstance* instance = GameInstance::Get();
 
-    IWindowController* windowController = engine.GetWindowController();
+    IWindowController* windowController = PotatoEngine::GetWindowController();
     windowController->SetTargetFrameRate(60.f);
     windowController->SetBackgroundColor(Color(0x00, 0xaa, 0xff, 0xff));
     // screenController->SetScreenResolution(Vector2(100,100));
@@ -56,12 +56,21 @@ int main()
 
     /// DEBUG
     DebugInfo* debugInfoWidget = uim->AddUI<DebugInfo>("W_DebugInfo");
-    engine.GetInputController()->RegisterInputBinding(InputBinding(
+    PotatoEngine::GetInputController()->RegisterInputBinding(InputBinding(
         Keycode::T,
         InputType::Impulse,
         "ToggleDebugInfo",
         debugInfoWidget,
         &DebugInfo::ToggleVisibility
+    ));
+    PotatoEngine::GetInputController()->RegisterInputBinding(InputBinding(
+        Keycode::Y,
+        InputType::Ongoing,
+        "ToggleDebugInfo",
+        []() -> void {
+            auto e = dynamic_cast<TextElement*>(UIManager::Get()->GetUI("PlayerPosText"));
+            e->SetPtSize(e->GetPtSize() + 1);
+        }
     ));
 
     /// PLAY

@@ -7,6 +7,7 @@
 #include <vector>
 #include <array>
 #include <typeindex>
+#include <typeinfo>
 
 #include "Asset.hpp"
 #include "AssetConfigs.h"
@@ -43,37 +44,42 @@ struct TextureLoader : IAssetLoader
 struct FontLoader : IAssetLoader
 {
     [[nodiscard]] Asset* LoadAsset(const FilePath& rootPath) const override;
-    [[nodiscard]] Font* LoadSizedFont(const FilePath& rootPath, int ptSize) const;
 };
 
 namespace Internal
 {
     using AssetRegistryType = std::unordered_map<std::type_index, AssetTypeDescriptor>;
 
-    inline static AssetRegistryType& GetAssetRegistry() {
+    inline AssetRegistryType& GetAssetRegistry() {
         static AssetRegistryType registry;
         return registry;
     }
 
-        static struct AssetLoaderRegistrar
-        {
-            AssetLoaderRegistrar() {
-                GetAssetRegistry()[std::type_index(typeid(Texture))] = {
-                    DEFAULT_TEXTURES_SUBDIR,
-                    DEFAULT_TEXTURE_ASSET_PATH,
-                    {".bmp"},
-                    std::make_unique<TextureLoader>(),
-                };
-                GetAssetRegistry()[std::type_index(typeid(Font))] = {
-                    DEFAULT_FONTS_SUBDIR,
-                    DEFAULT_FONT_ASSET_PATH,
-                    {".ttf"},
-                    std::make_unique<FontLoader>(),
-                };
-            }
-        } AssetLoaderRegistrar_i;
+
 
 }
+
+static struct AssetLoaderRegistrar
+{
+    AssetLoaderRegistrar() {
+        Internal::AssetRegistryType& registry = Internal::GetAssetRegistry();
+
+        registry[std::type_index(typeid(Texture))] = {
+            DEFAULT_TEXTURES_SUBDIR,
+            DEFAULT_TEXTURE_ASSET_PATH,
+            {".bmp"},
+            std::make_unique<TextureLoader>(),
+        };
+
+        registry[std::type_index(typeid(Font))] = {
+            DEFAULT_FONTS_SUBDIR,
+            DEFAULT_FONT_ASSET_PATH,
+            {".ttf"},
+            std::make_unique<FontLoader>(),
+        };
+
+    }
+} AssetLoaderRegistrar_i;
 
 constexpr int DEFAULT_FONT_PT_SIZE = 8;
 
@@ -99,11 +105,12 @@ public:
      */
     template<typename AssetType>
     AssetType* GetAsset(const std::string& relativePath) {
-        const FilePath path = GetAssetsDir() / NormalizePath(relativePath);
+        const AssetTypeDescriptor& descriptor = Internal::GetAssetRegistry().at(std::type_index(typeid(AssetType)));
+
+        const FilePath path = GetAssetsDir() / descriptor.subdir / NormalizePath(relativePath);
 
         auto returnDefaultAsset = [&]() -> AssetType* {
-            const AssetTypeDescriptor& descriptor = Internal::GetAssetRegistry().at(std::type_index(typeid(AssetType)));
-            return GetAsset<AssetType>((descriptor.subdir / descriptor.defaultAsset).string());
+            return GetAsset<AssetType>((descriptor.defaultAsset).string());
         };
 
         if (!std::filesystem::exists(path)) {
@@ -111,7 +118,7 @@ public:
             return returnDefaultAsset();
         }
 
-        if (const auto it = cache.find(relativePath); it != cache.end()) {
+        if (const auto it = cache.find(path.string()); it != cache.end()) {
             return static_cast<AssetType*>(it->second);
         }
 
@@ -129,7 +136,7 @@ public:
      * @note This function is intended for internal use only
      * @returns Current asset cache
      */
-    const std::unordered_map<std::string, Asset*>& GetCache() const;
+    [[nodiscard]] const std::unordered_map<std::string, Asset*>& GetCache() const;
 
     /**
      * @brief Normalizes a path string corresponding to the target OS

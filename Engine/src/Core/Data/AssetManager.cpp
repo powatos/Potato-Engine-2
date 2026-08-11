@@ -20,28 +20,13 @@ AssetManager::AssetManager() {
 }
 
 Asset* TextureLoader::LoadAsset(const FilePath& rootPath) const {
-    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(PotatoEngine::Get().GetWindowController()->RequestRenderingContext());
-    if (renderer == nullptr) {
-        LOG(LogType::ERROR, "Failed to get valid rendering context while creating texture with path {}", rootPath.string());
-        return nullptr;
-    }
-
-    SDL_Surface* surface = SDL_LoadBMP(rootPath.string().c_str());
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-
-    Texture* tex = new Texture( rootPath, surface, texture);
+    Texture* tex = new Texture(rootPath);
     return tex;
 }
 
-Font* FontLoader::LoadSizedFont(const FilePath& rootPath, int ptSize) const {
-    TTF_Font* ttf_font = TTF_OpenFont(rootPath.string().c_str(), static_cast<float>(ptSize));
-
-    Font* font = new Font(rootPath, ttf_font);
-    return font;
-}
-
 Asset* FontLoader::LoadAsset(const FilePath& rootPath) const {
-    return LoadSizedFont(rootPath, DEFAULT_FONT_PT_SIZE);
+    Font* font = new Font(rootPath, DEFAULT_FONT_PT_SIZE);
+    return font;
 }
 
 void AssetManager::CacheAssets() {
@@ -55,7 +40,9 @@ void AssetManager::CacheAssets() {
             }
 
             Asset* asset = loader->LoadAsset(entry.path());
-            cache[entry.path().string()] = asset;
+            cache[entry.path().string()] = {
+                asset
+            };
         }
     }
 
@@ -96,7 +83,7 @@ std::string AssetManager::NormalizePath(const std::string& p_path) {
     return result;
 }
 
-const std::unordered_map<std::string, Asset*> & AssetManager::GetCache() const {
+const std::unordered_map<std::string, Asset*>& AssetManager::GetCache() const {
     return cache;
 }
 

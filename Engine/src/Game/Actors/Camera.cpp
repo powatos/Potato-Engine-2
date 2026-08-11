@@ -42,7 +42,7 @@ float Camera::GetViewHeight() const {
 void Camera::TickPostUpdate(float dt) {
     Actor::TickPostUpdate(dt);
 
-    IWindowController* windowController = PotatoEngine::Get().GetWindowController();
+    IWindowController* windowController = PotatoEngine::GetWindowController();
 
     const float aspectRatio = windowController->GetScreenResolution().x / windowController->GetScreenResolution().y;
     const float renderHeight = ViewHeight / Zoom;

@@ -5,25 +5,39 @@
 #include <ranges>
 #include <SDL3_ttf/SDL_ttf.h>
 
-
-
-Font::Font(FilePath path, void* font) :
-    Asset(path),
-    font(font)
+Font::Font(const FilePath& path, int size) :
+    Asset(path)
 {
+    TTF_Font* font = TTF_OpenFont(path.string().c_str(), static_cast<float>(size));
+    ttf_fonts[size] = font;
+
+    cachedDefaultSize = size;
 }
 
 Font::Font(Font&& other) noexcept :
     Asset(std::move(other)),
-    font(other.font)
+    ttf_fonts(std::move(other.ttf_fonts))
 {
-    other.font = nullptr;
+    for (auto& font : other.ttf_fonts | std::views::values) {
+        font = nullptr;
+    }
 }
 
-void* Font::Internal_GetFont() {
+void* Font::Internal_GetFont(int size) {
+    if (size == -1) { return ttf_fonts[cachedDefaultSize]; }
+
+    if (auto it = ttf_fonts.find(size); it != ttf_fonts.end()) {
+        return it->second;
+    }
+
+    TTF_Font* font = TTF_OpenFont(path.string().c_str(), static_cast<float>(size));
+    ttf_fonts[size] = font;
     return font;
 }
 
 Font::~Font() {
-    TTF_CloseFont(static_cast<TTF_Font*>(font));
+    for (const auto& font : ttf_fonts | std::views::values) {
+        TTF_CloseFont(static_cast<TTF_Font*>(font));
+    }
+
 }

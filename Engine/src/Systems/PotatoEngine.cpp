@@ -44,7 +44,10 @@ PotatoEngine::PotatoEngine() {
 
     /// Initialize IO controllers
     SubsystemStack.push_back( OutputManager::Get() );
+    WindowController = OutputManager::Get();
+
     SubsystemStack.push_back( InputManager::Get() );
+    InputController = InputManager::Get();
 
     /// Initialize asset manager
     SubsystemStack.push_back( AssetManager::Get() );
@@ -71,8 +74,6 @@ PotatoEngine& PotatoEngine::Get()
 }
 
 void PotatoEngine::LoadSubclasses() {
-    InputController = InputManager::Get();
-    WindowController = OutputManager::Get();
 
     GameInstance::Get()->LoadSubclasses();
 }
@@ -107,11 +108,11 @@ void PotatoEngine::BeginPlay(bool autoResolve)
     engine->main();
 }
 
-IInputController* PotatoEngine::GetInputController() const {
+IInputController* PotatoEngine::GetInputController() {
     return InputController;
 }
 
-IWindowController* PotatoEngine::GetWindowController() const {
+IWindowController* PotatoEngine::GetWindowController() {
     return WindowController;
 }
 

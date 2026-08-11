@@ -33,14 +33,14 @@ struct TextElement : public WidgetElement
     void SetTextMode(TextMode textMode); ///< @brief Set text bounding box mode
     TextMode GetTextMode() const; ///< @brief Get text bounding box mode
 
-    void SetFont(Font* font); ///< @brief Set text font
-    Font* GetFont() const; ///< @brief Gets current text font
+    void SetFont(Font* font); ///< @brief Set text ttf_font
+    Font* GetFont() const; ///< @brief Gets current text ttf_font
 
     void SetColor(Color fontColor); ///< @brief Set text color
     Color GetColor() const; ///< @brief Gets current text color
 
-    void SetPtSize(int size); ///< @brief Set font size
-    int GetPtSize() const; ///< @brief Gets current font size
+    void SetPtSize(int size); ///< @brief Set ttf_font size
+    int GetPtSize() const; ///< @brief Gets current ttf_font size
 
     void* Internal_GetText() const;
 

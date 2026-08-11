@@ -14,7 +14,7 @@ Vector2 GameplayHelper::VecToScreenVec(const Vector2& worldPos) {
 
     return Vector2{
         worldPos.x,
-        PotatoEngine::Get().GetWindowController()->GetScreenResolution().y - worldPos.y
+        PotatoEngine::GetWindowController()->GetScreenResolution().y - worldPos.y
     };
 
 }

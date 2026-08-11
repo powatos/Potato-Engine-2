@@ -5,8 +5,6 @@
 
 using FilePath = std::filesystem::path;
 
-class AssetManager;
-
 /**
  * @brief Lightweight struct to store metadata for an `Asset`
  */
@@ -21,14 +19,11 @@ struct AssetMetadata
  */
 struct Asset
 {
-private:
-    friend class AssetManager;
-
 protected:
-    Asset(const FilePath& path); // only AssetManager constructs
-    virtual ~Asset() = default; // only freed in AssetManager
+    Asset(const FilePath& path);
 
 public:
+    virtual ~Asset() = default;
 
     const AssetMetadata meta; ///< @brief Metadata for asset
     const FilePath path; ///< @brief Path to file associated with asset; intended for internal use

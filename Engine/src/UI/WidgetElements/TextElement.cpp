@@ -15,7 +15,7 @@ TextElement::TextElement(const std::string& UID) : WidgetElement(UID) {
     textFont = AssetManager::Get()->GetAsset<Font>("");
 
     TTF_Font* ttf_font = static_cast<TTF_Font*>(textFont->Internal_GetFont());
-    TTF_TextEngine* textEngine = static_cast<TTF_TextEngine*>(PotatoEngine::Get().GetWindowController()->RequestTTFEngine());
+    TTF_TextEngine* textEngine = static_cast<TTF_TextEngine*>(PotatoEngine::GetWindowController()->RequestTTFEngine());
 
     TTF_Text* text = TTF_CreateText(
         textEngine,
@@ -89,7 +89,7 @@ TextMode TextElement::GetTextMode() const {
 
 void TextElement::SetFont(Font* font) {
     if (textFont == nullptr) {
-        LOG(LogType::WARNING, "Attempt to set invalid font to TextElement");
+        LOG(LogType::WARNING, "Attempt to set invalid ttf_font to TextElement");
         return;
     }
 
@@ -125,8 +125,8 @@ void TextElement::SetPtSize(int size) {
 
     if (size < 1) { size = 1; }
 
-    textFont = AssetManager::Get()->ChangeFontSize(textFont, size);
-    TTF_SetTextFont(static_cast<TTF_Text*>(ttf_text), static_cast<TTF_Font*>(textFont->Internal_GetFont()));
+    ptSize = size;
+    TTF_SetTextFont(static_cast<TTF_Text*>(ttf_text), static_cast<TTF_Font*>(textFont->Internal_GetFont(ptSize)));
 
     if (Mode == TextMode::ResizeToFit) {
         resizeBox();
@@ -171,7 +171,7 @@ void TextElement::shrinkText() {
 
     const Vector2 trueSize = GetTrueSize();
 
-    // make a temporary copy of the font to perform logic
+    // make a temporary copy of the ttf_font to perform logic
     TTF_Text* text = static_cast<TTF_Text*>(ttf_text);
     TTF_Font* probeFont = TTF_CopyFont(static_cast<TTF_Font*>(textFont->Internal_GetFont()));
 
@@ -207,7 +207,8 @@ void TextElement::shrinkText() {
         result = low;
     }
 
-    textFont = AssetManager::Get()->ChangeFontSize(textFont, result);
+    ptSize = result;
+    TTF_SetTextFont(static_cast<TTF_Text*>(ttf_text), static_cast<TTF_Font*>(textFont->Internal_GetFont(ptSize)));
 
     TTF_SetTextFont(text, static_cast<TTF_Font*>(textFont->Internal_GetFont()));
     TTF_CloseFont(probeFont);
