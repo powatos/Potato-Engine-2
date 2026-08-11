@@ -30,6 +30,8 @@ Actor::Actor()
     Movability = ActorMovability::Movable;
     CollisionResponse = CollisionType::Block;
 
+    zIndex = 0;
+
     bUseSimpleTexture = false;
     simpleColorFill = false;
     simpleColor = Color{};
@@ -157,6 +159,16 @@ float Actor::GetBounce() const {
 }
 void Actor::SetBounce(float bounce) {
     Bounciness = bounce;
+}
+
+int Actor::GetZIndex() const {
+    return zIndex;
+}
+void Actor::SetZIndex(int ZIndex) {
+    if (zIndex == ZIndex) { return; }
+
+    zIndex = ZIndex;
+    GameInstance::Get()->GetWorld()->ReorderActorByZIndex(this);
 }
 
 Texture* Actor::GetTexture() const {

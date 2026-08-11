@@ -72,16 +72,18 @@ struct HTreeNode
         if (from == Children.end()) { return; }
 
         for (auto to = Children.begin(); to != Children.end(); ++to) {
+            if (from == to) { return; }
+
             if (pred((*to)->Object, child)) {
                 // moves *from to *to in-place
-
-                if (from == to) { return; }
 
                 if (to < from) {
                     std::rotate(to, from, from + 1);
                 } else {
                     std::rotate(from, from+1, to + 1);
                 }
+
+                return;
             }
         }
     }

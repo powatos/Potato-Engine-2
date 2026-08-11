@@ -91,6 +91,9 @@ public:
     float GetBounce() const; /**< @brief Gets bounce @returns Bounce */
     void SetBounce(float bounce); /**< @brief Sets bounce @param bounce Bounce to set */
 
+    int GetZIndex() const; /**< @brief Gets ZIndex @returns ZIndex */
+    void SetZIndex(int ZIndex); /**< @brief Sets ZIndex @param ZIndex ZIndex to set */
+
     Texture* GetTexture() const; /**< @brief Gets texture @returns actor texture */
     void SetTexture(const std::string& texturePath); /**< @brief Sets actor texture */
     void SetTexture(Texture* texture); /**< @brief Sets actor texture */
@@ -166,6 +169,8 @@ private:
     
     ActorMovability Movability;
     CollisionType CollisionResponse;
+
+    int zIndex;
 
     float Bounciness;
     float Mass;

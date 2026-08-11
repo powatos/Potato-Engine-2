@@ -21,6 +21,8 @@ MyPlayer::MyPlayer() : downraycast(Raycast()) {
     SetTexture(tex);
 
     SetSize(Vector2(5, 10));
+
+    SetZIndex(5);
 }
 
 void MyPlayer::BeginPlay() {

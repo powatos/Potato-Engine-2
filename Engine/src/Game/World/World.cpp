@@ -90,11 +90,42 @@ const ActorPool& World::GetAllActors() const
     return actorPool;
 }
 
-Actor* World::AddtoPool(Actor* actor) {
+Actor* World::AddToPool(Actor* actor) {
     if (actor == nullptr) { return nullptr; }
+
+    for (auto it = actorPool.begin(); it != actorPool.end(); ++it) {
+        if (actor->GetZIndex() < (*it)->GetZIndex()) {
+            actorPool.insert(it, actor);
+            return actor;
+        }
+    }
 
     actorPool.push_back(actor);
     return actor;
+}
+
+void World::ReorderActorByZIndex(const Actor* actor) {
+    if (actor == nullptr) { return; }
+
+    auto from = std::ranges::find(actorPool, actor);
+    if (from == actorPool.end()) { return; }
+
+    for (auto to = actorPool.begin(); to != actorPool.end(); ++to) {
+        if (from == to) { continue; }
+
+        if (actor->GetZIndex() < (*to)->GetZIndex()) {
+            // moves *from to *to in-place
+
+            if (to < from) {
+                std::rotate(to, from, from + 1);
+            } else {
+                std::rotate(from, from+1, to + 1);
+            }
+
+            return;
+        }
+    }
+
 }
 
 World::~World() {

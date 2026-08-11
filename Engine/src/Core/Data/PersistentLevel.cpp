@@ -81,7 +81,7 @@ bool PersistentLevel::LoadStaticActors() {
                 continue;
             }
 
-            if (Actor* addedActor = world->AddtoPool(dynamic_cast<Actor*>(obj))) {
+            if (Actor* addedActor = world->AddToPool(dynamic_cast<Actor*>(obj))) {
                 addedActor->SetPosition(Position);
             } else {
                 allSuccessful = false;

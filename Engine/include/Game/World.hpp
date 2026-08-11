@@ -80,7 +80,15 @@ public:
      * @sa SpawnActor
      * @returns actor if successful
      */
-    Actor* AddtoPool(Actor* actor);
+    Actor* AddToPool(Actor* actor);
+
+    /**
+     * @brief Reorders an actor in the actor pool based on its zindex
+     * @details Called automatically when changing ZIndex
+     * @warning Intended for internal use only.
+     * @param actor actor to reorder
+     */
+    void ReorderActorByZIndex(const Actor* actor);
 
     /** @brief Gets count of actors in world @returns Count */
     inline size_t ActorCount() const { return actorPool.size(); }
@@ -105,7 +113,7 @@ ActorClass* World::SpawnActor() {
     static_assert(std::is_base_of_v<Actor, ActorClass>, "Illegal class spawn to world");
 
     ActorClass* actor = new ActorClass();
-    AddtoPool(actor);
+    AddToPool(actor);
 
     // post-spawn functionality here
     actor->DispatchBeginPlay();
@@ -115,8 +123,8 @@ ActorClass* World::SpawnActor() {
 
 template<std::derived_from<Actor> ActorClass>
 ActorClass* World::SpawnActor(const Vector2& SpawnPosition) {
-    Actor* actor = SpawnActor<ActorClass>();
+    ActorClass* actor = SpawnActor<ActorClass>();
     actor->SetPosition(SpawnPosition);
 
-    return static_cast<ActorClass*>(actor);
+    return actor;
 }

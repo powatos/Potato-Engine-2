@@ -53,7 +53,7 @@ void GameInstance::InstantiateSubclasses() {
     } else {
         player = c_p();
     }
-    world->AddtoPool(player);
+    world->AddToPool(player);
     ActivePlayerController->AssignPlayer(player);
 
     // Gamemode

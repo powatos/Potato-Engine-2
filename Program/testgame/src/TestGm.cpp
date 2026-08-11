@@ -43,7 +43,34 @@ void TestGM::randomTerrain() {
         terrain->SetMovability(ActorMovability::Static);
         terrain->SetUsingSimpleTexture(true);
         terrain->simpleColorFill = true;
-        terrain->simpleColor = Color::BLACK();
+        terrain->simpleColor = Color::GREEN();
+        terrain->SetZIndex(1);
+
+        currentLength += width;
+
+        width = std::min(GameplayUtil::RandomFloat(10.f, 30.f), maxLength - currentLength);
+
+    } while (currentLength < maxLength);
+
+    currentLength = 0.f;
+
+    do {
+        const float height = GameplayUtil::PerlinNoise(Vector2(currentLength, 10)) * 50.f;
+
+        Block* terrain = world->SpawnActor<Block>();
+
+        terrain->SetSize(Vector2(width, height));
+        terrain->SetPosition(Vector2(
+            currentLength,
+            height
+        ));
+
+        terrain->SetSimulatingPhysics(true);
+        terrain->SetCollisionType(CollisionType::None);
+        terrain->SetMovability(ActorMovability::Static);
+        terrain->SetUsingSimpleTexture(true);
+        terrain->simpleColorFill = true;
+        terrain->simpleColor = Color(0xff'22'8B'22);
 
         currentLength += width;
 
