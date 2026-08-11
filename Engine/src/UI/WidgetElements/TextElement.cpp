@@ -4,6 +4,7 @@
 
 #include <SDL3_ttf/SDL_ttf.h>
 
+#include "Core/AssetManager.hpp"
 #include "Core/FontManager.hpp"
 #include "Core/IWindowController.hpp"
 #include "Core/PotatoEngine.hpp"
@@ -11,9 +12,9 @@
 
 TextElement::TextElement(const std::string& UID) : WidgetElement(UID) {
 
-    textFont = FontManager::Get()->GetFont("");
+    textFont = AssetManager::Get()->GetAsset<Font>("");
 
-    TTF_Font* ttf_font = static_cast<TTF_Font*>(textFont->___Get_Font());
+    TTF_Font* ttf_font = static_cast<TTF_Font*>(textFont->Internal_GetFont());
     TTF_TextEngine* textEngine = static_cast<TTF_TextEngine*>(PotatoEngine::Get().GetWindowController()->RequestTTFEngine());
 
     TTF_Text* text = TTF_CreateText(
@@ -95,7 +96,7 @@ void TextElement::SetFont(Font* font) {
     textFont = font;
 
     TTF_Text* text = static_cast<TTF_Text*>(ttf_text);
-    TTF_SetTextFont(text, static_cast<TTF_Font*>(font->___Get_Font()));
+    TTF_SetTextFont(text, static_cast<TTF_Font*>(font->Internal_GetFont()));
 
     if (Mode == TextMode::ShrinkToFit) {
         shrinkText();
@@ -124,8 +125,8 @@ void TextElement::SetPtSize(int size) {
 
     if (size < 1) { size = 1; }
 
-    textFont = FontManager::Get()->ChangeFontSize(textFont, size);
-    TTF_SetTextFont(static_cast<TTF_Text*>(ttf_text), static_cast<TTF_Font*>(textFont->___Get_Font()));
+    textFont = AssetManager::Get()->ChangeFontSize(textFont, size);
+    TTF_SetTextFont(static_cast<TTF_Text*>(ttf_text), static_cast<TTF_Font*>(textFont->Internal_GetFont()));
 
     if (Mode == TextMode::ResizeToFit) {
         resizeBox();
@@ -172,7 +173,7 @@ void TextElement::shrinkText() {
 
     // make a temporary copy of the font to perform logic
     TTF_Text* text = static_cast<TTF_Text*>(ttf_text);
-    TTF_Font* probeFont = TTF_CopyFont(static_cast<TTF_Font*>(textFont->___Get_Font()));
+    TTF_Font* probeFont = TTF_CopyFont(static_cast<TTF_Font*>(textFont->Internal_GetFont()));
 
     TTF_SetTextFont(text, probeFont);
 
@@ -206,14 +207,14 @@ void TextElement::shrinkText() {
         result = low;
     }
 
-    textFont = FontManager::Get()->ChangeFontSize(textFont, result);
+    textFont = AssetManager::Get()->ChangeFontSize(textFont, result);
 
-    TTF_SetTextFont(text, static_cast<TTF_Font*>(textFont->___Get_Font()));
+    TTF_SetTextFont(text, static_cast<TTF_Font*>(textFont->Internal_GetFont()));
     TTF_CloseFont(probeFont);
 
 }
 
-void* TextElement::___Get_Text() const {
+void* TextElement::Internal_GetText() const {
     return ttf_text;
 }
 

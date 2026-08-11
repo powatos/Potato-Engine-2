@@ -10,6 +10,8 @@ class IWindowController;
 class EventManager;
 class IEngineSubsystem;
 
+namespace Internal
+{
 /**
  * @def PROJECT(name)
  * @brief Called at the top of the project entrypoint to define the application name
@@ -17,12 +19,13 @@ class IEngineSubsystem;
  * @param name application name
  */
 #define PROJECT(name) \
-struct ___ProjectInit { \
-    ___ProjectInit() { \
-        ___ENGINE_GLOBALS::appName = name; \
+struct ProjectInit { \
+    ProjectInit() { \
+        Internal::EngineGlobals::appName = name; \
     } \
-} ___ProjectInit;
+} Project_Init;
 
+}
 /**
  * @brief Global engine singleton class
  * @details This class manages the engine and engine subsystems. This class must be configured
@@ -75,7 +78,7 @@ private:
     std::string logPath;
 };
 
-namespace ___ENGINE_GLOBALS {
+namespace Internal::EngineGlobals {
     inline std::string orgName = "PotatoEngine";
     inline std::string appName;
 }

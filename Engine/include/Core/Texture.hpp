@@ -36,8 +36,8 @@ struct Texture : public Asset
     TextureScaleMode GetScaleMode() const;
     void SetScaleMode(TextureScaleMode mode);
 
-    void* ___Get_Surface() const;
-    void* ___Get_Texture() const;
+    void* Internal_GetSurface() const;
+    void* Internal_GetTexture() const;
 
 private:
     Color keyColor; // 0x0 alpha means do not use color key

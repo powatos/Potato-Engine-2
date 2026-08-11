@@ -28,7 +28,7 @@ OutputManager::OutputManager() {
     SDL_Renderer* renderer;
 
     SDL_CreateWindowAndRenderer(
-        ___ENGINE_GLOBALS::appName.c_str(),
+        Internal::EngineGlobals::appName.c_str(),
         static_cast<int>(windowSize.x), static_cast<int>(windowSize.y),
         SDL_WINDOW_MOUSE_FOCUS |
         SDL_WINDOW_INPUT_FOCUS |
@@ -144,7 +144,7 @@ void OutputManager::DrawLevel() {
                 continue;
             }
 
-            SDL_Texture* tex = static_cast<SDL_Texture*>(actor_tex->___Get_Texture());
+            SDL_Texture* tex = static_cast<SDL_Texture*>(actor_tex->Internal_GetTexture());
             // SDL_SetTextureScaleMode(tex, SDL_SCALEMODE_PIXELART);
             SDL_RenderTexture(renderer, tex, nullptr, &rect);
 
@@ -174,7 +174,7 @@ void OutputManager::Recurse_DrawUI(const UIHierarchy* ui, UIVector posScale, UIV
     if (!uiObj->isVisible()) { return; }
 
     // calls corresponding Render() overload
-    uiObj->___Render_Passthrough(this, posScale, sizeScale);
+    uiObj->Internal_RenderPassthrough(this, posScale, sizeScale);
 
     const UIVector screenPos = uiObj->GetScreenPosition();
     const UIVector screenSize = uiObj->GetScreenSize();
@@ -201,7 +201,7 @@ void OutputManager::Render(const class TextElement* ui, UIVector posScale, UIVec
     const Vector2 pos = getScaledVec(ui->GetScreenPosition(), posScale);
     const Vector2 size = getScaledVec(ui->GetScreenSize(), sizeScale);
 
-    TTF_Text* text = static_cast<TTF_Text*>(ui->___Get_Text());
+    TTF_Text* text = static_cast<TTF_Text*>(ui->Internal_GetText());
 
     TTF_DrawRendererText(text, pos.x, pos.y);
 

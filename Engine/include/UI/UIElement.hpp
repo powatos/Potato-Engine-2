@@ -4,7 +4,7 @@
 #include <set>
 
 #include "Core/HTreeNode.h"
-#include "____LLUIRenderer.hpp"
+#include "UIRenderer.hpp"
 #include "Core/IWindowController.hpp"
 #include "Util/UIVector.hpp"
 #include "Util/Vector2.hpp"
@@ -21,7 +21,7 @@ using UIHierarchy = HTreeNode<UIElement>;
 class UIElement
 {
 public:
-    virtual void ___Render_Passthrough(___LLUIRenderer* r, UIVector po, UIVector so) {};
+    virtual void Internal_RenderPassthrough(Internal::UIRenderer* r, UIVector po, UIVector so) {};
 
     /**
      * @brief Constructs UI element
@@ -55,7 +55,7 @@ public:
     Vector2 GetTruePosition() const; ///< @brief Gets true pixel-position on screen
     Vector2 GetTrueSize() const; ///< @brief Gets true pixel-size on screen
 
-    UIHierarchy* ___hierarchyRef;
+    UIHierarchy* Internal_HierarchyRef;
 private:
 
     const std::string UID;

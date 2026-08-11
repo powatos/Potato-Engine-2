@@ -4,66 +4,64 @@
 
 #include "Core/PotatoEngine.hpp"
 #include "Core/AssetManager.hpp"
-#include "Core/TextureManager.hpp"
-#include "Core/AssetConfigs.h"
-#include "Core/FontManager.hpp"
 
-#include "Debug/Log.hpp"
+#include <SDL3_ttf/SDL_ttf.h>
+
+#include "Core/TextureManager.hpp"
+#include "Core/FontManager.hpp"
+#include "Core/IWindowController.hpp"
 
 #include "SDL3/SDL.h"
 
 AssetManager::AssetManager() {
     LOG(LogType::VITAL, "AssetManager constructed");
+
+    CacheAssets();
+}
+
+Asset* TextureLoader::LoadAsset(const FilePath& rootPath) const {
+    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(PotatoEngine::Get().GetWindowController()->RequestRenderingContext());
+    if (renderer == nullptr) {
+        LOG(LogType::ERROR, "Failed to get valid rendering context while creating texture with path {}", rootPath.string());
+        return nullptr;
+    }
+
+    SDL_Surface* surface = SDL_LoadBMP(rootPath.string().c_str());
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+    Texture* tex = new Texture( rootPath, surface, texture);
+    return tex;
+}
+
+Font* FontLoader::LoadSizedFont(const FilePath& rootPath, int ptSize) const {
+    TTF_Font* ttf_font = TTF_OpenFont(rootPath.string().c_str(), static_cast<float>(ptSize));
+
+    Font* font = new Font(rootPath, ttf_font);
+    return font;
+}
+
+Asset* FontLoader::LoadAsset(const FilePath& rootPath) const {
+    return LoadSizedFont(rootPath, DEFAULT_FONT_PT_SIZE);
 }
 
 void AssetManager::CacheAssets() {
 
-    // Create textures
-    TextureManager* textureManager = TextureManager::Get();
+    for (auto& [subdir, _, validExtensions, loader]: Internal::GetAssetRegistry() | std::views::values) {
+        for (const auto& entry : std::filesystem::recursive_directory_iterator(GetAssetsDir() / subdir)) {
+            if (!std::filesystem::is_regular_file(entry)) { continue; }
+            const std::string ext = entry.path().extension().string();
+            if (std::ranges::find(validExtensions, ext) == validExtensions.end()) {
+                LOG(LogType::WARNING, "Invalid asset extension found: {}", entry.path().string());
+            }
 
-    for ( const auto& entry : std::filesystem::recursive_directory_iterator(GetAssetsDir() / DEFAULT_TEXTURES_SUBDIR) ) {
-        if (!std::filesystem::is_regular_file(entry)) { continue; }
-        const std::string ext = entry.path().extension().string();
-
-        if (std::ranges::find(TextureManager::validExtensions, ext) == TextureManager::validExtensions.end())
-        { LOG(LogType::WARNING, "Unsupported asset type found at {}", entry.path().string()); continue; }
-
-        Asset* asset = textureManager->CreateTexture(entry.path());
-        cache[entry.path().string()] = asset;
+            Asset* asset = loader->LoadAsset(entry.path());
+            cache[entry.path().string()] = asset;
+        }
     }
-
-    // Create fonts
-    FontManager* fontManager = FontManager::Get();
-
-    for ( const auto& entry : std::filesystem::recursive_directory_iterator(GetAssetsDir() / DEFAULT_FONTS_SUBDIR) ) {
-        if (!std::filesystem::is_regular_file(entry)) { continue; }
-        const std::string ext = entry.path().extension().string();
-
-        if (std::ranges::find(FontManager::validExtensions, ext) == FontManager::validExtensions.end())
-        { LOG(LogType::WARNING, "Unsupported asset type found at {}", entry.path().string()); continue; }
-
-        Asset* asset = fontManager->CreateFont(entry.path());
-        cache[entry.path().string()] = asset;
-    }
-
-    // Create ...
 
 }
 
-Asset* AssetManager::GetAsset(const std::string& relativePath) {
-    const FilePath path = GetAssetsDir() / NormalizePath(relativePath);
-
-    Asset* asset = cache[path.string()];
-
-    if (asset == nullptr) {
-        LOG(LogType::WARNING, "Attemping to get asset not yet cached: {}", relativePath);
-    }
-
-    return asset;
-
-}
-
-FilePath AssetManager::GetAssetsDir() const {
+FilePath AssetManager::GetAssetsDir() {
     const char* basePath = SDL_GetBasePath(); // same directory as executable
     FilePath assetsDir = FilePath(basePath) / "Assets";
 
@@ -74,8 +72,8 @@ FilePath AssetManager::GetAssetsDir() const {
     return assetsDir;
 }
 
-FilePath AssetManager::GetSaveDir() const {
-    char* prefPath = SDL_GetPrefPath(___ENGINE_GLOBALS::orgName.c_str() ,___ENGINE_GLOBALS::appName.c_str()); // local dir; win AppData\Roaming\orgName(PotatoEngine)\appName
+FilePath AssetManager::GetSaveDir() {
+    char* prefPath = SDL_GetPrefPath(Internal::EngineGlobals::orgName.c_str() ,Internal::EngineGlobals::appName.c_str()); // local dir; win AppData\Roaming\orgName(PotatoEngine)\appName
     FilePath saveDir = FilePath(prefPath) / "Saves";
     SDL_free(prefPath);
 
@@ -105,7 +103,7 @@ const std::unordered_map<std::string, Asset*> & AssetManager::GetCache() const {
 void AssetManager::Resolve() noexcept {
     LOG(LogType::VITAL, "Resolving AssetManager");
 
-    for (auto& [name, asset] : cache) {
+    for (auto& asset: cache | std::views::values) {
         delete asset;
         asset = nullptr;
     }

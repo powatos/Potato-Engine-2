@@ -12,6 +12,7 @@
 
 #include "Game/Actor.hpp"
 
+#include "Core/AssetManager.hpp"
 #include "Core/TextureManager.hpp"
 
 ARCHIVE_STATIC(Actor)
@@ -36,7 +37,7 @@ Actor::Actor()
     simpleColorFill = false;
     simpleColor = Color{};
 
-    ActorTexture = TextureManager::Get()->GetTexture(""); // fallbacks to default texture
+    ActorTexture = AssetManager::Get()->GetAsset<Texture>(""); // fallbacks to default texture
 
     isInPlay = false;
     Visible = true;
@@ -175,7 +176,7 @@ Texture* Actor::GetTexture() const {
     return ActorTexture;
 }
 void Actor::SetTexture(const std::string& texturePath) {
-    ActorTexture = TextureManager::Get()->GetTexture(texturePath);
+    ActorTexture = AssetManager::Get()->GetAsset<Texture>(texturePath);
 }
 void Actor::SetTexture(Texture* texture) {
     ActorTexture = texture;

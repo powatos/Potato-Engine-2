@@ -5,6 +5,7 @@
 
 #include "MyPlayer.hpp"
 
+#include "Core/AssetManager.hpp"
 #include "Core/InputController.hpp"
 #include "Core/TextureManager.hpp"
 #include "Game/Raycast.hpp"
@@ -16,7 +17,7 @@ MyPlayer::MyPlayer() : downraycast(Raycast()) {
 
     SetUsingSimpleTexture(false);
 
-    Texture* tex = TextureManager::Get()->GetTexture("Capsule.bmp");
+    Texture* tex = AssetManager::Get()->GetAsset<Texture>("Capsule.bmp");
     tex->SetKeyColor(Color(0xff'ff'00'ff));
     SetTexture(tex);
 

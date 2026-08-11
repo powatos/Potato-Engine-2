@@ -53,7 +53,7 @@ public:
      */
     UIElement* GetUI(const std::string& UID, const UIElement* HintParent = nullptr);
 
-    void ___SetZIndex(UIElement* ui, int zIndex) const;
+    void Internal_SetZIndex(UIElement* ui, int zIndex) const;
 
 private:
     UIManager();

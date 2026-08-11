@@ -8,8 +8,9 @@
 #include "Core/EngineSubsystem.hpp"
 
 enum class TickGroup;
-struct ___TickGroupHash;
 class Tickable;
+
+namespace Internal { struct TickGroupHash; }
 
 /**
  * 
@@ -56,16 +57,20 @@ private:
  */
 enum class TickGroup {
     PreInput, //< Stage before input is handled
-    _Input, //< Stage where input is handled @warning For internal use only
+    Internal_Input, //< Stage where input is handled @warning For internal use only
     Update, //< Main game update stage
     PostUpdate, //< Stage after main game updates are proccessed
-    _Physics, //< Stage where physics is handled @warning For internal use only
+    Internal_Physics, //< Stage where physics is handled @warning For internal use only
     PostPhysics, //< Stage after physics is proccessed
-    _Render, //< Render stage
+    Internal_Render, //< Render stage
     PostRender //< Stage after rendering is complete
 };
-struct ___TickGroupHash {
-    size_t operator ()(const TickGroup& g) const noexcept{
-        return static_cast<size_t>(g);
-    }
-};
+
+namespace Internal
+{
+    struct TickGroupHash {
+        size_t operator ()(const TickGroup& g) const noexcept{
+            return static_cast<size_t>(g);
+        }
+    };
+}

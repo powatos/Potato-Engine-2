@@ -11,7 +11,7 @@ struct Font : public Asset
 
     ~Font();
 
-    void* ___Get_Font();
+    void* Internal_GetFont();
 
 private:
 

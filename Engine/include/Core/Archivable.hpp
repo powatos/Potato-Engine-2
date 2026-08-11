@@ -5,6 +5,8 @@
 #include <string>
 #include <unordered_map>
 
+namespace Internal
+{
 /**
  * @def ARCHIVE_STATIC(type)
  * @brief Registers classes to be archived as a static actor
@@ -12,11 +14,15 @@
  * @param type Literal name of the class
  */
 #define ARCHIVE_STATIC(type) \
-static struct ___##type##_Register { \
-    ___##type##_Register() { \
-        ___Archive::_GetArchive()[#type] = []() -> Archivable* { return new type(); }; \
+static struct type##_RegisterArchive { \
+    type##_RegisterArchive() { \
+        Internal::Archive::GetArchive()[#type] = []() -> Archivable* { \
+            return new type(); \
+        }; \
     } \
-} ___##type##_register;
+} type##_RegisterArchive_i;
+
+}
 
 /**
  * @brief Abstract factory class inherited by all classes that should be archived
@@ -33,11 +39,12 @@ public:
     virtual ~Archivable() = default;
 };
 
-using ___ArchiveType = std::unordered_map< std::string, std::function<Archivable*()> >;
+namespace Internal::Archive {
+    using ArchiveType = std::unordered_map< std::string, std::function<Archivable*()> >;
 
-namespace ___Archive {
-    inline ___ArchiveType& _GetArchive(){
-        static ___ArchiveType archive;
+    inline ArchiveType& GetArchive(){
+        static ArchiveType archive;
         return archive;
     }
 }
+

@@ -5,7 +5,7 @@
 #include "Core/Tickable.hpp"
 #include "Core/InputController.hpp"
 
-using BindingMap = std::unordered_map<Keycode, std::vector<InputBinding>, ___KeycodeHash>;
+using BindingMap = std::unordered_map<Keycode, std::vector<InputBinding>, Internal::KeycodeHash>;
 
 class InputManager : public EngineSubsystem<InputManager>, public IInputController, public Tickable
 {

@@ -1,16 +1,81 @@
-/** @file DataManager.hpp */
+/** @file AssetManager.hpp */
 #pragma once
 
 #include <filesystem>
 #include <functional>
 #include <unordered_map>
 #include <vector>
+#include <array>
+#include <typeindex>
 
 #include "Asset.hpp"
+#include "AssetConfigs.h"
+#include "AssetManager.hpp"
 
 #include "EngineSubsystem.hpp"
+#include "Font.hpp"
+#include "Texture.hpp"
+#include "Debug/Log.hpp"
 
 using FilePath = std::filesystem::path;
+struct IAssetLoader;
+
+struct AssetTypeDescriptor
+{
+    FilePath subdir;
+    FilePath defaultAsset;
+    std::vector<std::string_view> validExtensions;
+    std::unique_ptr<IAssetLoader> loader;
+};
+
+struct IAssetLoader
+{
+    IAssetLoader() = default;
+    virtual ~IAssetLoader() = default;
+    [[nodiscard]] virtual Asset* LoadAsset(const FilePath& rootPath) const = 0;
+};
+
+struct TextureLoader : IAssetLoader
+{
+    [[nodiscard]] Asset* LoadAsset(const FilePath& rootPath) const override;
+};
+
+struct FontLoader : IAssetLoader
+{
+    [[nodiscard]] Asset* LoadAsset(const FilePath& rootPath) const override;
+    [[nodiscard]] Font* LoadSizedFont(const FilePath& rootPath, int ptSize) const;
+};
+
+namespace Internal
+{
+    using AssetRegistryType = std::unordered_map<std::type_index, AssetTypeDescriptor>;
+
+    inline static AssetRegistryType& GetAssetRegistry() {
+        static AssetRegistryType registry;
+        return registry;
+    }
+
+        static struct AssetLoaderRegistrar
+        {
+            AssetLoaderRegistrar() {
+                GetAssetRegistry()[std::type_index(typeid(Texture))] = {
+                    DEFAULT_TEXTURES_SUBDIR,
+                    DEFAULT_TEXTURE_ASSET_PATH,
+                    {".bmp"},
+                    std::make_unique<TextureLoader>(),
+                };
+                GetAssetRegistry()[std::type_index(typeid(Font))] = {
+                    DEFAULT_FONTS_SUBDIR,
+                    DEFAULT_FONT_ASSET_PATH,
+                    {".ttf"},
+                    std::make_unique<FontLoader>(),
+                };
+            }
+        } AssetLoaderRegistrar_i;
+
+}
+
+constexpr int DEFAULT_FONT_PT_SIZE = 8;
 
 /**
  * @brief Manager for asset file paths and directories
@@ -27,31 +92,31 @@ public:
     void Resolve() noexcept override;
 
     /**
-     * @brief Gets an asset based on its corresponding file
-     * @param relativePath Path from assets folder to the file associated with the asset
+     * @brief Gets an asset based on its type
+     * * @tparam AssetType type of the asset
+     * @param relativePath Path from its subdirectory
      * @returns Asset associated with file
      */
-    Asset* GetAsset(const std::string& relativePath);
+    template<typename AssetType>
+    AssetType* GetAsset(const std::string& relativePath) {
+        const FilePath path = GetAssetsDir() / NormalizePath(relativePath);
 
-    /**
-     * @brief Normalizes a path string corresponding to the target OS
-     * @details On POSIX systems, all separators are replaced with '/'. On Windows systems, all separators are replaced with '\\'
-     * @param path Directory path to normalize
-     * @return
-     */
-    static std::string NormalizePath(const std::string& path);
+        auto returnDefaultAsset = [&]() -> AssetType* {
+            const AssetTypeDescriptor& descriptor = Internal::GetAssetRegistry().at(std::type_index(typeid(AssetType)));
+            return GetAsset<AssetType>((descriptor.subdir / descriptor.defaultAsset).string());
+        };
 
-    /**
-     * @brief Gets the target assets directory from the OS home directory
-     * @return Full path to assets directory
-     */
-    FilePath GetAssetsDir() const;
+        if (!std::filesystem::exists(path)) {
+            LOG(LogType::WARNING, "Attempt to get invalid asset: {}", path.string());
+            return returnDefaultAsset();
+        }
 
-    /**
-     * @brief Gets the target saves directory from the OS home directory
-     * @return Full path to saves directory
-     */
-    FilePath GetSaveDir() const;
+        if (const auto it = cache.find(relativePath); it != cache.end()) {
+            return static_cast<AssetType*>(it->second);
+        }
+
+        return returnDefaultAsset();
+    }
 
     /**
      * @brief Calls corresponding constructors to cache all assets under the assets folder
@@ -65,6 +130,26 @@ public:
      * @returns Current asset cache
      */
     const std::unordered_map<std::string, Asset*>& GetCache() const;
+
+    /**
+     * @brief Normalizes a path string corresponding to the target OS
+     * @details On POSIX systems, all separators are replaced with '/'. On Windows systems, all separators are replaced with '\\'
+     * @param path Directory path to normalize
+     * @return
+     */
+    static std::string NormalizePath(const std::string& path);
+
+    /**
+     * @brief Gets the target assets directory from the OS home directory
+     * @return Full path to assets directory
+     */
+    static FilePath GetAssetsDir();
+
+    /**
+     * @brief Gets the target saves directory from the OS home directory
+     * @return Full path to saves directory
+     */
+    static FilePath GetSaveDir();
 
 private:
     std::unordered_map<std::string, Asset*> cache;

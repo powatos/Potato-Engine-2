@@ -65,12 +65,14 @@ enum class Keycode
 
 
 };
-
-struct ___KeycodeHash {
-    size_t operator ()(const Keycode& key) const noexcept{
-        return static_cast<size_t>(key);
-    }
-};
+namespace Internal
+{
+    struct KeycodeHash {
+        size_t operator ()(const Keycode& key) const noexcept{
+            return static_cast<size_t>(key);
+        }
+    };
+}
 
 /**
  * @enum InputType

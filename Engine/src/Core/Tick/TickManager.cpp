@@ -37,7 +37,7 @@ constexpr void TickManager::checkObjByGroup(float dt, TickGroup group, Tickable*
         case TickGroup::PreInput:
             obj->TickPreInput(dt);
             break;
-        case TickGroup::_Input:
+        case TickGroup::Internal_Input:
             obj->_TickInput(dt);
             break;
         case TickGroup::Update:
@@ -46,13 +46,13 @@ constexpr void TickManager::checkObjByGroup(float dt, TickGroup group, Tickable*
         case TickGroup::PostUpdate:
             obj->TickPostUpdate(dt);
             break;
-        case TickGroup::_Physics:
+        case TickGroup::Internal_Physics:
             obj->_TickPhysics(dt);
             break;
         case TickGroup::PostPhysics:
             obj->TickPostPhysics(dt);
             break;
-        case TickGroup::_Render:
+        case TickGroup::Internal_Render:
             obj->_TickRender(dt);
             break;
         case TickGroup::PostRender:

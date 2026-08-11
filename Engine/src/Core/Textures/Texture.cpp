@@ -28,10 +28,10 @@ Texture::Texture(Texture&& other) noexcept :
 }
 
 
-void* Texture::___Get_Surface() const {
+void* Texture::Internal_GetSurface() const {
     return sdl_surface;
 }
-void* Texture::___Get_Texture() const {
+void* Texture::Internal_GetTexture() const {
     return sdl_texture;
 }
 

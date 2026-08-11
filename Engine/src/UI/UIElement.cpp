@@ -47,7 +47,7 @@ void UIElement::SetZIndex(int zIndex) {
     if (ZIndex == zIndex) { return; }
 
     ZIndex = zIndex;
-    UIManager::Get()->___SetZIndex(this, zIndex);
+    UIManager::Get()->Internal_SetZIndex(this, zIndex);
 }
 int UIElement::GetZIndex() const {
     return ZIndex;

@@ -11,7 +11,7 @@
 GameInstance::GameInstance() {
     LOG(LogType::VITAL, "GameInstance constructed");
     
-    ___isMainTickRunning = false;
+    Internal_IsMainTickRunning = false;
 
     world = new World();
 
@@ -27,15 +27,15 @@ void GameInstance::BeginPlay() {
     // ActivePlayerController->BeginPlay();
     ActiveGamemode->BeginPlay();
 
-    ___isMainTickRunning = true;
+    Internal_IsMainTickRunning = true;
 }
 
 void GameInstance::InstantiateSubclasses() {
 
     // User-defined Instantiaters
-    auto c_pc = ___DEFAULT_INSTANTIATORS::_PlayerController();
-    auto c_p = ___DEFAULT_INSTANTIATORS::_Player();
-    auto c_gm = ___DEFAULT_INSTANTIATORS::_Gamemode();
+    auto c_pc = Internal::DefaultSubclassInstantiators::i_PlayerController();
+    auto c_p = Internal::DefaultSubclassInstantiators::i_Player();
+    auto c_gm = Internal::DefaultSubclassInstantiators::i_Gamemode();
     
     // PlayerController
     if (c_pc == nullptr) {
@@ -67,7 +67,7 @@ void GameInstance::InstantiateSubclasses() {
 }
 
 void GameInstance::RequestShutdown() {
-    ___isMainTickRunning = false;
+    Internal_IsMainTickRunning = false;
 }
 
 void GameInstance::LoadSubclasses() {

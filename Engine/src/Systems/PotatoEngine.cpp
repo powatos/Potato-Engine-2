@@ -31,16 +31,12 @@ PotatoEngine::PotatoEngine() {
     LOG(LogType::VITAL, "PotatoEngine constructed");
 
     /// Set up logs
-    char* prefPath = SDL_GetPrefPath(___ENGINE_GLOBALS::orgName.c_str() ,___ENGINE_GLOBALS::appName.c_str());
+    char* prefPath = SDL_GetPrefPath(Internal::EngineGlobals::orgName.c_str() ,Internal::EngineGlobals::appName.c_str());
     logPath = std::string(prefPath) + "debug.log";
     SDL_free(prefPath);
 
     LOG.init(logPath);
     // LOG.showTerminalOutput = false;
-
-    /// Initialize all specific asset managers
-    SubsystemStack.push_back( TextureManager::Get() );
-    SubsystemStack.push_back( FontManager::Get() );
 
     /// Initialize low level controllers
     SubsystemStack.push_back( Engine::Get() );
@@ -77,8 +73,6 @@ PotatoEngine& PotatoEngine::Get()
 void PotatoEngine::LoadSubclasses() {
     InputController = InputManager::Get();
     WindowController = OutputManager::Get();
-
-    AssetManager::Get()->CacheAssets();
 
     GameInstance::Get()->LoadSubclasses();
 }

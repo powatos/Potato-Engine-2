@@ -10,6 +10,6 @@
 #define DEFAULT_PRESETS_SUBDIR "Presets"
 
 #define DEFAULT_SOUNDS_SUBDIR "Sounds"
-#define DEFAULT_SOUND_ASSET_PATH "___default.ogg"
+#define DEFAULT_SOUND_ASSET_PATH "default.ogg"
 
 

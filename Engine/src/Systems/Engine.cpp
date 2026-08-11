@@ -36,7 +36,7 @@ int Engine::main() {
     const ms idealDelay(static_cast<int>(1000.f / outManager->GetTargetFrameRate()));
     auto lastTick = stdc::steady_clock::now();
 
-    while (Instance->___isMainTickRunning == true) {
+    while (Instance->Internal_IsMainTickRunning == true) {
         auto currentTick = stdc::steady_clock::now();
 
         const stdc::duration<float> elapsed = currentTick - lastTick;
@@ -49,16 +49,16 @@ int Engine::main() {
         {
             tickManager->Fire(dt, TickGroup::PreInput);
 
-            tickManager->Fire(dt, TickGroup::_Input);
+            tickManager->Fire(dt, TickGroup::Internal_Input);
 
             tickManager->Fire(dt, TickGroup::Update);
             tickManager->Fire(dt, TickGroup::PostUpdate);
 
-            tickManager->Fire(dt, TickGroup::_Physics);
+            tickManager->Fire(dt, TickGroup::Internal_Physics);
 
             tickManager->Fire(dt, TickGroup::PostPhysics);
 
-            tickManager->Fire(dt, TickGroup::_Render);
+            tickManager->Fire(dt, TickGroup::Internal_Render);
 
             tickManager->Fire(dt, TickGroup::PostRender);
         }
@@ -87,13 +87,6 @@ int Engine::main() {
     LOG(LogType::VITAL, "Engine main loop finished");
 
     return 0;
-}
-
-void Engine::FireTick(const float dt) const {
-    EventManager::Get()->FireNativeEvent<float>("___ENGINE_TICK", dt);
-}
-void Engine::FireTickPostPhysics(const float dt) const {
-    EventManager::Get()->FireNativeEvent<float>("___ENGINE_TICK_POST_PHYSICS", dt);
 }
 
 void Engine::Resolve() noexcept {

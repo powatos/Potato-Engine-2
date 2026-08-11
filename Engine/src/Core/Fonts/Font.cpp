@@ -20,7 +20,7 @@ Font::Font(Font&& other) noexcept :
     other.font = nullptr;
 }
 
-void* Font::___Get_Font() {
+void* Font::Internal_GetFont() {
     return font;
 }
 

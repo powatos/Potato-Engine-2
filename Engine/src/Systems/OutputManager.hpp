@@ -6,11 +6,11 @@
 #include "Core/EngineSubsystem.hpp"
 #include "Core/IWindowController.hpp"
 #include "Core/Tickable.hpp"
-#include "UI/____LLUIRenderer.hpp"
+#include "UI/UIRenderer.hpp"
 
 #include "UI/UIManager.hpp"
 
-class OutputManager : public EngineSubsystem<OutputManager>, public IWindowController, public Tickable, public ___LLUIRenderer
+class OutputManager : public EngineSubsystem<OutputManager>, public IWindowController, public Tickable, public Internal::UIRenderer
 {
     ENGINE_SUBSYSTEM(OutputManager)
 public:

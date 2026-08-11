@@ -28,7 +28,7 @@ struct TimerHandle
     TimerHandle() = default;
     TimerHandle(std::string timerName, double duration) : 
         name(std::move(timerName)),
-        eventName("___TIMER_" + name),
+        eventName("Internal_Timer-" + name),
         duration(duration),
         elapsed(0.0),
         hasFinished(false),

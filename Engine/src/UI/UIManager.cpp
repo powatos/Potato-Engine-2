@@ -31,8 +31,8 @@ UIElement* UIManager::GetUI(const std::string& UID, const UIElement* HintParent)
     return Recurse_Get(UID, RootWidget_H);
 }
 
-void UIManager::___SetZIndex(UIElement* ui, int zIndex) const {
-    ui->___hierarchyRef->Parent->ReorderChild(ui, zOrderingPred);
+void UIManager::Internal_SetZIndex(UIElement* ui, int zIndex) const {
+    ui->Internal_HierarchyRef->Parent->ReorderChild(ui, zOrderingPred);
 }
 
 void UIManager::Resolve() noexcept {
@@ -45,12 +45,12 @@ void UIManager::Resolve() noexcept {
 
 void UIManager::Recurse_Add(UIElement* ui, UIElement* parent, UIHierarchy* currentLevel) {
     if (parent == nullptr) {
-        RootWidget_H->AddChild(ui, &ui->___hierarchyRef, zOrderingPred);
+        RootWidget_H->AddChild(ui, &ui->Internal_HierarchyRef, zOrderingPred);
         return;
     }
 
     if ( currentLevel->Object == parent ) {
-        currentLevel->AddChild(ui, &ui->___hierarchyRef, zOrderingPred);
+        currentLevel->AddChild(ui, &ui->Internal_HierarchyRef, zOrderingPred);
         return;
     }
 

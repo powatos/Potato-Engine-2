@@ -42,7 +42,7 @@ struct TextElement : public WidgetElement
     void SetPtSize(int size); ///< @brief Set font size
     int GetPtSize() const; ///< @brief Gets current font size
 
-    void* ___Get_Text() const;
+    void* Internal_GetText() const;
 
     virtual void SetScreenSize(const UIVector& size) override;
 

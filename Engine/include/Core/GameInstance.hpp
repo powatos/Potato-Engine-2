@@ -12,6 +12,8 @@
 #include "Core/Singleton.hpp"
 #include "Game/PlayerController.hpp"
 
+namespace Internal
+{
 /**
  * @def SET_DEFAULT_SUBCLASS(def, set)
  * @relates GameInstance
@@ -25,12 +27,15 @@
  * order fiasco](https://en.cppreference.com/cpp/language/siof))
  */
 #define SET_DEFAULT_SUBCLASS(def, set) \
-static struct ___##set##_DEFAULT_SUBCLASS_REGISTER { \
-    ___##set##_DEFAULT_SUBCLASS_REGISTER() { \
-        ___DEFAULT_INSTANTIATORS::_##def() = []() -> def* { return new set(); }; \
+static struct set##_DefaultSubclassRegistrar { \
+    set##_DefaultSubclassRegistrar() { \
+        Internal::DefaultSubclassInstantiators::i_##def() = []() -> def* { \
+            return new set(); \
+        }; \
     } \
-} ___##set##_DEFAULT_SUBCLASS_REGISTER_i;
+} set##_DefaultSubclassRegistrar_i;
 
+}
 /**
  * @brief Singleton with various game properties and functions. This class also manages game subclasses
  * @details Set global constants and get objects using the @ref get() "instance". \n Subclasses must be registered 
@@ -63,7 +68,7 @@ public:
      * @warning NEVER MODIFY THIS VALUE DIRECTLY
      * @sa RequestShutdown()
      */
-    bool ___isMainTickRunning;
+    bool Internal_IsMainTickRunning;
 
 private:
     GameInstance();
@@ -80,16 +85,16 @@ private:
 
 };
 
-namespace ___DEFAULT_INSTANTIATORS {
-    inline std::function<Player*()>& _Player() {
+namespace Internal::DefaultSubclassInstantiators {
+    inline std::function<Player*()>& i_Player() {
         static std::function<Player*()> f;
         return f;
     }
-    inline std::function<PlayerController*()>& _PlayerController() {
+    inline std::function<PlayerController*()>& i_PlayerController() {
         static std::function<PlayerController*()> f;
         return f;
     }
-    inline std::function<Gamemode*()>& _Gamemode() {
+    inline std::function<Gamemode*()>& i_Gamemode() {
         static std::function<Gamemode*()> f;
         return f;
     }
