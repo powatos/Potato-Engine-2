@@ -13,7 +13,6 @@
 #include "Game/Actor.hpp"
 
 #include "Core/AssetManager.hpp"
-#include "Core/TextureManager.hpp"
 
 ARCHIVE_STATIC(Actor)
 

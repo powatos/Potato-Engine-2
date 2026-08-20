@@ -5,6 +5,7 @@
 
 #include "Widgets/DebugInfo.hpp"
 
+#include "Core/AssetManager.hpp"
 #include "UI/BoxElement.hpp"
 #include "UI/ResizeElement.hpp"
 #include "UI/UIManager.hpp"
@@ -14,25 +15,28 @@ void DebugInfo::Setup() {
 
     UIManager* uim = UIManager::Get();
 
-    SetScreenPosition(UIVector(0, 0, 10, 10));
-    SetScreenSize(UIVector(0.1, 0.3, 0, 0));
+    // SetScreenPosition(UIVector(0, 0, 10, 10));
+    // SetScreenSize(UIVector(0.1, 0.3, 0, 0));
+    //
+    // BoxElement* BG = uim->AddUI<BoxElement>("BG", this);
+    // BG->SetScreenSize(UIVector(1.f, 1.f, 0.f, 0.f));
+    // BG->BorderWeight = 1;
+    // BG->BorderColor = Color::BLACK();
+    //
+    // ResizeElement* resizer = uim->AddUI<ResizeElement>("ResizeElement", this);
+    // resizer->ResizeTarget = BG;
+    // resizer->padding = 2;
+    //
+    // TextElement* playerPosText = uim->AddUI<TextElement>("PlayerPosText", this);
+    // playerPosText->SetTextMode(TextMode::ResizeToFit);
+    // playerPosText->SetWrapText(false);
+    // playerPosText->SetPtSize(16);
+    // playerPosText->SetZIndex(1);
+    //
+    // SetVisibility(true);
 
-    BoxElement* BG = uim->AddUI<BoxElement>("BG", this);
-    BG->SetScreenSize(UIVector(1.f, 1.f, 0.f, 0.f));
-    BG->BorderWeight = 1;
-    BG->BorderColor = Color::BLACK();
-
-    ResizeElement* resizer = uim->AddUI<ResizeElement>("ResizeElement", this);
-    resizer->ResizeTarget = BG;
-    resizer->padding = 2;
-
-    TextElement* playerPosText = uim->AddUI<TextElement>("PlayerPosText", this);
-    playerPosText->SetTextMode(TextMode::ResizeToFit);
-    playerPosText->SetWrapText(false);
-    playerPosText->SetPtSize(16);
-    playerPosText->SetZIndex(1);
-
-    SetVisibility(true);
+    Preset* preset = AssetManager::Get()->GetAsset<Preset>("DebugInfo.json");
+    LoadWithPreset(preset);
 }
 
 void DebugInfo::TickPostPhysics(float dt) {

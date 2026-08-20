@@ -1,8 +1,7 @@
 # todo
+document asset manager + check for redundancies, tweaks
 actor texture rendering mode (shrink to fit, aspect ratio, etc.)
-refactor specific asset managers
 widget presets
-
 
 # other
 

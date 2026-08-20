@@ -1,6 +1,7 @@
 /** @file Widget.hpp */
 #pragma once
 
+#include "Preset.hpp"
 #include "UI/UIElement.hpp"
 
 struct WidgetElement;
@@ -23,6 +24,8 @@ public:
     Widget(const std::string& UID);
     virtual ~Widget();
 
-private:
+protected:
+
+    void LoadWithPreset(const Preset* preset);
 
 };

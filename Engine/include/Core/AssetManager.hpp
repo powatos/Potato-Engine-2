@@ -12,11 +12,13 @@
 #include "Asset.hpp"
 #include "AssetConfigs.h"
 #include "AssetManager.hpp"
+#include "AssetManager.hpp"
 
 #include "EngineSubsystem.hpp"
 #include "Font.hpp"
 #include "Texture.hpp"
 #include "Debug/Log.hpp"
+#include "UI/Preset.hpp"
 
 using FilePath = std::filesystem::path;
 struct IAssetLoader;
@@ -42,6 +44,11 @@ struct TextureLoader : IAssetLoader
 };
 
 struct FontLoader : IAssetLoader
+{
+    [[nodiscard]] Asset* LoadAsset(const FilePath& rootPath) const override;
+};
+
+struct PresetLoader : IAssetLoader
 {
     [[nodiscard]] Asset* LoadAsset(const FilePath& rootPath) const override;
 };
@@ -78,6 +85,13 @@ static struct AssetLoaderRegistrar
             std::make_unique<FontLoader>(),
         };
 
+        registry[std::type_index(typeid(Preset))] = {
+            DEFAULT_PRESETS_SUBDIR,
+            "", // preset has no default
+            {".json"},
+            std::make_unique<PresetLoader>(),
+        };
+
     }
 } AssetLoaderRegistrar_i;
 
@@ -110,7 +124,13 @@ public:
         const FilePath path = GetAssetsDir() / descriptor.subdir / NormalizePath(relativePath);
 
         auto returnDefaultAsset = [&]() -> AssetType* {
-            return GetAsset<AssetType>((descriptor.defaultAsset).string());
+            const FilePath defaultPath = descriptor.defaultAsset;
+            if (defaultPath.empty()) {
+                LOG(LogType::WARNING, "Attempt to get invalid asset with no default asset: {}", path.string());
+                return nullptr;
+            }
+
+            return GetAsset<AssetType>(defaultPath.string());
         };
 
         if (!std::filesystem::exists(path)) {

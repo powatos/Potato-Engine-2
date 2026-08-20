@@ -7,7 +7,6 @@
 
 #include <SDL3_ttf/SDL_ttf.h>
 
-#include "Core/TextureManager.hpp"
 #include "Core/FontManager.hpp"
 #include "Core/IWindowController.hpp"
 
@@ -29,11 +28,19 @@ Asset* FontLoader::LoadAsset(const FilePath& rootPath) const {
     return font;
 }
 
+Asset* PresetLoader::LoadAsset(const FilePath& rootPath) const {
+    Preset* preset = new Preset(rootPath);
+    return preset;
+}
+
+
 void AssetManager::CacheAssets() {
 
     for (auto& [subdir, _, validExtensions, loader]: Internal::GetAssetRegistry() | std::views::values) {
         for (const auto& entry : std::filesystem::recursive_directory_iterator(GetAssetsDir() / subdir)) {
+
             if (!std::filesystem::is_regular_file(entry)) { continue; }
+
             const std::string ext = entry.path().extension().string();
             if (std::ranges::find(validExtensions, ext) == validExtensions.end()) {
                 LOG(LogType::WARNING, "Invalid asset extension found: {}", entry.path().string());

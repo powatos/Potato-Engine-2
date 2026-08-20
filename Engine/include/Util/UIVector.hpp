@@ -44,4 +44,11 @@ struct UIVector
         return UIVector{scale - other.scale, offset - other.offset};
     }
 
+    /**
+     * @brief string representation of UIVector using float
+     */
+    inline std::string ToStringF() const {
+        return std::format("({:.3f}, {:.3f}, {:.3f}, {:.3f}), ", scale.x, scale.y, offset.x, offset.y);
+    }
+
 };

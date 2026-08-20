@@ -19,7 +19,10 @@ struct AssetMetadata
  */
 struct Asset
 {
-protected:
+    /**
+     * @brief Construct asset
+     * @warning For internal use only!
+     */
     Asset(const FilePath& path);
 
 public:

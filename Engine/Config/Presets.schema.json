@@ -6,6 +6,10 @@
     "$ref": "#/$defs/UIElement",
     "unevaluatedProperties": false,
     "properties": {
+        "name" : {
+            "type": "string",
+            "description": "This property is obsolete at the top-level"
+        },
         "elements": {
             "type": "object",
             "additionalProperties": false,

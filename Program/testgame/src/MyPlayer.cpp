@@ -7,7 +7,6 @@
 
 #include "Core/AssetManager.hpp"
 #include "Core/InputController.hpp"
-#include "Core/TextureManager.hpp"
 #include "Game/Raycast.hpp"
 
 SET_DEFAULT_SUBCLASS(Player, MyPlayer)

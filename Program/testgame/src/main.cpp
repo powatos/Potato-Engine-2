@@ -16,7 +16,6 @@
 #include <memory>
 
 #include "Core/IWindowController.hpp"
-#include "Core/TextureManager.hpp"
 #include "UI/TextElement.hpp"
 #include "UI/UIManager.hpp"
 #include "Util/GameplayUtil.hpp"

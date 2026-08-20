@@ -2,12 +2,14 @@
 
 #include "UI/ResizeElement.hpp"
 
-ResizeElement::ResizeElement(const std::string& UID) : WidgetElement(UID), padding(1) {
+ResizeElement::ResizeElement(const std::string& UID) : WidgetElement(UID), padding(1), ResizeTarget(nullptr) {
     SetScreenPosition(UIVector());
     SetScreenSize(UIVector());
 }
 
 void ResizeElement::TickPostPhysics(float dt) {
+
+    if (ResizeTarget == nullptr) { return; }
 
     UIVector TL, BR; // top left pos, bottom right pos
     Vector2 tTL, tBR; // true top left pos, true bottom right pos
