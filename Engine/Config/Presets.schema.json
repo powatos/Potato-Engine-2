@@ -6,7 +6,7 @@
     "$ref": "#/$defs/UIElement",
     "unevaluatedProperties": false,
     "properties": {
-        "name" : {
+        ".name" : {
             "type": "string",
             "description": "This property is obsolete at the top-level"
         },
@@ -57,27 +57,31 @@
         },
         "UIElement": {
             "type": "object",
-            "required": ["name"],
+            "required": [".name"],
             "properties": {
-                "name": {
+                ".name": {
                     "type": "string"
                 },
-                "position": {
+                "SetScreenSize": {
                     "$ref": "#/$defs/UIVector"
                 },
-                "size": {
+                "SetScreenPosition": {
                     "$ref": "#/$defs/UIVector"
                 },
-                "visibility": {
+                "SetVisibility": {
                     "type": "boolean"
+                },
+                "SetZIndex": {
+                    "type": "integer",
+                    "minimum": 1
                 }
             }
         },
         "WidgetElement": {
             "$ref": "#/$defs/UIElement",
-            "required": ["parent"],
+            "required": [".parent"],
             "properties": {
-                "parent": {
+                ".parent": {
                     "type": "string"
                 }
             }
@@ -86,13 +90,13 @@
             "$ref": "#/$defs/WidgetElement",
             "unevaluatedProperties": false,
             "properties": {
-                "fillColor": {
+                "FillColor": {
                     "$ref": "#/$defs/Color"
                 },
-                "borderColor": {
+                "BorderColor": {
                     "$ref": "#/$defs/Color"
                 },
-                "borderWeight": {
+                "BorderWeight": {
                     "type": "integer",
                     "minimum": 0
                 }
@@ -102,19 +106,22 @@
             "$ref": "#/$defs/WidgetElement",
             "unevaluatedProperties": false,
             "properties": {
-                "textMode": {
+                "SetText": {
+                    "type": "string"
+                },
+                "SetWrapText": {
+                    "type": "boolean"
+                },
+                "SetTextMode": {
                     "type": "string",
                     "enum": ["ResizeToFit", "ShrinkToFit", "IgnoreBounds"]
                 },
-                "wrapText": {
-                    "type": "boolean"
+                "SetColor": {
+                    "$ref": "#/$defs/Color"
                 },
-                "ptSize": {
+                "SetPtSize": {
                     "type": "integer",
                     "minimum": 1
-                },
-                "zIndex": {
-                    "type": "integer"
                 }
             }
         },
@@ -122,7 +129,7 @@
             "$ref": "#/$defs/WidgetElement",
             "unevaluatedProperties": false,
             "properties": {
-                "target": {
+                "ResizeTarget": {
                     "type": "string"
                 },
                 "padding": {

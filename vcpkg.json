@@ -5,6 +5,9 @@
     "sdl3",
     "sdl3-ttf",
     "nlohmann-json",
-    "fmt"
+    "fmt",
+    "boost-describe",
+    "boost-mp11",
+    "boost-callable-traits"
   ]
 }

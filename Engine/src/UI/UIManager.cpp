@@ -1,10 +1,44 @@
 /** @file UIManager.cpp */
 
-#include "UI/Widget.hpp"
+#include <fstream>
 
-#include "Debug/Log.hpp"
+#include "UI/WidgetElement.hpp"
 
 #include "UI/UIManager.hpp"
+
+namespace
+{
+    using json = nlohmann::json;
+
+    json loadJson(const FilePath& path) {
+        if (!std::filesystem::exists(path)) {
+            LOG(LogType::ERROR, "Attempt to load invalid json: {}", path.string());
+            return {};
+        }
+
+        std::ifstream file{path};
+        if (!file.is_open()) {
+            LOG(LogType::ERROR, "Couldn't open file: {}", path.string());
+            return {};
+        }
+
+        json j = json::parse(file);
+        return j;
+    }
+
+    UIVector getUIVector(const json& j) {
+        if (!j.is_array() ||
+            j.size() != 4)
+        {
+            LOG(LogType::ERROR, "Unexpected json found while parsing UIVector: {}", j.dump());
+            return {};
+        }
+
+        return UIVector{j[0], j[1], j[2], j[3]};
+    }
+
+
+}
 
 UIManager::UIManager() {
     LOG(LogType::VITAL, "UIManager constructed");
@@ -29,6 +63,50 @@ UIElement* UIManager::GetUI(const std::string& UID, const UIElement* HintParent)
     // }
 
     return Recurse_Get(UID, RootWidget_H);
+}
+
+void UIManager::LoadWithPreset(Widget* widget, const Preset* preset) {
+    const json data = loadJson(preset->path);
+
+    LOG(LogType::INFO, "Preset Loader: Loading preset {}", data[".name"].get<std::string>());
+
+    Internal_ApplyPresetProperties(widget, data);
+
+    if (!data.contains("elements")) {
+        goto exit; // skip nested loop for readability
+    }
+
+    for (const auto& [key, instanceArr] : data.at("elements").items()) {
+        const std::string typeName = key.substr(0, key.find("-instances"));
+
+        LOG(LogType::INFO, "  Preset Loader: Loading elements of type {}", typeName);
+
+        for (const json& elementJson : instanceArr) {
+            const std::string name = elementJson.at(".name").get<std::string>();
+
+            LOG(LogType::INFO, "      Preset Loader: Loading element {}", name);
+
+            UIElement* parent = nullptr;
+            if (elementJson.at(".parent") == "this") {
+                parent = widget;
+            } else {
+                parent = GetUI(elementJson.at("parent"));
+            }
+
+            WidgetElement* elem = Internal::WidgetElementPresetRegistry::GetRegistry()[typeName](
+                name,
+                parent,
+                elementJson
+            );
+
+        }
+
+    }
+
+exit:
+    LOG(LogType::INFO, "Preset Loader: Loading complete");
+    return;
+
 }
 
 void UIManager::Internal_SetZIndex(UIElement* ui, int zIndex) const {

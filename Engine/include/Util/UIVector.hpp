@@ -51,4 +51,5 @@ struct UIVector
         return std::format("({:.3f}, {:.3f}, {:.3f}, {:.3f}), ", scale.x, scale.y, offset.x, offset.y);
     }
 
+
 };

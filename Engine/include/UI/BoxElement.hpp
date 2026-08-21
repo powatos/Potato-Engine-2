@@ -19,3 +19,12 @@ public:
     int BorderWeight; ///< @brief Pixel-width of the border @note Set to 0 to disable border
 
 };
+
+BOOST_DESCRIBE_STRUCT(BoxElement,
+    (WidgetElement),
+    (
+        FillColor,
+        BorderColor,
+        BorderWeight
+    )
+)

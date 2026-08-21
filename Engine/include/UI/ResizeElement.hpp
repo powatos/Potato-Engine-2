@@ -22,3 +22,11 @@ public:
     int padding; ///< @brief Padding on each side to apply after resizing
 
 };
+
+BOOST_DESCRIBE_STRUCT(ResizeElement,
+    (WidgetElement),
+    (
+        ResizeTarget,
+        padding
+    )
+)

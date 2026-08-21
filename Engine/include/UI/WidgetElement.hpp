@@ -15,3 +15,10 @@ struct WidgetElement : public UIElement
 protected:
 
 };
+
+BOOST_DESCRIBE_STRUCT(WidgetElement,
+    (UIElement),
+    (
+
+    )
+)

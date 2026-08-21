@@ -2,6 +2,7 @@
 #pragma once
 
 #include <set>
+#include <boost/describe.hpp>
 
 #include "Core/HTreeNode.h"
 #include "UIRenderer.hpp"
@@ -66,3 +67,13 @@ private:
     bool Visible;
 
 };
+
+BOOST_DESCRIBE_STRUCT(UIElement,
+    (),
+    (
+        SetScreenSize,
+        SetScreenPosition,
+        SetVisibility,
+        SetZIndex
+    )
+)

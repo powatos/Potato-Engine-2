@@ -59,77 +59,77 @@ Widget::Widget(const std::string& UID) : UIElement(UID) {
 }
 
 // throws
-void Widget::LoadWithPreset(const Preset* preset) {
-    using json = nlohmann::json;
-
-    UIManager* uim = UIManager::Get();
-
-    const json data = loadJson(preset->path);
-
-    LOG(LogType::INFO, "Loading preset: {}", data["name"].get<std::string>());
-
-    if (data.contains("position")) {
-        const UIVector uiv = getUIVector(data["position"]);
-        LOG(LogType::INFO, "Position set {}", uiv.ToStringF());
-        SetScreenPosition(uiv);
-    }
-    if (data.contains("size")) {
-        const UIVector uiv = getUIVector(data["size"]);
-        LOG(LogType::INFO, "Size set {}", uiv.ToStringF());
-
-        SetScreenSize(uiv);
-    }
-    if (data.contains("visibility")) {
-        const bool v = data["visibility"].get<bool>();
-        LOG(LogType::INFO, "Visibility set {}", v);
-
-        SetVisibility(v);
-    }
-    if (!data.contains("elements")) { return; }
-
-    const json elements = data["elements"];
-    for (const auto& [T_instances, instancesArr] : elements.items()) {
-
-        std::function<UIElement*(const std::string&, UIElement*)> instantiateElement;
-
-        if ( T_instances == "BoxElement-instances" ) {
-
-            instantiateElement = [&uim](const std::string& name, UIElement* parent) {
-                return uim->AddUI<BoxElement>(name, parent);
-            };
-
-        } else if (T_instances == "TextElement-instances") {
-            instantiateElement = [&uim](const std::string& name, UIElement* parent) {
-                return uim->AddUI<TextElement>(name, parent);
-            };
-        } else if (T_instances == "ResizeElement-instances") {
-            instantiateElement = [&uim](const std::string& name, UIElement* parent) {
-                return uim->AddUI<ResizeElement>(name, parent);
-            };
-        }
-
-
-        for (const auto& inst : instancesArr) {
-
-            UIElement* parent = nullptr;
-            if (inst["parent"] == "this") { parent = this; }
-            else {
-                parent = uim->GetUI(inst["parent"]);
-            }
-
-            if (parent == nullptr) {
-                LOG(LogType::ERROR, "Invalid UI parent: {} for instance {}", inst["parent"].get<std::string>(), inst["name"].get<std::string>());
-                return;
-            }
-
-            UIElement* ui = instantiateElement(inst["name"], parent);
-            // element properties ...
-        }
-
-    }
-
-
-}
+// void Widget::LoadWithPreset(const Preset* preset) {
+//     using json = nlohmann::json;
+//
+//     UIManager* uim = UIManager::Get();
+//
+//     const json data = loadJson(preset->path);
+//
+//     LOG(LogType::INFO, "Loading preset: {}", data["name"].get<std::string>());
+//
+//     if (data.contains("position")) {
+//         const UIVector uiv = getUIVector(data["position"]);
+//         LOG(LogType::INFO, "Position set {}", uiv.ToStringF());
+//         SetScreenPosition(uiv);
+//     }
+//     if (data.contains("size")) {
+//         const UIVector uiv = getUIVector(data["size"]);
+//         LOG(LogType::INFO, "Size set {}", uiv.ToStringF());
+//
+//         SetScreenSize(uiv);
+//     }
+//     if (data.contains("visibility")) {
+//         const bool v = data["visibility"].get<bool>();
+//         LOG(LogType::INFO, "Visibility set {}", v);
+//
+//         SetVisibility(v);
+//     }
+//     if (!data.contains("elements")) { return; }
+//
+//     const json elements = data["elements"];
+//     for (const auto& [T_instances, instancesArr] : elements.items()) {
+//
+//         std::function<UIElement*(const std::string&, UIElement*)> instantiateElement;
+//
+//         if ( T_instances == "BoxElement-instances" ) {
+//
+//             instantiateElement = [&uim](const std::string& name, UIElement* parent) {
+//                 return uim->AddUI<BoxElement>(name, parent);
+//             };
+//
+//         } else if (T_instances == "TextElement-instances") {
+//             instantiateElement = [&uim](const std::string& name, UIElement* parent) {
+//                 return uim->AddUI<TextElement>(name, parent);
+//             };
+//         } else if (T_instances == "ResizeElement-instances") {
+//             instantiateElement = [&uim](const std::string& name, UIElement* parent) {
+//                 return uim->AddUI<ResizeElement>(name, parent);
+//             };
+//         }
+//
+//
+//         for (const auto& inst : instancesArr) {
+//
+//             UIElement* parent = nullptr;
+//             if (inst["parent"] == "this") { parent = this; }
+//             else {
+//                 parent = uim->GetUI(inst["parent"]);
+//             }
+//
+//             if (parent == nullptr) {
+//                 LOG(LogType::ERROR, "Invalid UI parent: {} for instance {}", inst["parent"].get<std::string>(), inst["name"].get<std::string>());
+//                 return;
+//             }
+//
+//             UIElement* ui = instantiateElement(inst["name"], parent);
+//             // element properties ...
+//         }
+//
+//     }
+//
+//
+// }
 
 Widget::~Widget() {
 

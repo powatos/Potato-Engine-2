@@ -1,6 +1,8 @@
 /** @file TextElement.hpp */
 #pragma once
 
+#include <nlohmann/detail/macro_scope.hpp>
+
 #include "WidgetElement.hpp"
 #include "Core/Font.hpp"
 
@@ -33,6 +35,7 @@ struct TextElement : public WidgetElement
     void SetTextMode(TextMode textMode); ///< @brief Set text bounding box mode
     TextMode GetTextMode() const; ///< @brief Get text bounding box mode
 
+    // TODO: decide how to set in presets
     void SetFont(Font* font); ///< @brief Set text ttf_font
     Font* GetFont() const; ///< @brief Gets current text ttf_font
 
@@ -64,4 +67,20 @@ private:
 
 };
 
+NLOHMANN_JSON_SERIALIZE_ENUM(TextMode, {
+    { TextMode::IgnoreBounds, "IgnoreBounds" },
+    { TextMode::ResizeToFit, "ResizeToFit" },
+    { TextMode::ShrinkToFit, "ShrinkToFit" }
+})
 
+BOOST_DESCRIBE_STRUCT(TextElement,
+    (WidgetElement),
+    (
+        SetText,
+        SetWrapText,
+        SetTextMode,
+        // SetFont,
+        SetColor,
+        SetPtSize
+    )
+)

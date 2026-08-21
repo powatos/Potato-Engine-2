@@ -36,7 +36,8 @@ void DebugInfo::Setup() {
     // SetVisibility(true);
 
     Preset* preset = AssetManager::Get()->GetAsset<Preset>("DebugInfo.json");
-    LoadWithPreset(preset);
+    uim->LoadWithPreset(this, preset);
+
 }
 
 void DebugInfo::TickPostPhysics(float dt) {

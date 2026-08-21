@@ -9,6 +9,9 @@
 #include "Core/IWindowController.hpp"
 #include "Core/PotatoEngine.hpp"
 #include "Debug/Log.hpp"
+#include "UI/UIManager.hpp"
+
+REGISTER_WIDGETELEMENT(TextElement)
 
 TextElement::TextElement(const std::string& UID) : WidgetElement(UID) {
 

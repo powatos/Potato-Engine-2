@@ -26,6 +26,13 @@ public:
 
 protected:
 
-    void LoadWithPreset(const Preset* preset);
+    // void LoadWithPreset(const Preset* preset);
 
 };
+
+BOOST_DESCRIBE_STRUCT(Widget,
+    (UIElement),
+    (
+
+    )
+)

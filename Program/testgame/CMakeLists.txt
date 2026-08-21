@@ -14,6 +14,8 @@ add_executable(TestGame
 	src/TestGm.hpp
 )
 
-target_link_libraries(TestGame PRIVATE PotatoEngine2)
+target_link_libraries(TestGame PRIVATE
+	"$<LINK_LIBRARY:WHOLE_ARCHIVE,PotatoEngine2>"
+)
 
 ConfigureAssets(TestGame)

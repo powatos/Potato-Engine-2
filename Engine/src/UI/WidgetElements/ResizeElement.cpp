@@ -2,6 +2,10 @@
 
 #include "UI/ResizeElement.hpp"
 
+#include "UI/UIManager.hpp"
+
+REGISTER_WIDGETELEMENT(ResizeElement)
+
 ResizeElement::ResizeElement(const std::string& UID) : WidgetElement(UID), padding(1), ResizeTarget(nullptr) {
     SetScreenPosition(UIVector());
     SetScreenSize(UIVector());

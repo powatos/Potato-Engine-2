@@ -4,6 +4,7 @@ find_package(SDL3 REQUIRED CONFIG)
 find_package(SDL3_ttf REQUIRED CONFIG)
 find_package(nlohmann_json REQUIRED CONFIG)
 find_package(fmt REQUIRED CONFIG)
+find_package(Boost REQUIRED COMPONENTS describe mp11 callable_traits)
 
 add_library(PotatoEngine2 STATIC)
 
@@ -26,9 +27,15 @@ target_link_libraries(PotatoEngine2
         SDL3::SDL3
 		SDL3_ttf::SDL3_ttf
         nlohmann_json::nlohmann_json
+		Boost::describe
+		Boost::mp11
 )
 
 target_compile_features(PotatoEngine2 PUBLIC cxx_std_20)
+
+if (MSVC)
+	target_compile_options(PotatoEngine2 PRIVATE /Zc:preprocessor)
+endif()
 
 function(ConfigureAssets target)
 
