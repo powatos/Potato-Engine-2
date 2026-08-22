@@ -34,6 +34,7 @@
                 ".name": "FPSText",
                 ".parent": "this",
                 "SetText": "FPS: 2 millioN!",
+                "SetFont": "Opsilon.ttf",
                 "SetScreenPosition": [0, 0, 0, 10],
                 "SetTextMode": "ResizeToFit",
                 "SetWrapText": false,
