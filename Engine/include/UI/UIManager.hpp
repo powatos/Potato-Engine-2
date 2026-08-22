@@ -9,6 +9,7 @@
 #include "Core/Singleton.hpp"
 
 #include "Widget.hpp"
+#include "Core/AssetManager.hpp"
 #include "Debug/Log.hpp"
 
 namespace Internal
@@ -135,41 +136,52 @@ namespace Internal::WidgetElementPresetRegistry
     }
 }
 
-template<>
-struct nlohmann::adl_serializer<UIVector> {
-    static UIVector from_json(const json& j) {
-        return UIVector{
-            j.at(0).get<float>(),
-            j.at(1).get<float>(),
-            j.at(2).get<float>(),
-            j.at(3).get<float>()
-        };
-    }
-    static void to_json(json& j, const UIVector& v) {
-        j = { v.scale.x, v.scale.y, v.offset.x, v.offset.y};
-    }
-};
-template<>
-struct nlohmann::adl_serializer<Color> {
-    static Color from_json(const json& j) {
-        return Color{
-            static_cast<unsigned char>(j.at(0).get<int>()),
-            static_cast<unsigned char>(j.at(1).get<int>()),
-            static_cast<unsigned char>(j.at(2).get<int>()),
-            static_cast<unsigned char>(j.at(3).get<int>())
-        };
-    }
-    static void to_json(json& j, const Color& v) {
-        j = {v.R, v.G, v.B, v.A};
-    }
-};
-template<>
-struct nlohmann::adl_serializer<UIElement*> {
-    static UIElement* from_json(const json& j) {
-        return UIManager::Get()->GetUI(j.get<std::string>());
-    }
-    // write to json using UIElement* should never occur
-};
+// serializers
+namespace nlohmann
+{
+    template<>
+    struct adl_serializer<UIVector> {
+        static UIVector from_json(const json& j) {
+            return UIVector{
+                j.at(0).get<float>(),
+                j.at(1).get<float>(),
+                j.at(2).get<float>(),
+                j.at(3).get<float>()
+            };
+        }
+        static void to_json(json& j, const UIVector& v) {
+            j = { v.scale.x, v.scale.y, v.offset.x, v.offset.y};
+        }
+    };
+    template<>
+    struct adl_serializer<Color> {
+        static Color from_json(const json& j) {
+            return Color{
+                static_cast<unsigned char>(j.at(0).get<int>()),
+                static_cast<unsigned char>(j.at(1).get<int>()),
+                static_cast<unsigned char>(j.at(2).get<int>()),
+                static_cast<unsigned char>(j.at(3).get<int>())
+            };
+        }
+        static void to_json(json& j, const Color& v) {
+            j = {v.R, v.G, v.B, v.A};
+        }
+    };
+    template<>
+    struct adl_serializer<UIElement*> {
+        static UIElement* from_json(const json& j) {
+            return UIManager::Get()->GetUI(j.get<std::string>());
+        }
+        // write to json using UIElement* should never occur
+    };
+    template<>
+    struct adl_serializer<Font*> {
+        static Font* from_json(const json& j) {
+            return AssetManager::Get()->GetAsset<Font>(j.get<std::string>());
+        }
+        // write to json using Font* should never occur
+    };
+}
 
 template<typename UIClass>
 requires std::derived_from<UIClass, Widget> || std::derived_from<UIClass, WidgetElement>

@@ -116,6 +116,9 @@
                     "type": "string",
                     "enum": ["ResizeToFit", "ShrinkToFit", "IgnoreBounds"]
                 },
+                "SetFont": {
+                    "type": "string"
+                },
                 "SetColor": {
                     "$ref": "#/$defs/Color"
                 },

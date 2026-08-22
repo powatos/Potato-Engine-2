@@ -35,7 +35,6 @@ struct TextElement : public WidgetElement
     void SetTextMode(TextMode textMode); ///< @brief Set text bounding box mode
     TextMode GetTextMode() const; ///< @brief Get text bounding box mode
 
-    // TODO: decide how to set in presets
     void SetFont(Font* font); ///< @brief Set text ttf_font
     Font* GetFont() const; ///< @brief Gets current text ttf_font
 
@@ -79,7 +78,7 @@ BOOST_DESCRIBE_STRUCT(TextElement,
         SetText,
         SetWrapText,
         SetTextMode,
-        // SetFont,
+        SetFont,
         SetColor,
         SetPtSize
     )
