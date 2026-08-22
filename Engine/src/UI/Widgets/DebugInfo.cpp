@@ -3,7 +3,7 @@
 #include "Core/GameInstance.hpp"
 #include "UI/TextElement.hpp"
 
-#include "Widgets/DebugInfo.hpp"
+#include "../../../include/Widgets/DebugInfo.hpp"
 
 #include "Core/AssetManager.hpp"
 #include "UI/BoxElement.hpp"

@@ -31,8 +31,20 @@ public:
      * @returns instance pointer
      */
     [[maybe_unused]] static T* Get() {
-        static T instance;
-        return &instance;
+        return instance;
+    }
+
+    /**
+     * @brief Makes instance of singleton
+     * @return Created instance
+     */
+    static T* Once_MakeInstance() {
+        static bool constructed = false;
+        if (constructed) { return instance; }
+        constructed = true;
+
+        instance = new T();
+        return Get();
     }
 
     Singleton(const Singleton&) = delete;
@@ -44,4 +56,7 @@ public:
 protected:
     Singleton() = default;
     virtual ~Singleton() = default;
+
+private:
+    inline static T* instance;
 };

@@ -21,8 +21,10 @@ public:
  * @note This class is intended for internal use
  */
 template<typename T>
-class EngineSubsystem : public IEngineSubsystem, public Singleton<T> 
-{};
+class EngineSubsystem : public IEngineSubsystem, public Singleton<T>
+{
+
+};
 
 /**
  * @def ENGINE_SUBSYSTEM(type)

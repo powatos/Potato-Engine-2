@@ -38,31 +38,31 @@ PotatoEngine::PotatoEngine() {
     // LOG.showTerminalOutput = false;
 
     /// Initialize low level controllers
-    SubsystemStack.push_back( Engine::Get() );
-    SubsystemStack.push_back( TickManager::Get() );
+    SubsystemStack.push_back( Engine::Once_MakeInstance() );
+    SubsystemStack.push_back( TickManager::Once_MakeInstance() );
 
     /// Initialize IO controllers
-    SubsystemStack.push_back( OutputManager::Get() );
+    SubsystemStack.push_back( OutputManager::Once_MakeInstance() );
     WindowController = OutputManager::Get();
 
-    SubsystemStack.push_back( InputManager::Get() );
+    SubsystemStack.push_back( InputManager::Once_MakeInstance() );
     InputController = InputManager::Get();
 
     /// Initialize asset manager
-    SubsystemStack.push_back( AssetManager::Get() );
+    SubsystemStack.push_back( AssetManager::Once_MakeInstance() );
 
     /// Initialize game core classes
-    SubsystemStack.push_back( GameInstance::Get() );
+    SubsystemStack.push_back( GameInstance::Once_MakeInstance() );
 
     /// Initialize event controller
-    SubsystemStack.push_back( EventManager::Get() );
+    SubsystemStack.push_back( EventManager::Once_MakeInstance() );
 
     /// Initialize physics controllers
-    SubsystemStack.push_back( PhysicsManager::Get() );
+    SubsystemStack.push_back( PhysicsManager::Once_MakeInstance() );
 
     /// Initialize high level controllers
-    SubsystemStack.push_back( UIManager::Get() );
-    SubsystemStack.push_back( TimerManager::Get() );
+    SubsystemStack.push_back( UIManager::Once_MakeInstance() );
+    SubsystemStack.push_back( TimerManager::Once_MakeInstance() );
 
 }
 
@@ -81,7 +81,7 @@ void PotatoEngine::BeginPlay(bool autoResolve)
 {
     Engine* engine = Engine::Get();
 
-    // Bind exit key (intentional lambda to surpress unregisters)
+    // Bind exit key (intentional lambda to suppress unregisters)
     InputController->RegisterInputBinding(InputBinding(
         Keycode::Escape, 
         InputType::Impulse, 

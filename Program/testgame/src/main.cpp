@@ -7,7 +7,7 @@
 #include <Actors/Block.hpp>
 #include <Actors/Player.hpp>
 #include <Game/World.hpp>
-#include <Widgets/DebugInfo.hpp>
+#include <../../../Engine/include/UI/DebugInfo.hpp>
 #include <Core/Texture.hpp>
 
 #include <Debug/Log.hpp>
