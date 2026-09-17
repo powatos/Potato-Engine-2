@@ -6,6 +6,9 @@
 
 #include "TestGm.hpp"
 
+#include "Core/InputController.hpp"
+#include "UI/UIManager.hpp"
+#include "UI/ProgressBarElement.hpp"
 #include "Util/GameplayUtil.hpp"
 
 SET_DEFAULT_SUBCLASS(Gamemode, TestGM)
@@ -14,8 +17,30 @@ void TestGM::BeginPlay() {
     Gamemode::BeginPlay();
 
     // work();
+    // computeWork();
     randomTerrain();
 
+    UIManager* uim = UIManager::Get();
+    pgb = uim->AddUI<ProgressBarElement>("playBar", uim->RootWidget);
+
+    pgb->SetScreenPosition({0.5, 0, 0, 50});
+    pgb->SetScreenSize({0, 0, 100, 10});
+
+    pgb->maxValue = 100.f;
+
+    PotatoEngine::GetInputController()->RegisterInputBinding(InputBinding(
+        Keycode::F,
+        InputType::Impulse,
+        "updateBar",
+        this,
+        &TestGM::updatePGB
+    ));
+
+}
+
+void TestGM::updatePGB() {
+    LOG(LogType::DEBUG, "progress updated");
+    pgb->AddValue(1.f);
 }
 
 void TestGM::randomTerrain() {
@@ -81,6 +106,18 @@ void TestGM::randomTerrain() {
 
 }
 
+void TestGM::computeWork() {
+    constexpr uint64_t iterations = 2'000'000'000ULL;
+
+    volatile uint64_t x = 0;
+
+    for (uint64_t i = 0; i < iterations; ++i) {
+        // Actual arithmetic work
+        x = x * 1664525ULL + 1013904223ULL;
+        x ^= x >> 13;
+        x *= 0x5bd1e995ULL;
+    }
+}
 
 void TestGM::work() {
     const float res = 1;

@@ -1,16 +1,17 @@
 /** @file UIRenderer.hpp */
 #pragma once
 
-struct UIVector;
+struct Vector2;
 struct Widget;
 struct TextElement;
 struct BoxElement;
+struct ProgressBarElement;
 
 namespace Internal
 {
 
 #define RenderSignature(UIClass) \
-const class UIClass* ui, UIVector posScale, UIVector sizeScale
+const class UIClass* ui, Vector2 uiPos, Vector2 uiSize
 
 /**
  * @internal
@@ -20,7 +21,7 @@ const class UIClass* ui, UIVector posScale, UIVector sizeScale
  * @endinternal
  */
 #define DEFINE_RENDER_PASSTHROUGH \
-inline virtual void Internal_RenderPassthrough(Internal::UIRenderer* r, UIVector po, UIVector so) override { r->Render(this, po, so); }
+inline virtual void Internal_RenderPassthrough(Internal::UIRenderer* r, Vector2 uiPos, Vector2 uiSize) override { r->Render(this, uiPos, uiSize); }
 
     /**
      * @brief Internal low level rendering interface for UI objects
@@ -34,6 +35,7 @@ inline virtual void Internal_RenderPassthrough(Internal::UIRenderer* r, UIVector
 
         virtual void Render(RenderSignature(TextElement)) = 0;
         virtual void Render(RenderSignature(BoxElement)) = 0;
+        virtual void Render(RenderSignature(ProgressBarElement)) = 0;
 
     protected:
         UIRenderer() = default;

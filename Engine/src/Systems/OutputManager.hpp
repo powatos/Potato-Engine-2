@@ -20,6 +20,9 @@ public:
     virtual void* RequestRenderingContext() const override;
     virtual void* RequestTTFEngine() const override;
 
+    void ShowBootstrapScreen() override;
+    void HideBootstrapScreen() override;
+
     virtual void SetScreenResolution(const Vector2& resolution) override;
     virtual void SetWindowSize(const Vector2& size) override;
     virtual void SetWindowMode(WindowMode mode) override;
@@ -27,20 +30,21 @@ public:
     virtual void SetShowBorder(bool show) override;
     virtual void SetIsResizable(bool isResizable) override;
 
-    virtual void Render(const class Widget* ui, UIVector posScale, UIVector sizeScale) override;
-    virtual void Render(const class TextElement* ui, UIVector posScale, UIVector sizeScale) override;
-    virtual void Render(const class BoxElement* ui, UIVector posScale, UIVector sizeScale) override;
+    virtual void Render(const struct Widget* ui, Vector2 uiPos, Vector2 uiSize) override;
+    virtual void Render(const struct TextElement* ui, Vector2 uiPos, Vector2 uiSize) override;
+    virtual void Render(const struct BoxElement* ui, Vector2 uiPos, Vector2 uiSize) override;
+    virtual void Render(const struct ProgressBarElement* ui, Vector2 uiPos, Vector2 uiSize) override;
 
 private:
     OutputManager();
     ~OutputManager();
 
+    bool bootstrapScreenEnabled;
+
     void DrawLevel();
     void DrawHUD();
-    void Recurse_DrawUI(const UIHierarchy* ui, UIVector posScale, UIVector sizeScale);
+    void Recurse_DrawUI(const UIHierarchy* ui, Vector2 parentAbsPos, Vector2 parentAbsSize);
     void DrawBars();
-
-    Vector2 getScaledVec(const UIVector& vec, const UIVector& scale) const;
 
 protected:
     void Draw();

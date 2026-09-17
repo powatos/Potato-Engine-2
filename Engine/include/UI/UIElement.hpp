@@ -22,7 +22,7 @@ using UIHierarchy = HTreeNode<UIElement>;
 class UIElement
 {
 public:
-    virtual void Internal_RenderPassthrough(Internal::UIRenderer* r, UIVector po, UIVector so) {};
+    virtual void Internal_RenderPassthrough(Internal::UIRenderer* r, Vector2 uiPos, Vector2 uiSize) {};
 
     /**
      * @brief Constructs UI element

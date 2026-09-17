@@ -10,6 +10,7 @@
 #include "Core/GameInstance.hpp"
 #include "Debug/Log.hpp"
 #include "UI/BoxElement.hpp"
+#include "UI/ProgressBarElement.hpp"
 #include "UI/TextElement.hpp"
 #include "Util/GameplayHelper.hpp"
 
@@ -55,6 +56,7 @@ OutputManager::OutputManager() {
     TTF_TextEngine* textEngine = TTF_CreateRendererTextEngine(renderer);
     TextEngine = textEngine;
 
+    bootstrapScreenEnabled = false;
 }
 
 
@@ -160,64 +162,54 @@ void OutputManager::DrawHUD() {
 
     const UIHierarchy* root = UIManager::Get()->RootWidget_H;
 
-    UIVector pos = root->Object->GetScreenPosition();
-    UIVector scale = root->Object->GetScreenSize();
+    const Vector2 pos = Vector2();;
+    const Vector2 size = screenResolution;
 
-    Recurse_DrawUI(root, pos, scale);
+    Recurse_DrawUI(root, pos, size);
 
 }
 
-void OutputManager::Recurse_DrawUI(const UIHierarchy* ui, UIVector posScale, UIVector sizeScale) {
+void OutputManager::Recurse_DrawUI(const UIHierarchy* ui, Vector2 parentAbsPos, Vector2 parentAbsSize) {
 
     UIElement* uiObj = ui->Object;
 
     if (!uiObj->isVisible()) { return; }
 
+    const UIVector localPos = uiObj->GetScreenPosition();
+    const UIVector localSize = uiObj->GetScreenSize();
+
+    const Vector2 absPos = parentAbsPos + parentAbsSize * localPos.scale + localPos.offset;
+    const Vector2 absSize = parentAbsSize * localSize.scale + localSize.offset;
+
     // calls corresponding Render() overload
-    uiObj->Internal_RenderPassthrough(this, posScale, sizeScale);
-
-    const UIVector screenPos = uiObj->GetScreenPosition();
-    const UIVector screenSize = uiObj->GetScreenSize();
-
-    posScale.scale *= screenPos.scale;
-    posScale.offset += screenPos.offset;
-
-    sizeScale.scale *= screenSize.scale;
-    sizeScale.offset += screenSize.offset;
+    uiObj->Internal_RenderPassthrough(this, absPos, absSize);
 
     for (const UIHierarchy* child : ui->Children) {
-        Recurse_DrawUI(child, posScale, sizeScale);
+        Recurse_DrawUI(child, absPos, absSize);
     }
 
 }
 
-void OutputManager::Render(const class Widget* ui, UIVector posScale, UIVector sizeScale) {
-
+void OutputManager::Render(const class Widget* ui, Vector2 uiPos, Vector2 uiSize) {
 }
 
-void OutputManager::Render(const class TextElement* ui, UIVector posScale, UIVector sizeScale) {
+void OutputManager::Render(const class TextElement* ui, Vector2 uiPos, Vector2 uiSize) {
     sdl_ren
-
-    const Vector2 pos = getScaledVec(ui->GetScreenPosition(), posScale);
-    const Vector2 size = getScaledVec(ui->GetScreenSize(), sizeScale);
 
     TTF_Text* text = static_cast<TTF_Text*>(ui->Internal_GetText());
 
-    TTF_DrawRendererText(text, pos.x, pos.y);
+    TTF_DrawRendererText(text, uiPos.x, uiPos.y);
 
 }
 
-void OutputManager::Render(const class BoxElement* ui, UIVector posScale, UIVector sizeScale) {
+void OutputManager::Render(const class BoxElement* ui, Vector2 uiPos, Vector2 uiSize) {
     sdl_ren
 
-    const Vector2 pos = getScaledVec(ui->GetScreenPosition(), posScale);
-    const Vector2 size = getScaledVec(ui->GetScreenSize(), sizeScale);
-
     const SDL_FRect rect{
-        pos.x,
-        pos.y,
-        size.x,
-        size.y
+        uiPos.x,
+        uiPos.y,
+        uiSize.x,
+        uiSize.y
     };
 
     if (ui->BorderWeight != 0) {
@@ -263,6 +255,37 @@ void OutputManager::Render(const class BoxElement* ui, UIVector posScale, UIVect
 
 }
 
+void OutputManager::Render(const ProgressBarElement* ui, Vector2 uiPos, Vector2 uiSize) {
+    sdl_ren
+
+    if (ui->maxValue == 0.f) {
+        LOG(LogType::WARNING, "Property bar with 0 maxValue not rendered");
+        return;
+    }
+
+    SDL_FRect outer {
+        uiPos.x,
+        uiPos.y,
+        uiSize.x,
+        uiSize.y
+    };
+    SDL_FRect bar {
+        uiPos.x,
+        uiPos.y,
+        (ui->value / ui->maxValue) * uiSize.x,
+        uiSize.y
+    };
+
+    const Color bgC = ui->backgroundColor;
+    const Color bC = ui->barColor;
+
+    SDL_SetRenderDrawColor(renderer, bgC.R, bgC.G, bgC.B, bgC.A);
+    SDL_RenderFillRect(renderer, &outer);
+
+    SDL_SetRenderDrawColor(renderer, bC.R, bC.G, bC.B, bC.A);
+    SDL_RenderFillRect(renderer, &bar);
+}
+
 #pragma endregion
 
 void OutputManager::DrawBars() {
@@ -306,17 +329,36 @@ void OutputManager::Tick(float dt) {
     // windowSize = Vector2(static_cast<float>(w),static_cast<float>(h));
 }
 
-Vector2 OutputManager::getScaledVec(const UIVector& vec, const UIVector& scale) const {
-    return (vec.scale * scale.scale) * screenResolution + (vec.offset + scale.offset);
-
-}
-
 void* OutputManager::RequestRenderingContext() const {
     return Renderer;
 }
 
 void* OutputManager::RequestTTFEngine() const {
     return TextEngine;
+}
+
+void OutputManager::ShowBootstrapScreen() {
+    sdl_ren
+
+    if (renderer == nullptr) { return; }
+
+    const std::string text = "Loading Potato Engine...";
+    const Vector2 pos = screenResolution/2;
+
+    SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
+    SDL_RenderDebugText(renderer, pos.x, pos.y, text.c_str());
+    SDL_RenderPresent(renderer);
+
+    bootstrapScreenEnabled = true;
+}
+void OutputManager::HideBootstrapScreen() {
+    sdl_ren
+
+    if (renderer == nullptr) { return; }
+    if (!bootstrapScreenEnabled) { return; }
+
+    SDL_RenderClear(renderer);
+
 }
 
 #pragma region Settings Setters

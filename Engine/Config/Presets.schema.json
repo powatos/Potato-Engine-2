@@ -32,6 +32,12 @@
                     "items": {
                         "$ref": "#/$defs/ResizeElement"
                     }
+                },
+                "ProgressBarElement-instances": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/ProgressBarElement"
+                    }
                 }
             }
         }
@@ -137,6 +143,24 @@
                 },
                 "padding": {
                     "type": "integer"
+                }
+            }
+        },
+        "ProgressBarElement": {
+            "$ref": "#/$defs/WidgetElement",
+            "unevaluatedProperties": false,
+            "properties": {
+                "value": {
+                    "type": "number"
+                },
+                "maxValue": {
+                    "type": "number"
+                },
+                "barColor": {
+                    "type": "#/$defs/Color"
+                },
+                "backGroundColor": {
+                    "type": "#/$defs/Color"
                 }
             }
         }

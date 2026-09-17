@@ -45,6 +45,8 @@ PotatoEngine::PotatoEngine() {
     SubsystemStack.push_back( OutputManager::Once_MakeInstance() );
     WindowController = OutputManager::Get();
 
+    WindowController->ShowBootstrapScreen();
+
     SubsystemStack.push_back( InputManager::Once_MakeInstance() );
     InputController = InputManager::Get();
 
@@ -103,7 +105,9 @@ void PotatoEngine::BeginPlay(bool autoResolve)
         );
     }
 
-    // Begin game loop
+    // Begin engine loop
+    WindowController->HideBootstrapScreen();
+
     engine->main();
 }
 

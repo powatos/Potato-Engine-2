@@ -1,11 +1,11 @@
 
 target_sources(PotatoEngine2 PRIVATE
 	WidgetElements/BoxElement.cpp
+	WidgetElements/ProgressBarElement.cpp
 	WidgetElements/ResizeElement.cpp
 	WidgetElements/TextElement.cpp
 
 	Widgets/DebugInfo.cpp
-	Widgets/LoadingScreen.cpp
 
 	Preset.cpp
 	UIElement.cpp

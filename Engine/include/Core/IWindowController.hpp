@@ -50,6 +50,10 @@ public:
     virtual void* RequestRenderingContext() const = 0;
     virtual void* RequestTTFEngine() const = 0;
 
+    virtual void ShowBootstrapScreen() = 0;
+    virtual void HideBootstrapScreen() = 0;
+
+
     /**
      * @brief Gets resolution of screen
      * @returns resolution
