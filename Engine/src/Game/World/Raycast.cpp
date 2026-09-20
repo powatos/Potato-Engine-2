@@ -13,6 +13,8 @@
 
 #include "Game/Raycast.hpp"
 
+#include "Debug/DebugObjectManager.hpp"
+
 Raycast::Raycast() {
     showDebug = false;
     debugDuration = 1.f;
@@ -28,7 +30,7 @@ Raycast::Raycast(const Vector2& rayOrigin, const Vector2& rayV, RaycastSettings 
     rayLength = ray.Magnitude();
 }
 
-Block* Raycast::Cast(HitResult& outHit) {
+void Raycast::Cast(HitResult& outHit) {
     World* world = GameInstance::Get()->GetWorld();
     const std::unordered_set<Actor*> OverrideActorsList = Settings.OverrideActorsList;
 
@@ -64,24 +66,14 @@ Block* Raycast::Cast(HitResult& outHit) {
         outHit.distance = outHit.ray_param * ray.Magnitude();
     }
 
-    Block* trail = nullptr;
-
     // TODO: line
-    // if (showDebug) {
-    //     trail = world->SpawnActor<Block>(origin);
-    //     trail->SetSize(Vector2(outHit.distance == 0 ? ray.Magnitude() : outHit.distance, 1));
-    //     trail->SetCollisionType(CollisionType::None);
-    //     trail->SetSimulatingPhysics(false);
-    //     trail->GetTexture().SetRotation(ray.Angle());
-    //     trail->ctex = 'r';
-    //     trail->SetVisibility(true);
-    //
-    //     TimerManager::Get()->AddTimer("raycast_trail_delete_delay", debugDuration, world, &World::DestroyActor, trail);
-    //     TickManager::Get()->Unregister(trail); // avoid uneccesary tick checks
-    //
-    // }
+    if (showDebug) {
 
-    return trail;
+        DebugObjects::Line(origin, ray, debugDuration);
+
+    }
+
+    // return trail;6
 }
 
 void Raycast::ComputeRaycast(Actor* actor, HitResult& outHit) {

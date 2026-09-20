@@ -40,6 +40,8 @@ int main()
 
     /// LEVEL SETUP
     [[maybe_unused]] World* world = instance->GetWorld();
+    world->Settings.Size.x *= 2;
+
     PersistentLevel level("save1.json");
     level.LoadStaticActors();
 

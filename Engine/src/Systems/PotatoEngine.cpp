@@ -24,6 +24,7 @@
 
 #include "Core/AssetManager.hpp"
 #include "Core/FontManager.hpp"
+#include "Debug/DebugObjectManager.hpp"
 
 
 PotatoEngine::PotatoEngine() {
@@ -65,6 +66,9 @@ PotatoEngine::PotatoEngine() {
     /// Initialize high level controllers
     SubsystemStack.push_back( UIManager::Once_MakeInstance() );
     SubsystemStack.push_back( TimerManager::Once_MakeInstance() );
+
+    // Initialize debug interfaces
+    SubsystemStack.push_back( DebugObjectManager::Once_MakeInstance() );
 
 }
 

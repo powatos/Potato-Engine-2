@@ -7,6 +7,7 @@
 
 #include "Core/AssetManager.hpp"
 #include "Core/InputController.hpp"
+#include "Debug/DebugObjectManager.hpp"
 #include "Game/Raycast.hpp"
 
 SET_DEFAULT_SUBCLASS(Player, MyPlayer)
@@ -26,7 +27,7 @@ MyPlayer::MyPlayer() : downraycast(Raycast()) {
 }
 
 void MyPlayer::BeginPlay() {
-    downraycast.SetRay(Vector2(0,-1));
+    downraycast.SetRay(Vector2(0,10));
     downraycast.Settings.OverrideActorsList.insert(this);
     downraycast.Settings.OverrideActorsType = RaycastOverrideType::Exclude;
     downraycast.showDebug = false;
@@ -35,6 +36,13 @@ void MyPlayer::BeginPlay() {
 }
 
 void MyPlayer::Tick(float dt) {
+
+    DebugObjects::Circle(
+        GetPosition(),
+        10,
+        1
+    );
+
     // HitResult hit;
     // downraycast.origin = GetPosition() - Vector2::Up();
     // downraycast.Cast(hit);

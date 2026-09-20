@@ -36,7 +36,7 @@ public:
 
     /**
      * @brief Constructs binding with standalone callback
-     * @warning This construction is not recommended. @sa @ref  "TODO<...>(...)"
+     * @warning This construction is not recommended. See other constructor overload
      * @param name Identifier for binding
      * @param callback Function to notify
      */

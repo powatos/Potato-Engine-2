@@ -8,6 +8,7 @@
 #include "Core/AssetManager.hpp"
 #include "Core/FontManager.hpp"
 #include "Core/GameInstance.hpp"
+#include "Debug/DebugObjectManager.hpp"
 #include "Debug/Log.hpp"
 #include "UI/BoxElement.hpp"
 #include "UI/ProgressBarElement.hpp"
@@ -154,6 +155,79 @@ void OutputManager::DrawLevel() {
 
     }
 
+}
+
+void OutputManager::DrawDebugObjects() {
+    sdl_ren
+
+    using namespace DebugObjects;
+
+    for (DebugObject* obj : DebugObjectManager::Get()->Internal_GetObjs()) {
+        if (obj == nullptr) { continue; }
+
+        const Camera* camera = GameInstance::Get()->GetPlayerController()->GetCamera();
+        const Vector2 pos = obj->position;
+
+        const Vector2 ScaleFactor = Vector2( screenResolution / camera->GetSize() );
+        const Vector2 screenVector =  Vector2(
+            (pos.x - camera->GetPosition().x),
+            (camera->GetPosition().y - pos.y)
+        ) * ScaleFactor;
+
+        SDL_SetRenderDrawColor(renderer, obj->color.R, obj->color.G, obj->color.B, obj->color.A);
+
+        if (auto* p = dynamic_cast<Point*>(obj)) {
+
+            SDL_RenderPoint(renderer, screenVector.x, screenVector.y);
+
+        } else if (auto* l = dynamic_cast<Line*>(obj)) {
+
+            const Vector2 endpoint = pos + l->line;
+            const Vector2 endpointScreenVector = Vector2(
+                (endpoint.x - camera->GetPosition().x),
+                (camera->GetPosition().y - endpoint.y)
+            ) * ScaleFactor;
+
+            SDL_RenderLine(renderer,
+                screenVector.x,
+                screenVector.y,
+                endpointScreenVector.x,
+                endpointScreenVector.y
+            );
+            // thickness via quad geometry rendering
+
+        } else if (auto* b = dynamic_cast<Box*>(obj)) {
+
+            SDL_FRect rect {
+                .x = screenVector.x,
+                .y = screenVector.y,
+                .w = b->size.x * ScaleFactor.x,
+                .h = b->size.y * ScaleFactor.y
+            };
+            SDL_RenderRect(renderer, &rect);
+
+        } else if (auto* c = dynamic_cast<Circle*>(obj)) {
+
+            const int resolution = std::max(32, static_cast<int>(c->radius * 1.41421356237));
+            const float angleStep = 360.f/static_cast<float>(resolution);
+
+            std::vector<SDL_FPoint> points;
+            points.reserve(resolution);
+
+            for (size_t i{}; i < resolution; ++i) {
+                points.emplace_back(
+                    screenVector.x + (c->radius * std::cos(PI/180.f * angleStep * static_cast<float>(i))),
+                    screenVector.y - (c->radius * std::sin(PI/180.f * angleStep * static_cast<float>(i)))
+                );
+            }
+
+            const SDL_FPoint* points_arr = points.data();
+            SDL_RenderPoints(renderer, points_arr, resolution);
+
+        }
+
+
+    }
 }
 
 #pragma region UI Rendering
@@ -308,6 +382,8 @@ void OutputManager::Draw() {
     // DrawBars();
 
     DrawLevel();
+
+    DrawDebugObjects();
 
     DrawHUD();
 

@@ -42,6 +42,7 @@ private:
     bool bootstrapScreenEnabled;
 
     void DrawLevel();
+    void DrawDebugObjects();
     void DrawHUD();
     void Recurse_DrawUI(const UIHierarchy* ui, Vector2 parentAbsPos, Vector2 parentAbsSize);
     void DrawBars();

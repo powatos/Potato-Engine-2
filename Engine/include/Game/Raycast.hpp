@@ -54,9 +54,8 @@ struct Raycast
     /**
      * @brief Casts the ray
      * @param outHit HitResult reference that contains information about the raycast
-     * @returns the trail that was spawned if showDebug was set true; `nullptr` if set false
      */
-    Block* Cast(HitResult& outHit);
+    void Cast(HitResult& outHit);
 
     /**
      * @brief Sets the ray of the raycast
