@@ -56,7 +56,7 @@ public:
     Vector2 GetTruePosition() const; ///< @brief Gets true pixel-position on screen
     Vector2 GetTrueSize() const; ///< @brief Gets true pixel-size on screen
 
-    UIHierarchy* Internal_HierarchyRef;
+    UIHierarchy* Node; ///< @brief Pointer to internal UI Hierarchy node @warning Do not edit hierarchy directly. Use parenting system via UIManager
 private:
 
     const std::string UID;

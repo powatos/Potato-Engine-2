@@ -18,7 +18,7 @@ void ResizeElement::TickPostPhysics(float dt) {
     UIVector TL, BR; // top left pos, bottom right pos
     Vector2 tTL, tBR; // true top left pos, true bottom right pos
 
-    for (const auto& sibling : Internal_HierarchyRef->Parent->Children) {
+    for (const auto& sibling : Node->Parent->Children) {
         if (sibling->Object == nullptr || sibling->Object == this || sibling->Object == ResizeTarget) { continue; }
 
         const UIVector TL_siblingPos = sibling->Object->GetScreenPosition();

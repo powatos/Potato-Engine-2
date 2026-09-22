@@ -66,7 +66,6 @@ void Raycast::Cast(HitResult& outHit) {
         outHit.distance = outHit.ray_param * ray.Magnitude();
     }
 
-    // TODO: line
     if (showDebug) {
 
         DebugObjects::Line(origin, ray, debugDuration);

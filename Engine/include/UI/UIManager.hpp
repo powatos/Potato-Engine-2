@@ -72,10 +72,10 @@ public:
 
     /** @brief Gets UI by UID
      * @param UID UID
-     * @param HintParent Parent of target UI; optional if unknown
+     * @param HintParentHierarchy Parent node of target UI; optional if unknown
      * @returns UI matching name
      */
-    UIElement* GetUI(const std::string& UID, const UIElement* HintParent = nullptr);
+    UIElement* GetUI(const std::string& UID, const UIHierarchy* HintParentHierarchy = nullptr);
 
     /**
      * @brief Loads a widget object using a preset

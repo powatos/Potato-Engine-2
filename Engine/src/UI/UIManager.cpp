@@ -55,13 +55,16 @@ void UIManager::RemoveUI(const std::string& UID) {
     Recurse_Remove(UID, RootWidget_H);
 }
 
-UIElement* UIManager::GetUI(const std::string& UID, const UIElement* HintParent) {
+UIElement* UIManager::GetUI(const std::string& UID, const UIHierarchy* HintParentHierarchy) {
 
-    // TODO: implement hint
-    // if (HintParent != nullptr) {
-    //     return Recurse_Get(UID, HintParent);
-    // }
+    if (HintParentHierarchy != nullptr) {
+        if (auto* ui = Recurse_Get(UID, HintParentHierarchy)) {
+            return ui;
+        }
+        LOG(LogType::WARNING, "GetUI called with hint returned invalid ui. Falling back to root recurse");
+    }
 
+    // fallback to get from root if hint failed
     return Recurse_Get(UID, RootWidget_H);
 }
 
@@ -110,7 +113,7 @@ exit:
 }
 
 void UIManager::Internal_SetZIndex(UIElement* ui, int zIndex) const {
-    ui->Internal_HierarchyRef->Parent->ReorderChild(ui, zOrderingPred);
+    ui->Node->Parent->ReorderChild(ui, zOrderingPred);
 }
 
 void UIManager::Resolve() noexcept {
@@ -123,12 +126,12 @@ void UIManager::Resolve() noexcept {
 
 void UIManager::Recurse_Add(UIElement* ui, UIElement* parent, UIHierarchy* currentLevel) {
     if (parent == nullptr) {
-        RootWidget_H->AddChild(ui, &ui->Internal_HierarchyRef, zOrderingPred);
+        RootWidget_H->AddChild(ui, &ui->Node, zOrderingPred);
         return;
     }
 
     if ( currentLevel->Object == parent ) {
-        currentLevel->AddChild(ui, &ui->Internal_HierarchyRef, zOrderingPred);
+        currentLevel->AddChild(ui, &ui->Node, zOrderingPred);
         return;
     }
 

@@ -27,7 +27,7 @@ void DebugInfo::TickPostPhysics(float dt) {
 
     UIManager* uim = UIManager::Get();
 
-    dynamic_cast<TextElement*>(uim->GetUI("PlayerPosText"))->SetText("Player position: " + playerPos.ToString());
+    dynamic_cast<TextElement*>(uim->GetUI("PlayerPosText", Node))->SetText("Player position: " + playerPos.ToString());
 
 
 }
