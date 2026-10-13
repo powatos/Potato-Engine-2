@@ -3,16 +3,16 @@
 
 #include <Debug/Log.hpp>
 
-#include "MyPlayer.hpp"
+#include "PlatformPlayer.hpp"
 
 #include "Core/AssetManager.hpp"
 #include "Core/InputController.hpp"
 #include "Debug/DebugObjectManager.hpp"
 #include "Game/Raycast.hpp"
 
-SET_DEFAULT_SUBCLASS(Player, MyPlayer)
+SET_DEFAULT_SUBCLASS(Player, PlatformPlayer)
 
-MyPlayer::MyPlayer() : downraycast(Raycast()) {
+PlatformPlayer::PlatformPlayer() : downraycast(Raycast()) {
     SetBounce(1.f);
 
     SetUsingSimpleTexture(false);
@@ -26,7 +26,7 @@ MyPlayer::MyPlayer() : downraycast(Raycast()) {
     SetZIndex(5);
 }
 
-void MyPlayer::BeginPlay() {
+void PlatformPlayer::BeginPlay() {
     downraycast.SetRay(Vector2(0,10));
     downraycast.Settings.OverrideActorsList.insert(this);
     downraycast.Settings.OverrideActorsType = RaycastOverrideType::Exclude;
@@ -35,7 +35,7 @@ void MyPlayer::BeginPlay() {
 
 }
 
-void MyPlayer::Tick(float dt) {
+void PlatformPlayer::Tick(float dt) {
 
     DebugObjects::Circle(
         GetPosition(),

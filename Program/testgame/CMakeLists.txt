@@ -7,8 +7,8 @@ add_executable(TestGame
 	src/CharacterController.cpp
 	src/CharacterController.hpp
 
-	src/MyPlayer.cpp
-	src/MyPlayer.hpp
+	src/PlatformPlayer.cpp
+	src/PlatformPlayer.hpp
 
 	src/TestGm.cpp
 	src/TestGm.hpp

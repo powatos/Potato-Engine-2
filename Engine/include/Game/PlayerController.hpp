@@ -23,7 +23,7 @@ public:
      * @brief Initializes controller
      * @details This method is called automatically and is intended for internal use only
      */
-    void Initialize();
+    void Internal_Initialize();
     /**
      * @brief Assigns player to controller
      * @details This method is called automatically and is intended for internal use only
@@ -35,6 +35,19 @@ public:
     Player* GetPlayer() const;
     /** @brief Gets assigned Camera @returns Camera */
     Camera* GetCamera() const;
+
+    /**
+    * @brief Gameplay start
+    * @details Put all pre-gameplay functionality here
+    * @note Always call base method when overriding:
+    * @code
+    * void PlayerControllerClass::BeginPlay() {
+    *     BasePlayerController::BeginPlay();
+    *     // ...
+    * }
+    * @endcode
+    */
+    virtual void BeginPlay();
 
     /**
      * @brief Called automatically to bind player inputs to InputController

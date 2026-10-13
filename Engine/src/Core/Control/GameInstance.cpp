@@ -24,7 +24,7 @@ void GameInstance::BeginPlay() {
     world->BeginPlay();
 
     // call BeginPlay on subclasses
-    // ActivePlayerController->BeginPlay();
+    ActivePlayerController->BeginPlay();
     ActiveGamemode->BeginPlay();
 
     Internal_IsMainTickRunning = true;
@@ -73,7 +73,7 @@ void GameInstance::RequestShutdown() {
 void GameInstance::LoadSubclasses() {
     InstantiateSubclasses();
 
-    ActivePlayerController->Initialize();
+    ActivePlayerController->Internal_Initialize();
     ActivePlayerController->SetupInputBindings();
 }
 

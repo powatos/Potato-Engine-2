@@ -11,9 +11,9 @@
 #include "UI/ProgressBarElement.hpp"
 #include "Util/GameplayUtil.hpp"
 
-SET_DEFAULT_SUBCLASS(Gamemode, TestGM)
+SET_DEFAULT_SUBCLASS(Gamemode, PlatformerGamemode)
 
-void TestGM::BeginPlay() {
+void PlatformerGamemode::BeginPlay() {
     Gamemode::BeginPlay();
 
     // work();
@@ -33,17 +33,17 @@ void TestGM::BeginPlay() {
         InputType::Impulse,
         "updateBar",
         this,
-        &TestGM::updatePGB
+        &PlatformerGamemode::updatePGB
     ));
 
 }
 
-void TestGM::updatePGB() {
+void PlatformerGamemode::updatePGB() {
     LOG(LogType::DEBUG, "progress updated");
     pgb->AddValue(1.f);
 }
 
-void TestGM::randomTerrain() {
+void PlatformerGamemode::randomTerrain() {
 
     World* world = GameInstance::Get()->GetWorld();
 
@@ -106,7 +106,7 @@ void TestGM::randomTerrain() {
 
 }
 
-void TestGM::computeWork() {
+void PlatformerGamemode::computeWork() {
     constexpr uint64_t iterations = 2'000'000'000ULL;
 
     volatile uint64_t x = 0;
@@ -119,7 +119,7 @@ void TestGM::computeWork() {
     }
 }
 
-void TestGM::work() {
+void PlatformerGamemode::work() {
     const float res = 1;
     const int scale = 10;
     const int edgeSize = scale/res;

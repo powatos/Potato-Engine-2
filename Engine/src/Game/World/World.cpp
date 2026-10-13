@@ -32,26 +32,41 @@ void World::DestroyActor(Actor* actor) {
 
 void World::CreateDefaultWalls() {
 
-    wallB = SpawnActor<Block>();
-    wallB->simpleColor = Color::RED();
+    Block** walls[] = {&wallB, &wallL, &wallR, &wallU};
 
-    wallL = SpawnActor<Block>();
-    wallL->simpleColor = Color::RED();
+    for (auto& wall : walls) {
+        *wall = SpawnActor<Block>();
+        (*wall)->simpleColor = Color::BLACK();
+        (*wall)->simpleColorFill = true;
+    }
 
-    wallR = SpawnActor<Block>();
-    wallR->simpleColor = Color::RED();
-
-    wallU = SpawnActor<Block>();
-    wallU->simpleColor = Color::RED();
+    // wallB = SpawnActor<Block>();
+    // wallB->simpleColor = Color::BLACK();
+    //
+    // wallL = SpawnActor<Block>();
+    // wallL->simpleColor = Color::BLACK();
+    //
+    // wallR = SpawnActor<Block>();
+    // wallR->simpleColor = Color::BLACK();
+    //
+    // wallU = SpawnActor<Block>();
+    // wallU->simpleColor = Color::BLACK();
 
     ResizeWalls();
 }
 
 void World::ResizeWalls() {
+    /**
+     * bottom and top extrude horizontally to fill corner
+     *
+     * -----
+     * |   |
+     * -----
+     */
     const int wallWidth = Settings.defaultWallThickness;
 
-    wallB->SetPosition(Vector2());
-    wallB->SetSize(Vector2(Settings.Size.x, wallWidth));
+    wallB->SetPosition(Vector2(-wallWidth, 0));
+    wallB->SetSize(Vector2(Settings.Size.x + 2*wallWidth, wallWidth));
 
     wallL->SetPosition(Vector2(-wallWidth, Settings.Size.y));
     wallL->SetSize(Vector2(wallWidth, Settings.Size.y));
@@ -59,8 +74,8 @@ void World::ResizeWalls() {
     wallR->SetPosition(Vector2(Settings.Size.x, Settings.Size.y));
     wallR->SetSize(Vector2(wallWidth, Settings.Size.y));
 
-    wallU->SetPosition(Vector2(0, Settings.Size.y + wallWidth));
-    wallU->SetSize(Vector2(Settings.Size.x, wallWidth));
+    wallU->SetPosition(Vector2(-wallWidth, Settings.Size.y + wallWidth));
+    wallU->SetSize(Vector2(Settings.Size.x + 2*wallWidth, wallWidth));
 
 }
 

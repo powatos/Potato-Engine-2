@@ -3,10 +3,10 @@
 #include "Actors/Player.hpp"
 #include "Game/Raycast.hpp"
 
-class MyPlayer : public Player
+class PlatformPlayer : public Player
 {
 public:
-    MyPlayer();
+    PlatformPlayer();
 
 protected:
     virtual void BeginPlay() override;

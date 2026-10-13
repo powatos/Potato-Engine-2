@@ -22,12 +22,16 @@ PlayerController::PlayerController() {
     CameraFollowsPlayer = true;
 }
 
-void PlayerController::Initialize() {
+void PlayerController::Internal_Initialize() {
 
     World* world = GameInstance::Get()->GetWorld();
 
     // Create camera
     ActiveCamera = world->SpawnActor<Camera>();
+
+}
+
+void PlayerController::BeginPlay() {
 
 }
 

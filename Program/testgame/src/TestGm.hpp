@@ -5,7 +5,7 @@
 
 struct ProgressBarElement;
 
-class TestGM : public Gamemode
+class PlatformerGamemode : public Gamemode
 {
 public:
     void BeginPlay() override;
